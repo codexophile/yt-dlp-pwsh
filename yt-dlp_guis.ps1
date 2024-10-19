@@ -26,7 +26,7 @@ function GenerateParameters {
 
 function Show-MainWindow {
 
-    $psForm = GuiFromXml(".\WpfApp\MainWindow.xaml")
+    $psForm = GuiFromXml(".\yt-dlp-mainwindow.xaml")
 
     # Get-Variable wpf_*
 
