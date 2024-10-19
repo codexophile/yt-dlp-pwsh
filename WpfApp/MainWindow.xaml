@@ -1,0 +1,40 @@
+﻿<Window x:Name="mainWindow" x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="551" Width="486" FontSize="14" ResizeMode="NoResize">
+    <Grid Margin="0,0,10,0">
+        <ListBox x:Name="destinationsListBox" FontSize="12" Margin="10,10,271,10"/>
+        <CheckBox x:Name="cbCookies" Content="Cookies from _browser" HorizontalAlignment="Left" Margin="210,10,0,0" VerticalAlignment="Top" Width="172" IsChecked="True"/>
+        <Button x:Name="proceedButton" Content="_Proceed" HorizontalAlignment="Left" Margin="210,392,0,0" VerticalAlignment="Top" Width="207" IsDefault="True" FontWeight="Bold"/>
+        <Button x:Name="buttonExit" Content="E_xit" HorizontalAlignment="Left" Margin="210,420,0,0" VerticalAlignment="Top" Width="197" IsCancel="True"/>
+        <CheckBox x:Name="cbCustomRanges" Content="Custom _ranges" HorizontalAlignment="Left" Margin="210,33,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cb720p" Content="720p" HorizontalAlignment="Left" Margin="328,33,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cb1080p" Content="1080p" HorizontalAlignment="Left" Margin="384,33,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="listboxRanges" Margin="210,56,39,355"/>
+        <Button x:Name="buttonAddRange" Content="➕" HorizontalAlignment="Left" Margin="210,250,0,0" VerticalAlignment="Top" Width="63"/>
+        <Button x:Name="buttonRemoveRange" Content="➖" HorizontalAlignment="Left" Margin="279,250,0,0" VerticalAlignment="Top" Width="63"/>
+        <TextBox x:Name="hourStart" HorizontalAlignment="Left" Margin="287,188,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <TextBox x:Name="minuteStart" HorizontalAlignment="Left" Margin="332,188,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <TextBox x:Name="secondStart" HorizontalAlignment="Left" Margin="377,188,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <TextBox x:Name="hourEnd" HorizontalAlignment="Left" Margin="287,219,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <TextBox x:Name="minuteEnd" HorizontalAlignment="Left" Margin="332,219,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <TextBox x:Name="secondEnd" HorizontalAlignment="Left" Margin="377,219,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="40" FontFamily="Global Monospace" TextAlignment="Center" Height="26"/>
+        <Label x:Name="labelStart" Content="Start" HorizontalAlignment="Left" Margin="215,188,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
+        <Label x:Name="labelEnd" Content="End" HorizontalAlignment="Left" Margin="215,219,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
+        <Button x:Name="btn_range_loadFromFile" Content="🔃" HorizontalAlignment="Left" Margin="347,250,0,0" VerticalAlignment="Top" Width="70"/>
+        <Button x:Name="buttonExit_Copy" Content="E_xit" HorizontalAlignment="Left" Margin="210,420,0,0" VerticalAlignment="Top" Width="207" IsCancel="True"/>
+        <TextBox x:Name="Textbox_CustomName" HorizontalAlignment="Left" Margin="210,301,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="207" Height="80" Text="" IsEnabled="False"/>
+        <CheckBox x:Name="Checkbox_CustomName" Content="Custom name" HorizontalAlignment="Left" Margin="210,278,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="BtnSetToZeroStart" Content="0" HorizontalAlignment="Left" Height="26" Margin="422,188,0,0" VerticalAlignment="Top" Width="30" IsEnabled="False"/>
+        <Button x:Name="BtnSetToZeroEnd" Content="0" HorizontalAlignment="Left" Height="26" Margin="422,219,0,0" VerticalAlignment="Top" Width="30" IsEnabled="False"/>
+        <Button x:Name="BtnPaste" Content="📋" HorizontalAlignment="Left" Height="26" Margin="422,355,0,0" VerticalAlignment="Top" Width="30" IsEnabled="False"/>
+
+    </Grid>
+
+
+
+</Window>
