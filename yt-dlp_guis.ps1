@@ -59,7 +59,11 @@ function Show-MainWindow {
             
             ForEach ($Control in $ControlsToToggle) {
                 # $args[0] or $This is the event target
-                $control.IsEnabled = $This.IsChecked
+                try {
+                    $control.IsEnabled = $This.IsChecked
+                }
+                catch {}
+         
             }
             
         } )

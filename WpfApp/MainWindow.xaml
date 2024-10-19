@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
         Title="Video Downloader" Height="600" Width="800"
-        FontSize="14" Background="#F5F5F5"
+        FontSize="14" Background="#1E1E1E"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="15,8"/>
             <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Background" Value="#3A3F44"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
@@ -30,17 +30,20 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Background" Value="#555B62"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style TargetType="CheckBox">
+<Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="Margin" Value="0,5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
         <Style TargetType="TextBox">
+<Setter Property="Background" Value="#2D2D30"/>
+<Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="#BDBDBD"/>
