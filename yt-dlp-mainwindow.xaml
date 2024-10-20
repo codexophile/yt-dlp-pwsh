@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="Video Downloader" Height="600" Width="800"
-        FontSize="14" Background="#1E1E1E"
+        Title="Video Downloader" Height="580" Width="780"
+        FontSize="13" Background="#1E1E1E"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="15,8"/>
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="Background" Value="#3A3F44"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -30,64 +30,84 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#555B62"/>
+                    <Setter Property="Background" Value="#404040"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style TargetType="CheckBox">
-<Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Margin" Value="0,4"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
         <Style TargetType="TextBox">
-<Setter Property="Background" Value="#2D2D30"/>
-<Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#BDBDBD"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="CaretBrush" Value="White"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
+    <Grid Margin="16">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="16"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left Panel - Destinations -->
         <DockPanel Grid.Column="0">
-            <TextBlock DockPanel.Dock="Top" Text="Destinations" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock DockPanel.Dock="Top" Text="Destinations" FontWeight="Bold" Margin="0,0,0,8"/>
             <ListBox x:Name="destinationsListBox" 
-                     Background="White"
-                     BorderBrush="#BDBDBD"
+                     BorderThickness="1"
                      FontSize="12"/>
         </DockPanel>
 
         <!-- Right Panel - Controls -->
-        <StackPanel Grid.Column="2">
+        <StackPanel Grid.Column="2" Margin="0,0,0,0">
             <!-- Options Group -->
-            <GroupBox Header="Options" Margin="0,0,0,10" Padding="10">
+            <GroupBox Header="Options">
                 <StackPanel>
                     <CheckBox x:Name="cbCookies" Content="Cookies from browser" IsChecked="True"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Margin="0,0,15,0"/>
-                        <CheckBox x:Name="cb720p" Content="720p" Margin="0,0,15,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4">
+                        <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Margin="0,0,12,0"/>
+                        <CheckBox x:Name="cb720p" Content="720p" Margin="0,0,12,0"/>
                         <CheckBox x:Name="cb1080p" Content="1080p"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
             <!-- Ranges Group -->
-            <GroupBox Header="Time Ranges" Margin="0,0,0,10" Padding="10">
+            <GroupBox Header="Time Ranges">
                 <StackPanel>
-                    <ListBox x:Name="listboxRanges" Height="120" Margin="0,0,0,10"/>
+                    <ListBox x:Name="listboxRanges" Height="100" Margin="0,0,0,8"/>
                     
                     <!-- Time Input Section -->
-                    <Grid Margin="0,0,0,10">
+                    <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -101,54 +121,54 @@
                         <!-- Start Time -->
                         <Label Content="Start" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBox x:Name="hourStart" Width="40" Text="00" TextAlignment="Center"/>
+                            <TextBox x:Name="hourStart" Width="36" Text="00" TextAlignment="Center"/>
                             <TextBlock Text=":" VerticalAlignment="Center" Margin="2,0"/>
-                            <TextBox x:Name="minuteStart" Width="40" Text="00" TextAlignment="Center"/>
+                            <TextBox x:Name="minuteStart" Width="36" Text="00" TextAlignment="Center"/>
                             <TextBlock Text=":" VerticalAlignment="Center" Margin="2,0"/>
-                            <TextBox x:Name="secondStart" Width="40" Text="00" TextAlignment="Center"/>
+                            <TextBox x:Name="secondStart" Width="36" Text="00" TextAlignment="Center"/>
                         </StackPanel>
-                        <Button x:Name="BtnSetToZeroStart" Content="0" Grid.Row="0" Grid.Column="2" Width="30"/>
+                        <Button x:Name="BtnSetToZeroStart" Content="0" Grid.Row="0" Grid.Column="2" Width="28"/>
 
                         <!-- End Time -->
-                        <Label Content="End" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,0"/>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                            <TextBox x:Name="hourEnd" Width="40" Text="00" TextAlignment="Center"/>
+                        <Label Content="End" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                            <TextBox x:Name="hourEnd" Width="36" Text="00" TextAlignment="Center"/>
                             <TextBlock Text=":" VerticalAlignment="Center" Margin="2,0"/>
-                            <TextBox x:Name="minuteEnd" Width="40" Text="00" TextAlignment="Center"/>
+                            <TextBox x:Name="minuteEnd" Width="36" Text="00" TextAlignment="Center"/>
                             <TextBlock Text=":" VerticalAlignment="Center" Margin="2,0"/>
-                            <TextBox x:Name="secondEnd" Width="40" Text="00" TextAlignment="Center"/>
+                            <TextBox x:Name="secondEnd" Width="36" Text="00" TextAlignment="Center"/>
                         </StackPanel>
-                        <Button x:Name="BtnSetToZeroEnd" Content="0" Grid.Row="1" Grid.Column="2" Width="30" Margin="0,5,0,0"/>
+                        <Button x:Name="BtnSetToZeroEnd" Content="0" Grid.Row="1" Grid.Column="2" Width="28" Margin="0,4,0,0"/>
                     </Grid>
 
                     <!-- Range Control Buttons -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-                        <Button x:Name="buttonAddRange" Content="Add" Width="80"/>
-                        <Button x:Name="buttonRemoveRange" Content="Remove" Width="80" Margin="10,0"/>
-                        <Button x:Name="btn_range_loadFromFile" Content="Load" Width="80"/>
-                    </StackPanel>
+                    <UniformGrid Rows="1" Margin="0,0,0,8">
+                        <Button x:Name="buttonAddRange" Content="Add" Margin="0,0,4,0"/>
+                        <Button x:Name="buttonRemoveRange" Content="Remove" Margin="4,0"/>
+                        <Button x:Name="btn_range_loadFromFile" Content="Load" Margin="4,0,0,0"/>
+                    </UniformGrid>
                 </StackPanel>
             </GroupBox>
 
             <!-- Custom Name Section -->
-            <GroupBox Header="Naming" Margin="0,0,0,10" Padding="10">
+            <GroupBox Header="Naming">
                 <StackPanel>
                     <CheckBox x:Name="Checkbox_CustomName" Content="Custom name"/>
-                    <TextBox x:Name="Textbox_CustomName" Height="60"
+                    <TextBox x:Name="Textbox_CustomName" Height="50"
                              IsEnabled="{Binding IsChecked, ElementName=Checkbox_CustomName}"
                              TextWrapping="Wrap"
-                             Margin="0,5"/>
-                    <Button x:Name="BtnPaste" Content="📋" HorizontalAlignment="Right" Width="30"/>
+                             Margin="0,4"/>
+                    <Button x:Name="BtnPaste" Content="📋" HorizontalAlignment="Right" Width="28"/>
                 </StackPanel>
             </GroupBox>
 
             <!-- Action Buttons -->
             <Button x:Name="proceedButton" Content="PROCEED" 
                     FontWeight="Bold" 
-                    Background="#4CAF50"
-                    Margin="0,10,0,5"/>
+                    Background="#2E7D32"
+                    Margin="0,8,0,4"/>
             <Button x:Name="buttonExit" Content="EXIT" 
-                    Background="#F44336"/>
+                    Background="#C62828"/>
         </StackPanel>
     </Grid>
 </Window>
