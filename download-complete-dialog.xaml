@@ -1,0 +1,69 @@
+<Window x:Class="YtDlpManager.DownloadCompleteDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Download Complete" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- File Info Section -->
+        <GroupBox Header="Downloaded Files" Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <ListBox x:Name="FilesList" Margin="5" 
+                         SelectionMode="Single"
+                         SelectionChanged="FilesList_SelectionChanged"/>
+                
+                <StackPanel Grid.Column="1" Margin="5">
+                    <Button x:Name="OpenButton" Content="Open" Margin="0,0,0,5" Padding="15,5"/>
+                    <Button x:Name="LocateButton" Content="Locate" Margin="0,0,0,5" Padding="15,5"/>
+                    <Button x:Name="ConvertButton" Content="Convert" Margin="0,0,0,5" Padding="15,5"/>
+                    <Button x:Name="FixAudioButton" Content="Fix Audio" Margin="0,0,0,5" Padding="15,5"/>
+                    <Button x:Name="SourceButton" Content="Source" Margin="0,0,0,5" Padding="15,5"/>
+                    <Button x:Name="OpenerButton" Content="Opener" Padding="15,5"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- Info Json Section -->
+        <GroupBox Header="Video Information" Grid.Row="2" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="Title:" Margin="0,5,0,2"/>
+                <TextBox x:Name="TitleTextBox" IsReadOnly="True" 
+                         TextWrapping="Wrap" Height="50"
+                         VerticalScrollBarVisibility="Auto"/>
+                
+                <TextBlock Text="Description:" Margin="0,10,0,2"/>
+                <TextBox x:Name="DescriptionTextBox" IsReadOnly="True"
+                         TextWrapping="Wrap" Height="100"
+                         VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Json File Operations -->
+        <GroupBox Header=".info.json Operations" Grid.Row="3" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Button x:Name="OpenJsonButton" Content="Open JSON" Margin="0,0,5,0" Padding="15,5"/>
+                <Button x:Name="LocateJsonButton" Content="Locate JSON" Margin="0,0,5,0" Padding="15,5"/>
+                <Button x:Name="CommentsButton" Content="View Comments" Margin="0,0,5,0" Padding="15,5"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Bottom Controls -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <CheckBox x:Name="ExitAfterCheckBox" Content="Exit after operation" 
+                      VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Button x:Name="CloseButton" Content="Close" Padding="20,5"/>
+        </StackPanel>
+    </Grid>
+</Window>
