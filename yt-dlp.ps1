@@ -5,11 +5,11 @@ Clear-Host
 
 Set-Location $PSScriptRoot
 
-. .\yt-dlp-debug.ps1
-. ..\functions.ps1
-. ..\functions-forms.ps1
+. ..\#lib\functions.ps1
+. ..\#lib\functions-forms.ps1
 . .\yt-dlp_functions.ps1
 . .\yt-dlp_guis.ps1
+. .\yt-dlp-debug.ps1
 
 if ( $Debug ) { debug-function }
 

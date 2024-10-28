@@ -26,7 +26,7 @@ function GenerateParameters {
 
 function Show-MainWindow {
 
-    $psForm = GuiFromXml(".\gui-main-window.xaml")
+    $psForm = GuiFromXaml ".\gui-main-window.xaml"
 
     # Get-Variable wpf_*
 
@@ -123,8 +123,8 @@ function Show-MainWindow {
     $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
     $wpf_Textbox_CustomName.Text = $DisplayFileName
         
-    $Result = $psForm.ShowDialog()
-    Write-Host $Result
+    $null = $psForm.ShowDialog()
+    # Write-Host $Result
     Return
 
 }
