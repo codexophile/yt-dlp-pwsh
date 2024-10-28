@@ -6,9 +6,17 @@ function debug-function {
     # $psForm.ShowDialog()
     Show-MainWindow
     $Options = GenerateParameters
+    $InfoJson = Get-Content -Path '.\dummy.info.json'
+    $ytdlPath = 'D:\Program Files - Portable\youtube-dl\yt-dlp.exe'
+    $OutTemplate = '%(uploader_id)s- %(uploader)s - (%(extractor)s)%(id)s - %(title)s _%(section_start)s @[o][bQ].%(ext)s'
+    $outFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $OutTemplate
+    $outputFiles = @()
     foreach ($Item in $Options.Items) {
-        ConvertTo-Seconds $Item
+        $Timestamp = ConvertTo-Seconds $Item
+        $outputFiles += $outFileName -replace '_NA', "_$Timestamp.0"
     }
+    $outputFiles
+    exit
 
     # Load the GUI
     $window = GuiFromXaml -XamlTextOrXamlFile "gui-download-complete.xaml"

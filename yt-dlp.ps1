@@ -69,7 +69,6 @@ switch ($mode) {
         If ($Options.SeventTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
         If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
 
-
     }
 
     'min' {
@@ -100,14 +99,24 @@ if ( [System.IO.File]::Exists( $pathToJson )  ) {
         
 }
 
+$OutputFiles = @()
 $outFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $OutTemplate
+If ($Options.CustomRange) {
+    foreach ($Item in $Options.Items) {
+        $Timestamp = ConvertTo-Seconds $Item
+        $outputFiles += $outFileName -replace '_NA', "_$Timestamp.0"
+    }
+}
+else {
+    $OutputFiles += $outFileName
+}
 
 Write-Ascii $Extractor; Write-Host
 Write-Host
 Write-Host "Mode   : $mode"        -ForegroundColor Yellow
 Write-Host "URL    : $url"         -ForegroundColor Yellow
 Write-Host "Out dir: $destination" -ForegroundColor Yellow
-Write-Host "As     : $outFileName" -ForegroundColor Yellow 
+Write-Host "As     : $outputFiles" -ForegroundColor Yellow 
 Write-Host
 Write-Host -NoNewline " $ytdlPath " -BackgroundColor DarkGreen -ForegroundColor White
 
@@ -127,8 +136,6 @@ Write-Host
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
-
-
 
 Return
 
