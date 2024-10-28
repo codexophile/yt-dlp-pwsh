@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="Video Downloader" Height="580" Width="780"
+        Title="yt-dlp-pwsh" Height="620" Width="600"
         FontSize="13" Background="#1E1E1E"
         WindowStartupLocation="CenterScreen">
     
