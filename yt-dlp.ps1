@@ -3,6 +3,9 @@ param( [string]$url, [string]$mode, [string]$destination, [Switch]$Debug, [Switc
 
 Clear-Host
 
+. .\debug-code.ps1
+if ( $Debug ) { debug-function }
+
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
     Write-Host "Mode: $mode"
