@@ -3,7 +3,14 @@ param( [string]$url, [string]$mode, [string]$destination, [Switch]$Debug, [Switc
 
 Clear-Host
 
-. .\debug-code.ps1
+Set-Location $PSScriptRoot
+
+. .\yt-dlp-debug.ps1
+. ..\functions.ps1
+. ..\functions-forms.ps1
+. .\yt-dlp_functions.ps1
+. .\yt-dlp_guis.ps1
+
 if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
@@ -13,11 +20,6 @@ If (-Not($url -OR $mode)) {
     return     
 }
 
-Set-Location $PSScriptRoot
-. ..\functions.ps1
-. ..\functions-forms.ps1
-. .\yt-dlp_functions.ps1
-. .\yt-dlp_guis.ps1
 $ytdlPath = 'D:\Program Files - Portable\youtube-dl\yt-dlp.exe'
 
 $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' )
