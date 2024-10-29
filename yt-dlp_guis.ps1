@@ -25,6 +25,7 @@ function GenerateParameters {
 }
 
 function Show-MainWindow {
+    param( $InfoJson, $ytdlPath)
 
     $psForm = GuiFromXaml ".\gui-main-window.xaml"
 

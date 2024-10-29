@@ -4,18 +4,13 @@ function debug-function {
     # $psForm = GuiFromXml(".\gui-download-complete.xaml")
     # $psForm = GuiFromXml(".\gui-main-window.xaml")
     # $psForm.ShowDialog()
-    Show-MainWindow
-    $Options = GenerateParameters
     $InfoJson = Get-Content -Path '.\dummy.info.json'
+    $InfoJsonPath = '.\dummy.info.json'
     $ytdlPath = 'D:\Program Files - Portable\youtube-dl\yt-dlp.exe'
+    Show-MainWindow $InfoJson $ytdlPath
+    $Options = GenerateParameters
     $OutTemplate = '%(uploader_id)s- %(uploader)s - (%(extractor)s)%(id)s - %(title)s _%(section_start)s @[o][bQ].%(ext)s'
-    $outFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $OutTemplate
-    $outputFiles = @()
-    foreach ($Item in $Options.Items) {
-        $Timestamp = ConvertTo-Seconds $Item
-        $outputFiles += $outFileName -replace '_NA', "_$Timestamp.0"
-    }
-    $outputFiles
+    Get-OutputFileNames -OptionsObj $Options -InfoJSON $InfoJson -OutTemplate $OutTemplate
     exit
 
     # Load the GUI

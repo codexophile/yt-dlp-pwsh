@@ -11,7 +11,7 @@ Set-Location $PSScriptRoot
 . .\yt-dlp_guis.ps1
 . .\yt-dlp-debug.ps1
 
-if ( $Debug ) { debug-function }
+# if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
@@ -47,7 +47,7 @@ switch ($mode) {
 
     'max' {
 
-        Show-MainWindow
+        Show-MainWindow $InfoJson $ytdlPath
         
         $Options = GenerateParameters
         $destination = $Options.destination
@@ -99,24 +99,17 @@ if ( [System.IO.File]::Exists( $pathToJson )  ) {
         
 }
 
-$OutputFiles = @()
-$outFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $OutTemplate
-If ($Options.CustomRange) {
-    foreach ($Item in $Options.Items) {
-        $Timestamp = ConvertTo-Seconds $Item
-        $outputFiles += $outFileName -replace '_NA', "_$Timestamp.0"
-    }
-}
-else {
-    $OutputFiles += $outFileName
-}
+$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 
 Write-Ascii $Extractor; Write-Host
 Write-Host
 Write-Host "Mode   : $mode"        -ForegroundColor Yellow
 Write-Host "URL    : $url"         -ForegroundColor Yellow
 Write-Host "Out dir: $destination" -ForegroundColor Yellow
-Write-Host "As     : $outputFiles" -ForegroundColor Yellow 
+Write-Host "As     : "             -ForegroundColor Yellow 
+foreach ($fileName in $OutputFiles) {
+    Write-Host $filename
+}
 Write-Host
 Write-Host -NoNewline " $ytdlPath " -BackgroundColor DarkGreen -ForegroundColor White
 
@@ -137,19 +130,11 @@ $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.js
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
-Return
-
 #* After download
-$finalFilePath = "$destination/$outFileName"
-Set-Location -LiteralPath $destination
-if ( -not ( Test-Path -LiteralPath $outFileName ) ) {
-    Write-Host "destination: $(Test-Path -LiteralPath $destination)"
-    Write-Host "curdir     : $(Get-Location)"
-    Write-Host "fname      : $outFileName"
-    Write-Host "file       : $(Test-Path -LiteralPath $outFileName)"
-    MessageBox 'Error with file name' "" 'Ok' 'Error'
-    exitTerminal $finalFilePath $pathToJson # 🛑
+foreach ($File in $OutputFiles) {
+    Write-Host
+    "$destination\$File"
+    Test-Path -LiteralPath "$destination\$File"
 }
 
-
-exitTerminal $pathToJson $finalFilePath
+# exitTerminal $pathToJson $finalFilePath

@@ -1,3 +1,25 @@
+
+function Get-OutputFileNames {
+    param( $OptionsObj, $InfoJSON, $OutTemplate )
+    
+    $OutputFiles = @()
+    $outFileName = $InfoJSON | & $ytdlPath '--load-info-json' - -O $OutTemplate
+
+    if ($OptionsObj.CustomRange) {
+        foreach ($Item in $Options.Items) {
+            $Timestamp = ConvertTo-Seconds $Item
+            # Apply the replacements to the filename and add to the output list
+            $modifiedFileName = $outFileName -replace ':', '：' -replace '_NA', "_$Timestamp.0"
+            $OutputFiles += $modifiedFileName
+        }
+    }
+    else {
+        $OutputFiles += $outFileName
+    }
+
+    return $OutputFiles
+}
+
 function Get-OutputTemplate {
     param( $InfoJson )
 
