@@ -4,12 +4,18 @@
 
 
 function Show-DownloadCompleteWindow {
+    param( $SavedInfoJson, $FilesList)
+    
     # Load the GUI
     $window = GuiFromXaml -XamlTextOrXamlFile "gui-download-complete.xaml"
 
+    foreach ($File in $FilesList) {
+        $wpf_FilesList.Items.Add( $File )
+    }
+
     # Add event handlers
     $wpf_FilesList.Add_SelectionChanged({
-            param($sender, $e)
+            # param($sender, $e)
             # Your FilesList_SelectionChanged logic here
         })
 
@@ -23,6 +29,15 @@ function Show-DownloadCompleteWindow {
 
     $wpf_CloseButton.Add_Click({
             $window.Close()
+        })
+
+    # Add Loaded event handler to ensure focus
+    $window.Add_Loaded({
+            $window.Activate()
+            $window.Focus()
+        
+            # Optionally, if you want to focus a specific control:
+            # $wpf_FilesList.Focus()
         })
 
     # Show the window
@@ -145,6 +160,15 @@ function Show-MainWindow {
             
             Set-Content -Path ./yt-dlp_cutom_ranges.txt -Value $wpf_ListBoxRanges.Items
             $psForm.hide()
+        })
+
+    # Add Loaded event handler to ensure focus
+    $window.Add_Loaded({
+            $window.Activate()
+            $window.Focus()
+        
+            # Optionally, if you want to focus a specific control:
+            # $wpf_FilesList.Focus()
         })
         
     $DisplayTemplate = Get-OutputTemplate($InfoJson)

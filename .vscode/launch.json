@@ -16,6 +16,7 @@
                 "-mode",
                 "max",
                 "-Debug"
+                // "-verbose"
             ]
         }
     ]
