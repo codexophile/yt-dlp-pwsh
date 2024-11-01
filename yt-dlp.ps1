@@ -11,7 +11,7 @@ Set-Location $PSScriptRoot
 . .\yt-dlp_guis.ps1
 . .\yt-dlp-debug.ps1
 
-# if ( $Debug ) { debug-function }
+if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
@@ -108,7 +108,7 @@ Write-Host "URL    : $url"         -ForegroundColor Yellow
 Write-Host "Out dir: $destination" -ForegroundColor Yellow
 Write-Host "As     : "             -ForegroundColor Yellow 
 foreach ($fileName in $OutputFiles) {
-    Write-Host $filename
+    Write-Host $filename -ForegroundColor Yellow
 }
 Write-Host
 Write-Host -NoNewline " $ytdlPath " -BackgroundColor DarkGreen -ForegroundColor White
