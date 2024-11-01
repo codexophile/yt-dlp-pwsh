@@ -169,6 +169,9 @@
                     Margin="0,8,0,4"/>
             <Button x:Name="buttonExit" Content="EXIT" 
                     Background="#C62828"/>
+
+            <Button x:Name="buttonRefreshDestinations" Content="Refresh Destinations" Margin="0,8,0,4"/>  
+                    
         </StackPanel>
     </Grid>
 </Window>

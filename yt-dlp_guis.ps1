@@ -81,6 +81,8 @@ function Show-MainWindow {
 
     # $DownloadParameters = 'man is'
 
+    
+
     #* Generate parameters/initialize variables on GUI events
 
     function WheelEventHandler() {
@@ -160,6 +162,20 @@ function Show-MainWindow {
             
             Set-Content -Path ./yt-dlp_cutom_ranges.txt -Value $wpf_ListBoxRanges.Items
             $psForm.hide()
+        })
+
+    $wpf_buttonRefreshDestinations.add_click({
+            # Clear the current items in the destinationsListBox
+            $wpf_destinationsListBox.Items.Clear()
+
+            # Add the new destinations
+            if (Test-Path W:) {
+                Get-ChildItem -Path 'W:\#later' -Directory | ForEach-Object {
+                    [void] $wpf_destinationsListBox.Items.Add($_.FullName)
+                }
+            }
+            [void] $wpf_destinationsListBox.Items.Add([Environment]::GetFolderPath("Desktop"))
+            [void] $wpf_destinationsListBox.Items.Add("$HOME\Downloads")
         })
 
     # Add Loaded event handler to ensure focus
