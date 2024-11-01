@@ -116,9 +116,9 @@ Write-Host -NoNewline " $ytdlPath " -BackgroundColor DarkGreen -ForegroundColor 
 $index = 0
 foreach ( $parameter in $DownloadParameters ) {
     if ( $index % 2 -eq 1 ) {
-        Write-Host  " $parameter " -ForegroundColor Yellow
+        Write-Host  " $parameter " -ForegroundColor Yellow -BackgroundColor DarkBlue
     }
-    else { Write-Host  " $parameter " }
+    else { Write-Host  " $parameter "  -ForegroundColor White -BackgroundColor DarkBlue }
     $index++
 }
 
