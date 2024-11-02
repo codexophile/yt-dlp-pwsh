@@ -93,6 +93,7 @@
             <GroupBox Header="Options">
                 <StackPanel>
                     <CheckBox x:Name="cbCookies" Content="Cookies from browser" IsChecked="True"/>
+                    <CheckBox x:Name="cbBestAudio" Content="Best audio only" Margin="0,4"/> <!-- New CheckBox for best audio -->
                     <StackPanel Orientation="Horizontal" Margin="0,4">
                         <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Margin="0,0,12,0"/>
                         <CheckBox x:Name="cb720p" Content="720p" Margin="0,0,12,0"/>
