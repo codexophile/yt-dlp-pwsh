@@ -53,15 +53,17 @@ function GenerateParameters {
     $CustomName = $wpf_Checkbox_CustomName.IsChecked ? $wpf_Textbox_CustomName.Text : $False
     $720p = $wpf_cb720p.IsChecked ? $true : $false
     $1080p = $wpf_cb1080p.IsChecked ? $true : $false
+    $BestAudioOnly = $wpf_cbBestAudio.IsChecked ? $true : $false
 
     Return @{
-        Destination  = $destination
-        IsCookies    = $isCookies
-        CustomRange  = $CustomRange
-        Items        = $Items
-        CustomName   = $CustomName
-        SeventTwenty = $720p
-        TenEighty    = $1080p
+        Destination   = $destination
+        IsCookies     = $isCookies
+        CustomRange   = $CustomRange
+        Items         = $Items
+        CustomName    = $CustomName
+        SeventTwenty  = $720p
+        TenEighty     = $1080p
+        BestAudioOnly = $BestAudioOnly
     }
 
 }

@@ -66,8 +66,12 @@ switch ($mode) {
 
         $DownloadParameters += '-o', $OutTemplate
         $DownloadParameters += '--embed-info-json', '--embed-subs', '--embed-metadata', '--embed-chapters'
-        If ($Options.SeventTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
-        If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
+        
+        if ($Options.BestAudioOnly) { $DownloadParameters += '-f', 'bestaudio' }
+        else {
+            If ($Options.SeventTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
+            If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
+        }
 
     }
 
