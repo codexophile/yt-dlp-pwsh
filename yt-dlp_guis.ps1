@@ -71,17 +71,16 @@ function Show-MainWindow {
 
     $psForm = GuiFromXaml ".\gui-main-window.xaml"
 
-    # Get-Variable wpf_*
-
-    if ( Test-Path W: ) {
-        get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $wpf_destinationsListBox.Items.Add( $_.fullname ) } 
+    function RefreshAndDisplayDestinations {
+        $wpf_destinationsListBox.Items.Clear()
+        if ( Test-Path W: ) {
+            get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $wpf_destinationsListBox.Items.Add( $_.fullname ) } 
+        }
+        [void] $wpf_destinationsListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
+        [void] $wpf_destinationsListBox.Items.Add("$HOME\Downloads")
     }
-    [void] $wpf_destinationsListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
-    [void] $wpf_destinationsListBox.Items.Add("$HOME\Downloads")
 
-    # $DownloadParameters = 'man is'
-
-    
+    RefreshAndDisplayDestinations
 
     #* Generate parameters/initialize variables on GUI events
 
@@ -165,23 +164,13 @@ function Show-MainWindow {
         })
 
     $wpf_buttonRefreshDestinations.add_click({
-            # Clear the current items in the destinationsListBox
-            $wpf_destinationsListBox.Items.Clear()
-
-            # Add the new destinations
-            if (Test-Path W:) {
-                Get-ChildItem -Path 'W:\#later' -Directory | ForEach-Object {
-                    [void] $wpf_destinationsListBox.Items.Add($_.FullName)
-                }
-            }
-            [void] $wpf_destinationsListBox.Items.Add([Environment]::GetFolderPath("Desktop"))
-            [void] $wpf_destinationsListBox.Items.Add("$HOME\Downloads")
+            RefreshAndDisplayDestinations        
         })
 
     # Add Loaded event handler to ensure focus
-    $window.Add_Loaded({
-            $window.Activate()
-            $window.Focus()
+    $wpf_mainWindow.Add_Loaded({
+            $wpf_mainWindow.Activate()
+            $wpf_mainWindow.Focus()
         
             # Optionally, if you want to focus a specific control:
             # $wpf_FilesList.Focus()
