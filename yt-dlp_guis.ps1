@@ -165,6 +165,11 @@ function Show-MainWindow {
             $psForm.hide()
         })
 
+    $wpf_buttonExit.add_click({
+            $wpf_mainWindow.close()
+            exitAndCloseTerminal
+        })
+
     $wpf_buttonRefreshDestinations.add_click({
             RefreshAndDisplayDestinations        
         })
@@ -176,6 +181,12 @@ function Show-MainWindow {
         
             # Optionally, if you want to focus a specific control:
             # $wpf_FilesList.Focus()
+        })
+
+    # add gui close event handler
+    $psForm.add_Closing({
+            $wpf_mainWindow.close()
+            exitAndCloseTerminal
         })
         
     $DisplayTemplate = Get-OutputTemplate($InfoJson)

@@ -112,5 +112,7 @@ function exitAndCloseTerminal {
         # $psform.hide()
         exit 
     } 
-    [Environment]::Exit(0)
+    else {
+        [Environment]::Exit(0)
+    }
 }

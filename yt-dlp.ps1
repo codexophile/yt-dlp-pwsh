@@ -46,7 +46,11 @@ switch ($mode) {
     'list' {
         $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
         $AfterListGui = GuiFromXaml($AfterListXaml)
-        Activate
+        $AfterListGui.add_Loaded({
+                Activate
+                $AfterListGui.Activate()
+                $AfterListGui.Focus()
+            })
         $wpf_btnExit.add_click({
                 $AfterListGui.close()
                 exitAndCloseTerminal
@@ -56,6 +60,7 @@ switch ($mode) {
                 . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
             })
         $AfterListGui.ShowDialog()
+
         Exit
     }
 
