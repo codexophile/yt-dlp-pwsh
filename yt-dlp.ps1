@@ -1,6 +1,6 @@
 param( 
     [string]$url, [string]$mode, [string]$destination, 
-    [Switch]$Debug, [Switch]$SkipPrompt
+    [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson
 )
 
 $VerbosePreference = 'Continue'
@@ -31,9 +31,11 @@ if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy',
 
 & $ytdlPath -U
 
-$InfoJsonParameters = @($BaseParameters)
-$InfoJsonParameters += '--print', '%()j', '--no-clean-info-json', '--cookies-from-browser', 'vivaldi'
-$InfoJson = Get-InfoJson $ytdlPath $InfoJSONParameters 
+if ( -Not $InfoJson ) {   
+    $InfoJsonParameters = @($BaseParameters)
+    $InfoJsonParameters += '--print', '%()j', '--no-clean-info-json', '--cookies-from-browser', 'vivaldi'
+    $InfoJson = Get-InfoJson $ytdlPath $InfoJSONParameters 
+}
 If (-Not $InfoJson ) { exitAndCloseTerminal }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
@@ -51,7 +53,7 @@ switch ($mode) {
             })
         $wpf_btnDownload.add_click({
                 $AfterListGui.close()
-                . $PSCommandPath $url 'max'
+                . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
             })
         $AfterListGui.ShowDialog()
         Exit
