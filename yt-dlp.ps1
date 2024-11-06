@@ -14,7 +14,7 @@ Set-Location $PSScriptRoot
 . .\yt-dlp-debug.ps1
 . .\gui-others.ps1
 
-# if ( $Debug ) { debug-function }
+if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
@@ -124,26 +124,7 @@ if ( [System.IO.File]::Exists( $pathToJson )  ) {
 
 $OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 
-Write-Ascii $Extractor; Write-Host
-Write-Host
-Write-Host "Mode   : $mode"        -ForegroundColor Yellow
-Write-Host "URL    : $url"         -ForegroundColor Yellow
-Write-Host "Out dir: $destination" -ForegroundColor Yellow
-Write-Host "As     : "             -ForegroundColor Yellow 
-foreach ($fileName in $OutputFiles) {
-    Write-Host $filename -ForegroundColor Yellow
-}
-Write-Host
-Write-Host -NoNewline " $ytdlPath " -BackgroundColor DarkGreen -ForegroundColor White
-
-$index = 0
-foreach ( $parameter in $DownloadParameters ) {
-    if ( $index % 2 -eq 1 ) {
-        Write-Host  " $parameter " -ForegroundColor Yellow -BackgroundColor DarkBlue
-    }
-    else { Write-Host  " $parameter "  -ForegroundColor White -BackgroundColor DarkBlue }
-    $index++
-}
+Show-DownloadInfo
 
 Write-Host
 Write-Host

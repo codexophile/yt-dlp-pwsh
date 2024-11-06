@@ -1,3 +1,60 @@
+function Show-DownloadInfo {
+    $borderColor = 'DarkCyan'
+    $headerColor = 'Cyan'
+    $textColor = 'Yellow'
+    
+    # Draw top border
+    Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+    
+    # Show ASCII art with padding
+    Write-Ascii $Extractor
+    Write-Host
+    
+    # Create info block with consistent formatting
+    $infoBlock = @(
+        @{ Label = "MODE"; Value = $mode }
+        @{ Label = "URL"; Value = $url }
+        @{ Label = "OUTPUT DIR"; Value = $destination }
+    )
+    
+    # Display info block with proper alignment
+    $labelWidth = ($infoBlock | ForEach-Object { $_.Label.Length } | Measure-Object -Maximum).Maximum + 2
+    foreach ($item in $infoBlock) {
+        $label = $item.Label.PadRight($labelWidth)
+        Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
+        Write-Host $label -ForegroundColor $headerColor -NoNewline
+        Write-Host " │ " -ForegroundColor $borderColor -NoNewline
+        Write-Host $item.Value -ForegroundColor $textColor
+    }
+    
+    # Display output files
+    Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
+    Write-Host "FILES".PadRight($labelWidth) -ForegroundColor $headerColor -NoNewline
+    Write-Host " │ " -ForegroundColor $borderColor
+    foreach ($fileName in $OutputFiles) {
+        Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
+        Write-Host "".PadRight($labelWidth) -NoNewline
+        Write-Host " │ " -ForegroundColor $borderColor -NoNewline
+        Write-Host $fileName -ForegroundColor $textColor
+    }
+    
+    # Draw separator
+    Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+    
+    # Display command parameters with alternating colors
+    Write-Host " COMMAND " -BackgroundColor DarkGreen -ForegroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    
+    for ($i = 0; $i -lt $DownloadParameters.Count; $i++) {
+        $bgColor = if ($i % 2 -eq 0) { 'DarkBlue' } else { 'DarkMagenta' }
+        Write-Host " $($DownloadParameters[$i]) " -ForegroundColor White -BackgroundColor $bgColor -NoNewline
+        Write-Host " " -NoNewline
+    }
+    Write-Host
+    
+    # Draw bottom border
+    Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+}
 
 function Get-OutputFileNames {
     param( $OptionsObj, $InfoJSON, $OutTemplate )
@@ -101,15 +158,12 @@ function Get-InfoJson {
 
 function exitTerminal {
     param ( $pathToJson, $finalFilePath )
-    # activate
-    #// if( Test-Path variable:$psform ) { $psform.hide() }
     $response = infoJsonOperations $pathToJson $finalFilePath
     if ( $response -eq 'Cancel' ) { exit }
 }
 
 function exitAndCloseTerminal { 
     if ( $Debug ) {
-        # $psform.hide()
         exit 
     } 
     else {
