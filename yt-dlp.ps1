@@ -1,8 +1,10 @@
-param( [string]$url, [string]$mode, [string]$destination, [Switch]$Debug, [Switch]$SkipPrompt
+param( 
+    [string]$url, [string]$mode, [string]$destination, 
+    [Switch]$Debug, [Switch]$SkipPrompt
 )
 
+$VerbosePreference = 'Continue'
 Clear-Host
-
 Set-Location $PSScriptRoot
 
 . ..\#lib\functions.ps1
@@ -10,8 +12,9 @@ Set-Location $PSScriptRoot
 . .\yt-dlp_functions.ps1
 . .\yt-dlp_guis.ps1
 . .\yt-dlp-debug.ps1
+. .\gui-others.ps1
 
-if ( $Debug ) { debug-function }
+# if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
@@ -40,9 +43,18 @@ switch ($mode) {
     
     'list' {
         $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
+        $AfterListGui = GuiFromXaml($AfterListXaml)
         Activate
-        MessageBox Exit? Done 'Ok' 'Question'
-        exitAndCloseTerminal
+        $wpf_btnExit.add_click({
+                $AfterListGui.close()
+                exitAndCloseTerminal
+            })
+        $wpf_btnDownload.add_click({
+                $AfterListGui.close()
+                . $PSCommandPath $url 'max'
+            })
+        $AfterListGui.ShowDialog()
+        Exit
     }
 
     'max' {
