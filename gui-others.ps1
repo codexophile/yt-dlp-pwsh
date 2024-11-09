@@ -10,3 +10,5 @@ $AfterListXaml = @'
     </Grid>
 </Window>
 '@
+
+$AfterListXaml | Out-Null

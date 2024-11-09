@@ -68,21 +68,23 @@ function GenerateParameters {
 
 }
 
+function RefreshAndDisplayDestinations {
+    param( $ListBox)
+    
+    $ListBox.Items.Clear()
+    if ( Test-Path W: ) {
+        get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $ListBox.Items.Add( $_.fullname ) } 
+    }
+    [void] $ListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
+    [void] $ListBox.Items.Add("$HOME\Downloads")
+}
+
 function Show-MainWindow {
     param( $InfoJson, $ytdlPath)
 
     $psForm = GuiFromXaml ".\gui-main-window.xaml"
 
-    function RefreshAndDisplayDestinations {
-        $wpf_destinationsListBox.Items.Clear()
-        if ( Test-Path W: ) {
-            get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $wpf_destinationsListBox.Items.Add( $_.fullname ) } 
-        }
-        [void] $wpf_destinationsListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
-        [void] $wpf_destinationsListBox.Items.Add("$HOME\Downloads")
-    }
-
-    RefreshAndDisplayDestinations
+    RefreshAndDisplayDestinations $wpf_destinationsListBox
 
     #* Generate parameters/initialize variables on GUI events
 
