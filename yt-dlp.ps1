@@ -14,7 +14,7 @@ Set-Location $PSScriptRoot
 . .\yt-dlp-debug.ps1
 . .\gui-others.ps1
 
-if ( $Debug ) { debug-function }
+# if ( $Debug ) { debug-function }
 
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
@@ -28,6 +28,12 @@ $ytdlPath = 'D:\Program Files - Portable\youtube-dl\yt-dlp.exe'
 $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' )
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
+
+if ( $mode -eq 'auto') {
+    $DestinationPrompt = GuiFromXaml $DestinationPromptXaml
+    $DestinationPrompt.ShowDialog()
+    return
+}
 
 & $ytdlPath -U
 

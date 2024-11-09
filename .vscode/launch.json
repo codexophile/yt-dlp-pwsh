@@ -15,7 +15,8 @@
                 // "https://www.facebook.com/watch/?v=1144747659954794",
                 "-mode",
                 // "max",
-                "list",
+                // "list",
+                "auto",
                 "-Debug",
                 "-verbose"
             ]
