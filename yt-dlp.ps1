@@ -30,9 +30,9 @@ $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
 if ( $mode -eq 'auto') {
-    $DestinationPrompt = GuiFromXaml $DestinationPromptXaml
-    $DestinationPrompt.ShowDialog()
-    return
+    show-DestinationPrompt
+    $destination = $wpf_destinationsListBox.SelectedItem
+    $mode = 'max'
 }
 
 & $ytdlPath -U
@@ -75,7 +75,9 @@ switch ($mode) {
         Show-MainWindow $InfoJson $ytdlPath
         
         $Options = GenerateParameters
-        $destination = $Options.destination
+        if (-not$destination) {
+            $destination = $Options.destination
+        }
         $DownloadParameters = $BaseParameters
         $DownloadParameters += '-P', $destination
         If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }

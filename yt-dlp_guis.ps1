@@ -2,6 +2,18 @@
 # Add-Type -AssemblyName System.Windows.Forms
 # Add-Type -AssemblyName System.Drawing
 
+function show-DestinationPrompt {
+    $DestinationPrompt = GuiFromXaml $DestinationPromptXaml
+    RefreshAndDisplayDestinations $wpf_destinationsListBox
+    $wpf_RefreshButton.Add_Click({
+            RefreshAndDisplayDestinations $wpf_destinationsListBox
+        })
+    $wpf_SelectButton.Add_Click({
+            $DestinationPrompt.Close()
+            return $wpf_destinationsListBox.SelectedItem
+        })
+    $DestinationPrompt.ShowDialog()
+}
 
 function Show-DownloadCompleteWindow {
     param( $SavedInfoJson, $FilesList)
