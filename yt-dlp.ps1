@@ -56,33 +56,13 @@ switch ($mode) {
         Exit
     }
 
+    'quick' {
+        
+    }
+
     'max' {
 
-        Show-MainWindow $InfoJson $ytdlPath
-        
-        $Options = GenerateParameters
-        $destination = $Options.destination
-        $DownloadParameters = $BaseParameters
-        $DownloadParameters += '-P', $destination
-        If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }
-        If ($Options.CustomRange) {
-            foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
-        }
-        If ($Options.CustomName) {
-            $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) @[o][bQ].%(ext)s"
-        }
-        Else {
-            $OutTemplate = Get-OutputTemplate($InfoJson)
-        }
-
-        $DownloadParameters += '-o', $OutTemplate
-        $DownloadParameters += '--embed-info-json', '--embed-subs', '--embed-metadata', '--embed-chapters'
-        
-        if ($Options.BestAudioOnly) { $DownloadParameters += '-f', 'bestaudio' }
-        else {
-            If ($Options.SeventTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
-            If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
-        }
+        $DownloadParameters = HandleModeMax
 
     }
 
