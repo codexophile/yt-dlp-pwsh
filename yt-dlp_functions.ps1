@@ -164,7 +164,7 @@ function exitTerminal {
 
 function exitAndCloseTerminal { 
     if ( $Debug ) {
-        exit 
+        exit
     } 
     else {
         [Environment]::Exit(0)
