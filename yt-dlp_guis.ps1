@@ -190,11 +190,12 @@ function Show-MainWindow {
             $wpf_mainWindow.close()
             exitAndCloseTerminal
         })
-        
-    $DisplayTemplate = Get-OutputTemplate($InfoJson)
-    $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
-    $wpf_Textbox_CustomName.Text = $DisplayFileName
-        
+ 
+    if ($InfoJson) {
+        $DisplayTemplate = Get-OutputTemplate($InfoJson)
+        $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
+        $wpf_Textbox_CustomName.Text = $DisplayFileName
+    }        
     $null = $psForm.ShowDialog()
     # Write-Host $Result
     Return
