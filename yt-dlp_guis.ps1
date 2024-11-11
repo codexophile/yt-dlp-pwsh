@@ -187,7 +187,7 @@ function Show-MainWindow {
 
     # add gui close event handler
     $psForm.add_Closing({
-            $wpf_mainWindow.close()
+            # $wpf_mainWindow.close()
             exitAndCloseTerminal
         })
  
