@@ -52,7 +52,6 @@ switch ($mode) {
                 . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
             })
         $AfterListGui.ShowDialog()
-
         Exit
     }
 
@@ -61,6 +60,7 @@ switch ($mode) {
     }
 
     'max' {
+        & $ytdlPath -U                    # perform an update before downloading
         $InfoJSON = Get-InfoJson $ytdlPath
         $DownloadParameters = HandleModeMax $InfoJSON $ytdlPath
     }
@@ -99,7 +99,6 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
-& $ytdlPath -U                    # perform an update before downloading
 & $YtdlPath $DownloadParameters   # 🔥 
 
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
