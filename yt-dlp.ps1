@@ -14,8 +14,6 @@ Set-Location $PSScriptRoot
 . .\yt-dlp-debug.ps1
 . .\gui-others.ps1
 
-if ( $Debug ) { debug-function }
-
 If (-Not($url -OR $mode)) {
     Write-Host "Url : $url"
     Write-Host "Mode: $mode"
@@ -29,12 +27,7 @@ $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certific
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
-if ( -Not $InfoJson ) {   
-    $InfoJsonParameters = @($BaseParameters)
-    $InfoJsonParameters += '--print', '%()j', '--no-clean-info-json', '--cookies-from-browser', 'vivaldi'
-    $InfoJson = Get-InfoJson $ytdlPath $InfoJSONParameters 
-}
-If (-Not $InfoJson ) { exitAndCloseTerminal }
+if ( $Debug ) { debug-function }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 

@@ -108,11 +108,11 @@ function Get-InfoJson {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string]$YtdlPath,
-        
-        [Parameter(Mandatory)]
-        [string[]]$InfoJsonParameters
+        [string]$YtdlPath
     )
+
+    $InfoJsonParameters = @($BaseParameters)
+    $InfoJsonParameters += '--print', '%()j', '--no-clean-info-json', '--cookies-from-browser', 'vivaldi'
 
     Write-Host "Getting .info.json ..."
     $stopWatch = [System.Diagnostics.Stopwatch]::StartNew()
