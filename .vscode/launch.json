@@ -9,13 +9,14 @@
             "args": [
                 "-url",
                 // "some_nonsense",
-                // "https://www.instagram.com/p/DBYmp-WP_ez/",
+                "https://www.instagram.com/p/DBYmp-WP_ez/",
                 // "https://www.youtube.com/watch?v=YLwbPbzGCTk",
-                "https://www.pornhub.org/view_video.php?viewkey=66865c2b94794",
+                // "https://www.pornhub.org/view_video.php?viewkey=66865c2b94794",
                 // "https://www.facebook.com/watch/?v=1144747659954794",
                 "-mode",
                 // "max",
-                "list",
+                // "list",
+                "quick",
                 "-Debug",
                 "-verbose"
             ]
