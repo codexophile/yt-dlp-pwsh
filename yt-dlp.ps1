@@ -27,7 +27,7 @@ $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certific
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
-if ( $Debug ) { debug-function }
+# if ( $Debug ) { debug-function }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 
@@ -35,6 +35,7 @@ $mode = $mode.ToLower()
 switch ($mode) {
     
     'list' {
+        $InfoJson = Get-InfoJson $ytdlPath
         $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
         $AfterListGui = GuiFromXaml($AfterListXaml)
         $AfterListGui.add_Loaded({
