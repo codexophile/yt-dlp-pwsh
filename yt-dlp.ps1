@@ -29,8 +29,6 @@ $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certific
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
-& $ytdlPath -U
-
 if ( -Not $InfoJson ) {   
     $InfoJsonParameters = @($BaseParameters)
     $InfoJsonParameters += '--print', '%()j', '--no-clean-info-json', '--cookies-from-browser', 'vivaldi'
@@ -128,7 +126,8 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
-& $YtdlPath $DownloadParameters
+& $ytdlPath -U                    # perform an update before downloading
+& $YtdlPath $DownloadParameters   # 🔥 
 
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
