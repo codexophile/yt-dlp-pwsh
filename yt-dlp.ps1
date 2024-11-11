@@ -57,13 +57,12 @@ switch ($mode) {
     }
 
     'quick' {
-        
+        $downloadParameters = HandleModeMax -ytdlPath $ytdlPath
     }
 
     'max' {
-
-        $DownloadParameters = HandleModeMax
-
+        $InfoJSON = Get-InfoJson $ytdlPath
+        $DownloadParameters = HandleModeMax $InfoJSON $ytdlPath
     }
 
     'min' {

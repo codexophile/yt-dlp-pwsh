@@ -1,4 +1,5 @@
 function HandleModeMax {
+    param( $InfoJson, $ytdlPath )
 
     Show-MainWindow $InfoJson $ytdlPath
         
