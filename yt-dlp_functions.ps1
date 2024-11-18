@@ -46,7 +46,7 @@ function Show-DownloadInfo {
     $infoBlock = @(
         @{ Label = "MODE"; Value = $mode }
         @{ Label = "URL"; Value = $url }
-        @{ Label = "OUTPUT DIR"; Value = $destination }
+        @{ Label = "OUTPUT DIR"; Value = $Options.Destination }
     )
     
     # Display info block with proper alignment
