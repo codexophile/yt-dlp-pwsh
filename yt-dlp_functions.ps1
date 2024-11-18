@@ -30,6 +30,7 @@ function HandleModeMax {
 }
 
 function Show-DownloadInfo {
+
     $borderColor = 'DarkCyan'
     $headerColor = 'Cyan'
     $textColor = 'Yellow'

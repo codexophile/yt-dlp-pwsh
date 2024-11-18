@@ -103,6 +103,7 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
+if ($Debug) { Pause }
 & $ytdlPath -U                    # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 

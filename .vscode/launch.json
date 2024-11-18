@@ -18,8 +18,8 @@
                 "max",
                 // "list",
                 // "quick",
-                // "-Debug",
-                "-verbose"
+                "-Debug"
+                // "-verbose"
             ]
         }
     ]
