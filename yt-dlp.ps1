@@ -98,8 +98,9 @@ if ( [System.IO.File]::Exists( $pathToJson )  ) {
         
 }
 
-$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 $Options = generateParameters
+$OutTemplate = Get-OutputTemplate $InfoJSON
+$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 
 Show-DownloadInfo 
 

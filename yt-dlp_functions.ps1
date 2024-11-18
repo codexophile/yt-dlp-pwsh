@@ -90,12 +90,16 @@ function Show-DownloadInfo {
 
 function Get-OutputFileNames {
     param( $OptionsObj, $InfoJSON, $OutTemplate )
+
+    if ( $OptionsObj.CustomName ) {
+        $OutTemplate = "$($OptionsObj.CustomName) - $( $OptionsObj.customRange ? '_%(section_start)s' : '' ) @[o][bQ].%(ext)s"
+    }
     
     $OutputFiles = @()
     $outFileName = $InfoJSON | & $ytdlPath '--load-info-json' - -O $OutTemplate
 
     if ($OptionsObj.CustomRange) {
-        foreach ($Item in $Options.Items) {
+        foreach ($Item in $OptionsObj.Items) {
             $Timestamp = ConvertTo-Seconds $Item
             # Apply the replacements to the filename and add to the output list
             $modifiedFileName = $outFileName -replace ':', '：' -replace '_NA', "_$Timestamp.0"
