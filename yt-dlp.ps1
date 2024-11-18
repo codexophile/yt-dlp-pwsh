@@ -64,9 +64,8 @@ switch ($mode) {
     }
 
     'max' {
-        & $ytdlPath -U                    # perform an update before downloading
         $InfoJSON = Get-InfoJson $ytdlPath
-        Show-MainWindow -ytdlPath $ytdlPath
+        Show-MainWindow -ytdlPath $ytdlPath $InfoJson
         $DownloadParameters = HandleModeMax $InfoJSON $ytdlPath
     }
 
@@ -104,6 +103,7 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
+& $ytdlPath -U                    # perform an update before downloading
 & $YtdlPath $DownloadParameters   # 🔥 
 
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
