@@ -56,12 +56,15 @@ switch ($mode) {
     }
 
     'quick' {
-        $downloadParameters = HandleModeMax -ytdlPath $ytdlPath
+        Show-MainWindow -ytdlPath $ytdlPath
+        $InfoJson = Get-InfoJson $ytdlPath
+        $downloadParameters = HandleModeMax $InfoJson
     }
 
     'max' {
         & $ytdlPath -U                    # perform an update before downloading
         $InfoJSON = Get-InfoJson $ytdlPath
+        Show-MainWindow -ytdlPath $ytdlPath
         $DownloadParameters = HandleModeMax $InfoJSON $ytdlPath
     }
 

@@ -1,8 +1,6 @@
 function HandleModeMax {
-    param( $InfoJson, $ytdlPath )
+    param( $InfoJson )
 
-    Show-MainWindow $InfoJson $ytdlPath
-        
     $Options = GenerateParameters
     $destination = $Options.destination
     $DownloadParameters = $BaseParameters
