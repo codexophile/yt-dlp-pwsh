@@ -30,7 +30,6 @@ function HandleModeMax {
 }
 
 function Show-DownloadInfo {
-
     $borderColor = 'DarkCyan'
     $headerColor = 'Cyan'
     $textColor = 'Yellow'
@@ -73,16 +72,14 @@ function Show-DownloadInfo {
     # Draw separator
     Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
     
-    # Display command parameters with alternating colors
-    Write-Host " COMMAND " -BackgroundColor DarkGreen -ForegroundColor White -NoNewline
-    Write-Host " " -NoNewline
+    # Display command parameters in a vertical, color-coded list
+    Write-Host " COMMAND " -BackgroundColor DarkGreen -ForegroundColor White
     
-    for ($i = 0; $i -lt $DownloadParameters.Count; $i++) {
+    foreach ($i in 0..($DownloadParameters.Count - 1)) {
         $bgColor = if ($i % 2 -eq 0) { 'DarkBlue' } else { 'DarkMagenta' }
-        Write-Host " $($DownloadParameters[$i]) " -ForegroundColor White -BackgroundColor $bgColor -NoNewline
-        Write-Host " " -NoNewline
+        Write-Host (" {0,2}. " -f ($i + 1)) -ForegroundColor White -BackgroundColor Gray -NoNewline
+        Write-Host " $($DownloadParameters[$i]) " -ForegroundColor White -BackgroundColor $bgColor
     }
-    Write-Host
     
     # Draw bottom border
     Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor

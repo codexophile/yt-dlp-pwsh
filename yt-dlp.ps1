@@ -30,7 +30,7 @@ $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certific
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
-# if ( $Debug ) { debug-function }
+# if ( $Debug ) { debug-function2 }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 
