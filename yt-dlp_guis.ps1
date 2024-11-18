@@ -157,6 +157,7 @@ function Show-MainWindow {
         })
 
     $wpf_proceedButton.add_click({
+
             # Custom ranges checked but you forgot to add the ranges to the listbox
             if ( $wpf_CbCustomranges.IsChecked -and $wpf_ListBoxRanges.Items.count -eq 0 ) {
                 Write-Host Listbox empty! -ForegroundColor Red
@@ -165,6 +166,7 @@ function Show-MainWindow {
             
             Set-Content -Path ./yt-dlp_cutom_ranges.txt -Value $wpf_ListBoxRanges.Items
             $psForm.hide()
+            
         })
 
     $wpf_buttonExit.add_click({
