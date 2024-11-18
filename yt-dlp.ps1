@@ -1,9 +1,10 @@
 param( 
     [string]$url, [string]$mode, [string]$destination, 
-    [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson
+    [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
+    [Switch]$Verbose
 )
 
-if ( $Debug ) {
+if ( $Verbose) {
     $VerbosePreference = 'Continue'
 }
 Clear-Host
