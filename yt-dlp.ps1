@@ -103,7 +103,7 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
-& $ytdlPath -U                    # perform an update before downloading
+& $ytdlPath -U                    # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
