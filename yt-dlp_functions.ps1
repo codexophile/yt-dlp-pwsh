@@ -21,7 +21,7 @@ function HandleModeMax {
         
     if ($Options.BestAudioOnly) { $DownloadParameters += '-f', 'bestaudio' }
     else {
-        If ($Options.SeventTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
+        If ($Options.SevenTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
         If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
     }
 

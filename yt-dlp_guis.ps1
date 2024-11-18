@@ -61,7 +61,7 @@ function GenerateParameters {
         CustomRange   = $CustomRange
         Items         = $Items
         CustomName    = $CustomName
-        SeventTwenty  = $720p
+        SevenTwenty   = $720p
         TenEighty     = $1080p
         BestAudioOnly = $BestAudioOnly
     }
@@ -166,7 +166,7 @@ function Show-MainWindow {
             
             Set-Content -Path ./yt-dlp_cutom_ranges.txt -Value $wpf_ListBoxRanges.Items
             $psForm.hide()
-            
+
         })
 
     $wpf_buttonExit.add_click({
