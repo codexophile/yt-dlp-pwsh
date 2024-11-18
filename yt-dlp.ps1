@@ -3,7 +3,9 @@ param(
     [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson
 )
 
-$VerbosePreference = 'Continue'
+if ( $Debug ) {
+    $VerbosePreference = 'Continue'
+}
 Clear-Host
 Set-Location $PSScriptRoot
 

@@ -18,7 +18,7 @@
                 "max",
                 // "list",
                 // "quick",
-                "-Debug",
+                // "-Debug",
                 "-verbose"
             ]
         }
