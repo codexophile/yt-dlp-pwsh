@@ -1,7 +1,7 @@
 param( 
     [string]$url, [string]$mode, [string]$destination, 
     [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
-    [Switch]$Verbose
+    [Switch]$Verbose = $false
 )
 
 if ( $Verbose) {
