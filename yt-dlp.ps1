@@ -113,7 +113,7 @@ if ($Debug) { Pause }
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
 
-$JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId-uid_$UniqueId.info.json"
+$JsonPath = "archive\($extractor)$VideoId-uid_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
