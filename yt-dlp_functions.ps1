@@ -1,10 +1,13 @@
 function Test-DownloadedInfoJson {
-    param($uniqueId, $extractor, $VideoId)
+    param( $extractor, $VideoId)
 
-    $CurrentPathToInfoJson = "archive\$uniqueId.info.json"
+    $CurrentPathToInfoJson = "archive\($extractor)$VideoId.info.json"
     $LegacyPathToInfoJson = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
-    return [System.IO.File]::Exists( $CurrentPathToInfoJson ) -or [System.IO.File]::Exists( $LegacyPathToInfoJson )
     
+    if ([System.IO.File]::Exists( $CurrentPathToInfoJson )) { return $CurrentPathToInfoJson }
+    elseif ([System.IO.File]::Exists( $LegacyPathToInfoJson )) { return $LegacyPathToInfoJson }
+    else { return $false }
+
 }
 
 function HandleModeMax {
