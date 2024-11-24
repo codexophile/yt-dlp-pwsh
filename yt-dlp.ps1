@@ -98,8 +98,9 @@ if ( $pathToJson ) {
         
 }
 
+$UniqueId = Get-UniqueId
 $Options = generateParameters
-$OutTemplate = Get-OutputTemplate $InfoJSON
+$OutTemplate = Get-OutputTemplate $InfoJSON $UniqueId
 $OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 
 Show-DownloadInfo 
@@ -110,7 +111,7 @@ if ($Debug) { Pause }
 & $ytdlPath -U                    # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 
-$JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
+$JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId-uid_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 

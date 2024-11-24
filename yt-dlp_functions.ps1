@@ -133,7 +133,7 @@ function Get-OutputFileNames {
 }
 
 function Get-OutputTemplate {
-    param( $InfoJson )
+    param( $InfoJson, $UniqueId )
 
     $ExtractorHashTable = @{
         facebook  = "%(uploader_id)s";
@@ -150,7 +150,7 @@ function Get-OutputTemplate {
 
     $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
     $Extractor = $InfoJSONFormatted.extractor
-    $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s - %(title)s$( $Options.customRange ? ' _%(section_start)s' : '' ) @[o][bQ].%(ext)s"
+    $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s - %(title)s$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId  @[o][bQ].%(ext)s"
     Return $OutTemplate
     
 }
