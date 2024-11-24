@@ -111,6 +111,8 @@ if ($Debug) { Pause }
 & $ytdlPath -U                    # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 
+if ($Extractor -eq 'generic') { $VideoId = '' }
+
 $JsonPath = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId-uid_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
