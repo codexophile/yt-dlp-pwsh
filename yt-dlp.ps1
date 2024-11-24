@@ -83,9 +83,9 @@ $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
 $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
 
-$pathToJson = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
-if ( [System.IO.File]::Exists( $pathToJson )  ) { 
-
+$pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
+if ( $pathToJson ) {
+   
     activate
     Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
     $response = guiAlreadyExistsPrompt
