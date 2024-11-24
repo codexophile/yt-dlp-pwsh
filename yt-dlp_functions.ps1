@@ -1,13 +1,23 @@
 function Test-DownloadedInfoJson {
     param( $extractor, $VideoId)
 
-    $CurrentPathToInfoJson = "archive\($extractor)$VideoId.info.json"
-    $LegacyPathToInfoJson = "D:\Mega\IDEs\powershell\yt-dlp archive\($extractor)$VideoId.info.json"
+    $CurrentPath = "archive"
+    $LegacyPath = "D:\Mega\IDEs\powershell\yt-dlp archive"
+    $SearchPattern = "*($extractor)$VideoId*.info.json"
     
-    if ([System.IO.File]::Exists( $CurrentPathToInfoJson )) { return $CurrentPathToInfoJson }
-    elseif ([System.IO.File]::Exists( $LegacyPathToInfoJson )) { return $LegacyPathToInfoJson }
-    else { return $false }
-
+    # Search in current path
+    $currentPathResult = Get-ChildItem -Path $CurrentPath -Filter $SearchPattern -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($currentPathResult) {
+        return $currentPathResult.FullName
+    }
+    
+    # Search in legacy path
+    $legacyPathResult = Get-ChildItem -Path $LegacyPath -Filter $SearchPattern -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($legacyPathResult) {
+        return $legacyPathResult.FullName
+    }
+    
+    return $false
 }
 
 function HandleModeMax {
