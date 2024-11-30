@@ -28,7 +28,7 @@ function Show-DownloadCompleteWindow {
         })
 
     $wpf_CloseButton.Add_Click({
-            $window.Close()
+            exitAndCloseTerminal
         })
 
     # Add Loaded event handler to ensure focus
@@ -38,6 +38,11 @@ function Show-DownloadCompleteWindow {
         
             # Optionally, if you want to focus a specific control:
             # $wpf_FilesList.Focus()
+        })
+
+    $window.add_Closing({
+            # $wpf_mainWindow.close()
+            exitAndCloseTerminal
         })
 
     # Show the window
