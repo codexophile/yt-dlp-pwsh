@@ -20,7 +20,7 @@ function Test-DownloadedInfoJson {
     return $false
 }
 
-function HandleModeMax {
+function Get-DownloadParameters {
     param( $InfoJson, $UniqueId )
 
     $Options = GenerateParameters

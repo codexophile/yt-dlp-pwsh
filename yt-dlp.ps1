@@ -63,13 +63,11 @@ switch ($mode) {
     'quick' {
         Show-MainWindow -ytdlPath $ytdlPath
         $InfoJson = Get-InfoJson $ytdlPath
-        $downloadParameters = HandleModeMax $InfoJson $UniqueId
     }
 
     'max' {
         $InfoJSON = Get-InfoJson $ytdlPath
         Show-MainWindow -ytdlPath $ytdlPath $InfoJson
-        $DownloadParameters = HandleModeMax $InfoJSON $UniqueId
     }
 
     'min' {
@@ -81,6 +79,7 @@ switch ($mode) {
     Default {}
 }
 
+$DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId
 $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
 $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
