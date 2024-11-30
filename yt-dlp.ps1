@@ -34,6 +34,8 @@ if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy',
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 
+$UniqueId = Get-UniqueId
+
 $mode = $mode.ToLower()
 switch ($mode) {
     
@@ -61,13 +63,13 @@ switch ($mode) {
     'quick' {
         Show-MainWindow -ytdlPath $ytdlPath
         $InfoJson = Get-InfoJson $ytdlPath
-        $downloadParameters = HandleModeMax $InfoJson
+        $downloadParameters = HandleModeMax $InfoJson $UniqueId
     }
 
     'max' {
         $InfoJSON = Get-InfoJson $ytdlPath
         Show-MainWindow -ytdlPath $ytdlPath $InfoJson
-        $DownloadParameters = HandleModeMax $InfoJSON $ytdlPath
+        $DownloadParameters = HandleModeMax $InfoJSON $UniqueId
     }
 
     'min' {
@@ -98,7 +100,6 @@ if ( $pathToJson ) {
         
 }
 
-$UniqueId = Get-UniqueId
 $Options = generateParameters
 $OutTemplate = Get-OutputTemplate $InfoJSON $UniqueId
 $OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
@@ -107,7 +108,7 @@ Show-DownloadInfo
 
 Write-Host
 Write-Host
-if ($Debug) { Pause }
+# if ($Debug) { Pause }
 & $ytdlPath -U                    # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 

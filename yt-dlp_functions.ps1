@@ -21,21 +21,24 @@ function Test-DownloadedInfoJson {
 }
 
 function HandleModeMax {
-    param( $InfoJson )
+    param( $InfoJson, $UniqueId )
 
     $Options = GenerateParameters
     $destination = $Options.destination
     $DownloadParameters = $BaseParameters
     $DownloadParameters += '-P', $destination
+    
     If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }
+   
     If ($Options.CustomRange) {
         foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
     }
+
     If ($Options.CustomName) {
-        $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) @[o][bQ].%(ext)s"
+        $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o][bQ].%(ext)s"
     }
     Else {
-        $OutTemplate = Get-OutputTemplate($InfoJson)
+        $OutTemplate = Get-OutputTemplate $InfoJson $UniqueId
     }
 
     $DownloadParameters += '-o', $OutTemplate
@@ -150,7 +153,7 @@ function Get-OutputTemplate {
 
     $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
     $Extractor = $InfoJSONFormatted.extractor
-    $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s - %(title)s$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId  @[o][bQ].%(ext)s"
+    $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s - %(title)s$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o][bQ].%(ext)s"
     Return $OutTemplate
     
 }
