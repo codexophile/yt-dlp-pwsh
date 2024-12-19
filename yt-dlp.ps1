@@ -1,11 +1,11 @@
 param( 
-    [string]$url, [string]$mode, [string]$destination, 
-    [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
-    [Switch]$Verbose = $false
+  [string]$url, [string]$mode, [string]$destination, 
+  [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
+  [Switch]$Verbose = $false, [String]$GivenName
 )
 
 if ( $Verbose) {
-    $VerbosePreference = 'Continue'
+  $VerbosePreference = 'Continue'
 }
 Clear-Host
 Set-Location $PSScriptRoot
@@ -18,10 +18,10 @@ Set-Location $PSScriptRoot
 . .\gui-others.ps1
 
 If (-Not($url -OR $mode)) {
-    Write-Host "Url : $url"
-    Write-Host "Mode: $mode"
-    Write-Host "Both download mode and url are required" -ForegroundColor Red
-    return     
+  Write-Host "Url : $url"
+  Write-Host "Mode: $mode"
+  Write-Host "Both download mode and url are required" -ForegroundColor Red
+  return     
 }
 
 $ytdlPath = 'D:\Program Files - Portable\youtube-dl\yt-dlp.exe'
@@ -39,44 +39,44 @@ $UniqueId = Get-UniqueId
 $mode = $mode.ToLower()
 switch ($mode) {
     
-    'list' {
-        $InfoJson = Get-InfoJson $ytdlPath
-        $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
-        $AfterListGui = GuiFromXaml($AfterListXaml)
-        $AfterListGui.add_Loaded({
-                Activate
-                $AfterListGui.Activate()
-                $AfterListGui.Focus()
-            })
-        $wpf_btnExit.add_click({
-                $AfterListGui.close()
-                exitAndCloseTerminal
-            })
-        $wpf_btnDownload.add_click({
-                $AfterListGui.close()
-                . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
-            })
-        $AfterListGui.ShowDialog()
-        Exit
-    }
+  'list' {
+    $InfoJson = Get-InfoJson $ytdlPath
+    $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
+    $AfterListGui = GuiFromXaml($AfterListXaml)
+    $AfterListGui.add_Loaded({
+        Activate
+        $AfterListGui.Activate()
+        $AfterListGui.Focus()
+      })
+    $wpf_btnExit.add_click({
+        $AfterListGui.close()
+        exitAndCloseTerminal
+      })
+    $wpf_btnDownload.add_click({
+        $AfterListGui.close()
+        . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
+      })
+    $AfterListGui.ShowDialog()
+    Exit
+  }
 
-    'quick' {
-        Show-MainWindow -ytdlPath $ytdlPath
-        $InfoJson = Get-InfoJson $ytdlPath
-    }
+  'quick' {
+    Show-MainWindow -ytdlPath $ytdlPath
+    $InfoJson = Get-InfoJson $ytdlPath
+  }
 
-    'max' {
-        $InfoJSON = Get-InfoJson $ytdlPath
-        Show-MainWindow -ytdlPath $ytdlPath $InfoJson
-    }
+  'max' {
+    $InfoJSON = Get-InfoJson $ytdlPath
+    Show-MainWindow -ytdlPath $ytdlPath $InfoJson
+  }
 
-    'min' {
-        $destination = 'W:\#previews'
-        $DownloadParameters = $BaseParameters
-        $DownloadParameters += '-P', 'W:\#previews', '-S', '+size,+br,+res,+fps'
-    }
+  'min' {
+    $destination = 'W:\#previews'
+    $DownloadParameters = $BaseParameters
+    $DownloadParameters += '-P', 'W:\#previews', '-S', '+size,+br,+res,+fps'
+  }
     
-    Default {}
+  Default {}
 }
 
 $DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId
@@ -87,15 +87,15 @@ $VideoId = $InfoJSONFormatted.id
 $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if ( $pathToJson ) {
    
-    activate
-    Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
-    $response = guiAlreadyExistsPrompt
-    switch ( $response ) {
-        Yes { Remove-Item $pathToJson }
-        No { exitAndCloseTerminal }
-        Abort { Remove-Item $pathToJson }
-        Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
-    }
+  activate
+  Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
+  $response = guiAlreadyExistsPrompt
+  switch ( $response ) {
+    Yes { Remove-Item $pathToJson }
+    No { exitAndCloseTerminal }
+    Abort { Remove-Item $pathToJson }
+    Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
+  }
         
 }
 
@@ -119,9 +119,9 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
 foreach ($File in $OutputFiles) {
-    Write-Host
-    "$destination\$File"
-    Test-Path -LiteralPath "$destination\$File"
+  Write-Host
+  "$destination\$File"
+  Test-Path -LiteralPath "$destination\$File"
 }
 
 Show-DownloadCompleteWindow $JsonPath $OutputFiles
