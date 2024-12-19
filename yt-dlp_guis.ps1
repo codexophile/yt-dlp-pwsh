@@ -87,9 +87,6 @@ function RefreshAndDisplayDestinations {
 function Show-MainWindow {
   param( $InfoJson, $ytdlPath)
 
-  Write-Host 'test'
-  Write-Host $GivenName
-
   $psForm = GuiFromXaml ".\gui-main-window.xaml"
 
   RefreshAndDisplayDestinations $wpf_destinationsListBox
@@ -206,6 +203,10 @@ function Show-MainWindow {
     $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
     $wpf_Textbox_CustomName.Text = $DisplayFileName
   }        
+  if ($GivenName) {
+    $wpf_Textbox_CustomName.Text = $GivenName
+    $wpf_Checkbox_CustomName.IsChecked = $true
+  }
   $null = $psForm.ShowDialog()
   # Write-Host $Result
   Return
