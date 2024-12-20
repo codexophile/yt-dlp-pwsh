@@ -26,12 +26,11 @@
                             <TextBlock Text="{Binding Path=FilePath}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
+                                        <!-- Default foreground will be black -->
+                                        <Setter Property="Foreground" Value="Black"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=Exists}" Value="True">
-                                                <Setter Property="Foreground" Value="Red"/>
-                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding Path=Exists}" Value="False">
-                                                <Setter Property="Foreground" Value="Green"/>
+                                                <Setter Property="Foreground" Value="Red"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

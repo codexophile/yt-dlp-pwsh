@@ -12,17 +12,18 @@ function Show-DownloadCompleteWindow {
   # Create a custom object for each file with path and existence status
   foreach ($File in $FilesList) {
     $fullPath = "$Destination\$File"
-    $fileExists = Test-Path -LiteralPath $fullPath
+    # Explicitly check if file exists and set boolean value
+    $fileExists = [bool](Test-Path -LiteralPath $fullPath -PathType Leaf)
         
     $fileItem = [PSCustomObject]@{
       FilePath = $fullPath
-      Exists   = $fileExists
+      Exists   = $fileExists  # This will be a true boolean value
     }
         
     $wpf_FilesList.Items.Add($fileItem)
     Write-Host "$fullPath - Exists: $fileExists"
   }
-    
+
   # Add event handlers
   $wpf_FilesList.Add_SelectionChanged({
       # param($sender, $e)
@@ -31,6 +32,7 @@ function Show-DownloadCompleteWindow {
     
   $wpf_OpenButton.Add_Click({
       # Open button logic
+      
     })
     
   $wpf_LocateButton.Add_Click({
