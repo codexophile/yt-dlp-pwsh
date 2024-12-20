@@ -32,7 +32,7 @@ function Show-DownloadCompleteWindow {
     
   $wpf_OpenButton.Add_Click({
       # Open button logic
-      
+      . $wpf_FilesList.SelectedItem.FilePath
     })
     
   $wpf_LocateButton.Add_Click({
