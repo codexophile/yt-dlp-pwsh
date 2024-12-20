@@ -11,6 +11,9 @@ function Show-DownloadCompleteWindow {
 
   foreach ($File in $FilesList) {
     $wpf_FilesList.Items.Add( "$Destination\$File" )
+    Write-Host
+    "$Destination\$File"
+    Test-Path -LiteralPath "$Destination\$File"
   }
 
   # Add event handlers
