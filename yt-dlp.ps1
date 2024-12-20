@@ -118,10 +118,11 @@ $JsonPath = "archive\($extractor)$VideoId-uid_$UniqueId.info.json"
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
+$Destination = $Options.destination
 foreach ($File in $OutputFiles) {
   Write-Host
-  "$destination\$File"
-  Test-Path -LiteralPath "$destination\$File"
+  "$Destination\$File"
+  Test-Path -LiteralPath "$Destination\$File"
 }
 
 Show-DownloadCompleteWindow $JsonPath $OutputFiles
