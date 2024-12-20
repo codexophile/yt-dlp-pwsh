@@ -4,13 +4,13 @@
 
 
 function Show-DownloadCompleteWindow {
-  param( $SavedInfoJson, $FilesList)
+  param( $SavedInfoJson, $FilesList, $Destination)
     
   # Load the GUI
   $window = GuiFromXaml -XamlTextOrXamlFile "gui-download-complete.xaml"
 
   foreach ($File in $FilesList) {
-    $wpf_FilesList.Items.Add( $File )
+    $wpf_FilesList.Items.Add( "$Destination\$File" )
   }
 
   # Add event handlers

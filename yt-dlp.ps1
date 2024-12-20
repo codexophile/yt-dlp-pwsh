@@ -125,6 +125,6 @@ foreach ($File in $OutputFiles) {
   Test-Path -LiteralPath "$Destination\$File"
 }
 
-Show-DownloadCompleteWindow $JsonPath $OutputFiles
+Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
 
 # exitTerminal $pathToJson $finalFilePath
