@@ -20,9 +20,26 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <ListBox x:Name="FilesList" Margin="5" 
-                         SelectionMode="Single"
-                         SelectionChanged="FilesList_SelectionChanged"/>
+                <ListBox x:Name="FilesList">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=FilePath}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Exists}" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Exists}" Value="False">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
                 
                 <StackPanel Grid.Column="1" Margin="5">
                     <Button x:Name="OpenButton" Content="Open" Margin="0,0,0,5" Padding="15,5"/>

@@ -4,50 +4,53 @@
 
 
 function Show-DownloadCompleteWindow {
-  param( $SavedInfoJson, $FilesList, $Destination)
+  param($SavedInfoJson, $FilesList, $Destination)
     
   # Load the GUI
   $window = GuiFromXaml -XamlTextOrXamlFile "gui-download-complete.xaml"
-
+    
+  # Create a custom object for each file with path and existence status
   foreach ($File in $FilesList) {
-    $wpf_FilesList.Items.Add( "$Destination\$File" )
-    Write-Host
-    "$Destination\$File"
-    Test-Path -LiteralPath "$Destination\$File"
+    $fullPath = "$Destination\$File"
+    $fileExists = Test-Path -LiteralPath $fullPath
+        
+    $fileItem = [PSCustomObject]@{
+      FilePath = $fullPath
+      Exists   = $fileExists
+    }
+        
+    $wpf_FilesList.Items.Add($fileItem)
+    Write-Host "$fullPath - Exists: $fileExists"
   }
-
+    
   # Add event handlers
   $wpf_FilesList.Add_SelectionChanged({
       # param($sender, $e)
       # Your FilesList_SelectionChanged logic here
     })
-
+    
   $wpf_OpenButton.Add_Click({
       # Open button logic
     })
-
+    
   $wpf_LocateButton.Add_Click({
       # Locate button logic
     })
-
+    
   $wpf_CloseButton.Add_Click({
       exitAndCloseTerminal
     })
-
+    
   # Add Loaded event handler to ensure focus
   $window.Add_Loaded({
       $window.Activate()
       $window.Focus()
-        
-      # Optionally, if you want to focus a specific control:
-      # $wpf_FilesList.Focus()
     })
-
+    
   $window.add_Closing({
-      # $wpf_mainWindow.close()
       exitAndCloseTerminal
     })
-
+    
   # Show the window
   $window.ShowDialog()
 }
