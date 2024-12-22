@@ -39,7 +39,8 @@ function Show-DownloadCompleteWindow {
     })
     
   $wpf_CloseButton.Add_Click({
-      exitAndCloseTerminal
+      $window.Close()
+      # exitAndCloseTerminal
     })
     
   # Add Loaded event handler to ensure focus
@@ -49,7 +50,7 @@ function Show-DownloadCompleteWindow {
     })
     
   $window.add_Closing({
-      exitAndCloseTerminal
+      # exitAndCloseTerminal
     })
     
   # Show the window
@@ -187,7 +188,7 @@ function Show-MainWindow {
     })
 
   $wpf_buttonRefreshDestinations.add_click({
-      RefreshAndDisplayDestinations        
+      RefreshAndDisplayDestinations $wpf_destinationsListBox   
     })
 
   # Add Loaded event handler to ensure focus
