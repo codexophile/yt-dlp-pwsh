@@ -67,16 +67,18 @@ function GenerateParameters {
   $720p = $wpf_cb720p.IsChecked ? $true : $false
   $1080p = $wpf_cb1080p.IsChecked ? $true : $false
   $BestAudioOnly = $wpf_cbBestAudio.IsChecked ? $true : $false
+  $ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked ? $true : $false
 
   Return @{
-    Destination   = $destination
-    IsCookies     = $isCookies
-    CustomRange   = $CustomRange
-    Items         = $Items
-    CustomName    = $CustomName
-    SevenTwenty   = $720p
-    TenEighty     = $1080p
-    BestAudioOnly = $BestAudioOnly
+    Destination        = $destination
+    IsCookies          = $isCookies
+    CustomRange        = $CustomRange
+    Items              = $Items
+    CustomName         = $CustomName
+    SevenTwenty        = $720p
+    TenEighty          = $1080p
+    BestAudioOnly      = $BestAudioOnly
+    ImpersonateGeneric = $ImpersonateGeneric
   }
 
 }
@@ -162,10 +164,12 @@ function Show-MainWindow {
 
   $wpf_Checkbox_CustomName.add_click({
       $wpf_Textbox_CustomName.IsEnabled = $This.IsChecked
-      $wpf_BtnPaste.IsEnabled = $This.IsChecked
     })
 
   $wpf_BtnPaste.add_click({
+      $clipboardContent = (get-clipboard).Trim()
+      if ( $clipboardContent -eq "" ) { return }
+      $wpf_Checkbox_CustomName.IsChecked = $true
       $wpf_Textbox_CustomName.Text = (Get-Clipboard).Trim()
     })
 
@@ -203,7 +207,7 @@ function Show-MainWindow {
   # add gui close event handler
   $psForm.add_Closing({
       # $wpf_mainWindow.close()
-      exitAndCloseTerminal
+      # exitAndCloseTerminal
     })
  
   if ($InfoJson) {

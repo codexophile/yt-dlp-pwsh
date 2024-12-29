@@ -65,7 +65,8 @@ switch ($mode) {
 
   'quick' {
     Show-MainWindow -ytdlPath $ytdlPath
-    $InfoJson = Get-InfoJson $ytdlPath
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters
+    $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
   }
 
   'max' {
