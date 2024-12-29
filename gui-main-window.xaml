@@ -89,18 +89,53 @@
 
         <!-- Right Panel - Controls -->
         <StackPanel Grid.Column="2" Margin="0,0,0,0">
-            <!-- Options Group -->
-            <GroupBox Header="Options">
-                <StackPanel>
-                    <CheckBox x:Name="cbCookies" Content="Cookies from browser" IsChecked="True"/>
-                    <CheckBox x:Name="cbBestAudio" Content="Best audio only" Margin="0,4"/> <!-- New CheckBox for best audio -->
-                    <StackPanel Orientation="Horizontal" Margin="0,4">
-                        <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Margin="0,0,12,0"/>
-                        <CheckBox x:Name="cb720p" Content="720p" Margin="0,0,12,0"/>
-                        <CheckBox x:Name="cb1080p" Content="1080p"/>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
+          <!-- Options Group -->
+          <GroupBox Header="Options">
+              <Grid>
+                  <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  
+                  <!-- Left Column -->
+                  <CheckBox x:Name="cbCookies" 
+                            Content="Cookies from browser" 
+                            IsChecked="True" 
+                            Grid.Column="0" 
+                            Grid.Row="0"/>
+                  <CheckBox x:Name="cbBestAudio" 
+                            Content="Best audio only" 
+                            Grid.Column="0" 
+                            Grid.Row="1" 
+                            Margin="0,4"/>
+                  <CheckBox x:Name="cbImpersonateGeneric" 
+                            Content="Impersonate" 
+                            Grid.Column="0" 
+                            Grid.Row="2" 
+                            Margin="0,4"/>
+                  
+                  <!-- Right Column -->
+                  <CheckBox x:Name="cbCustomRanges" 
+                            Content="Custom ranges" 
+                            Grid.Column="1" 
+                            Grid.Row="0"/>
+                  <StackPanel Orientation="Horizontal" 
+                              Grid.Column="1" 
+                              Grid.Row="1" 
+                              Margin="0,4">
+                      <CheckBox x:Name="cb720p" 
+                                Content="720p" 
+                                Margin="0,0,12,0"/>
+                      <CheckBox x:Name="cb1080p" 
+                                Content="1080p"/>
+                  </StackPanel>
+              </Grid>
+          </GroupBox>
 
             <!-- Ranges Group -->
             <GroupBox Header="Time Ranges">
