@@ -149,7 +149,7 @@ function Get-OutputTemplate {
     facebook  = "%(uploader_id)s";
     hotstar   = "%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s";
     zee5      = "%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s";
-    instagram = "%(channel)s- %(uploader)s  - %(uploader_id)s";
+    instagram = "%(channel)s- %(uploader)s - %(uploader_id)s";
     tiktok    = "%(uploader)s";
     twitter   = "%(uploader_id)s- %(uploader)s";
     vimeo     = "%(uploader_id)s- %(uploader)s";
@@ -160,9 +160,12 @@ function Get-OutputTemplate {
 
   $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
   $Extractor = $InfoJSONFormatted.extractor
-  $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s - %(title)s$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o][bQ].%(ext)s"
-  Return $OutTemplate
     
+  # Build the template conditionally based on extractor
+  $TitlePart = if ($Extractor -ne "facebook") { " - %(title)s" } else { "" }
+  $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o][bQ].%(ext)s"
+    
+  Return $OutTemplate
 }
 
 Function Get-Proxy() {
