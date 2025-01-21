@@ -1,4 +1,4 @@
-# . D:\Mega\IDEs\powershell\functions-forms.ps1
+# . c:\mega\IDEs\powershell\functions-forms.ps1
 # Add-Type -AssemblyName System.Windows.Forms
 # Add-Type -AssemblyName System.Drawing
 

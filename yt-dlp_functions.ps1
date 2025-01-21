@@ -2,7 +2,7 @@ function Test-DownloadedInfoJson {
   param( $extractor, $VideoId)
 
   $CurrentPath = "archive"
-  $LegacyPath = "D:\Mega\IDEs\powershell\yt-dlp archive"
+  $LegacyPath = "c:\mega\IDEs\powershell\yt-dlp archive"
   $SearchPattern = "*($extractor)$VideoId*.info.json"
     
   # Search in current path
