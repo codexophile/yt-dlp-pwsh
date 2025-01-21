@@ -219,6 +219,7 @@ function Show-MainWindow {
     $wpf_Textbox_CustomName.Text = $GivenName
     $wpf_Checkbox_CustomName.IsChecked = $true
   }
+  $wpf_txtVideoUrl.Text = $url
   $null = $psForm.ShowDialog()
   # Write-Host $Result
   Return
