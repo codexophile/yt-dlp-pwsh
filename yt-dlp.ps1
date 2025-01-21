@@ -79,6 +79,16 @@ switch ($mode) {
     $DownloadParameters = $BaseParameters
     $DownloadParameters += '-P', 'W:\#previews', '-S', '+size,+br,+res,+fps'
   }
+
+  'check' {
+    $InfoJson = Get-InfoJson $ytdlPath
+    $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
+    $extractor = $InfoJSONFormatted.extractor
+    $videoId = $InfoJSONFormatted.id
+    Write-Host $VideoId
+    Pause
+    Exit
+  }
     
   Default {}
 }
