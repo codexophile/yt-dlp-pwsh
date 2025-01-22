@@ -94,6 +94,68 @@ function RefreshAndDisplayDestinations {
   [void] $ListBox.Items.Add("$HOME\Downloads")
 }
 
+function Save-YtDlpConfig {
+  # Get current configuration from GUI controls
+  $config = @{
+    Cookies            = $wpf_cbCookies.IsChecked
+    BestAudioOnly      = $wpf_cbBestAudio.IsChecked
+    ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked
+    CustomRanges       = $wpf_CbCustomranges.IsChecked
+    Resolution720p     = $wpf_cb720p.IsChecked
+    Resolution1080p    = $wpf_cb1080p.IsChecked
+    TimeRanges         = @()
+  }
+
+  # Save time ranges if any exist
+  if ($wpf_ListBoxRanges.Items.Count -gt 0) {
+    $config.TimeRanges = @($wpf_ListBoxRanges.Items)
+  }
+
+  # Save configuration to JSON file
+  $configPath = Join-Path $PSScriptRoot "gui-main-window-config.json"
+  $config | ConvertTo-Json | Set-Content -Path $configPath
+  Write-Host "Configuration saved successfully" -ForegroundColor Green
+}
+
+function Load-YtDlpConfig {
+  # Construct path to configuration file
+  $configPath = Join-Path $PSScriptRoot "gui-main-window-config.json"
+
+  # Check if configuration file exists
+  if (-not (Test-Path $configPath)) {
+    Write-Host "No saved configuration found" -ForegroundColor Yellow
+    return $false
+  }
+
+  try {
+    # Load and parse configuration
+    $config = Get-Content -Path $configPath | ConvertFrom-Json
+
+    # Apply configuration to GUI controls
+    $wpf_cbCookies.IsChecked = $config.Cookies
+    $wpf_cbBestAudio.IsChecked = $config.BestAudioOnly
+    $wpf_cbImpersonateGeneric.IsChecked = $config.ImpersonateGeneric
+    $wpf_CbCustomranges.IsChecked = $config.CustomRanges
+    $wpf_cb720p.IsChecked = $config.Resolution720p
+    $wpf_cb1080p.IsChecked = $config.Resolution1080p
+
+    # Clear and load time ranges
+    $wpf_ListBoxRanges.Items.Clear()
+    if ($config.TimeRanges) {
+      foreach ($range in $config.TimeRanges) {
+        $wpf_ListBoxRanges.Items.Add($range)
+      }
+    }
+
+    Write-Host "Configuration loaded successfully" -ForegroundColor Green
+    return $true
+  }
+  catch {
+    Write-Host "Error loading configuration: $_" -ForegroundColor Red
+    return $false
+  }
+}
+
 function Show-MainWindow {
   param( $InfoJson, $ytdlPath)
 
@@ -171,6 +233,14 @@ function Show-MainWindow {
       if ( $clipboardContent -eq "" ) { return }
       $wpf_Checkbox_CustomName.IsChecked = $true
       $wpf_Textbox_CustomName.Text = (Get-Clipboard).Trim()
+    })
+
+  $wpf_btnSaveConfig.add_click({
+      Save-YtDlpConfig
+    })
+
+  $wpf_btnLoadConfig.add_click({
+      Load-YtDlpConfig
     })
 
   $wpf_proceedButton.add_click({
