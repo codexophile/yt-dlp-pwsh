@@ -221,19 +221,24 @@
                     </GroupBox>
                 </Grid>
 
-                    <!-- Action Buttons -->
-                    <UniformGrid Rows="1" Margin="0,8,0,0">
-                        <Button x:Name="buttonRefreshDestinations" Content="Refresh" Margin="0,0,4,0"/>
-                        <Button x:Name="proceedButton" Content="PROCEED" 
-                                FontWeight="Bold" 
-                                Background="#2E7D32"
-                                Margin="4,0"/>
-                        <Button x:Name="buttonExit" Content="EXIT" 
-                                Background="#C62828"
-                                Margin="4,0,0,0"/>
-                    </UniformGrid>
-                </StackPanel>
-            </Grid>
+                <!-- Action Buttons -->
+                <UniformGrid Rows="1" Margin="0,4,0,0">
+                    <Button x:Name="buttonRefreshDestinations" Content="Refresh" Margin="0,0,4,0" Padding="8,4"/>
+                    <Button x:Name="proceedButton" Content="PROCEED" 
+                            FontWeight="Bold" 
+                            Background="#2E7D32"
+                            Margin="4,0"
+                            Padding="8,4"/>
+                    <Button x:Name="buttonExit" Content="EXIT" 
+                            Background="#C62828"
+                            Margin="4,0,0,0"
+                            Padding="8,4"/>
+                    <Button x:Name="buttonRestart" Content="RESTART" 
+                            Background="#FFA000"
+                            Margin="4,0,0,0"
+                            Padding="8,4"/>
+                </UniformGrid>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
