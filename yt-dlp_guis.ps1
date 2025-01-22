@@ -245,6 +245,8 @@ function Show-MainWindow {
 
   $wpf_proceedButton.add_click({
 
+      Save-YtDlpConfig
+
       # Custom ranges checked but you forgot to add the ranges to the listbox
       if ( $wpf_CbCustomranges.IsChecked -and $wpf_ListBoxRanges.Items.count -eq 0 ) {
         Write-Host Listbox empty! -ForegroundColor Red
