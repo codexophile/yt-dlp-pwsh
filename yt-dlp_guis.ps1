@@ -221,7 +221,6 @@ function Show-MainWindow {
     } )
   $wpf_btn_range_loadFromFile.add_click( {
       $wpf_ListBoxRanges.Items.Clear()
-      foreach ($line in Get-Content .\yt-dlp_cutom_ranges.txt) { $wpf_ListBoxRanges.Items.Add( $line ) }        
     } )
 
   $wpf_Checkbox_CustomName.add_click({
@@ -253,7 +252,6 @@ function Show-MainWindow {
         Return
       }
             
-      Set-Content -Path ./yt-dlp_cutom_ranges.txt -Value $wpf_ListBoxRanges.Items
       $psForm.hide()
 
     })
