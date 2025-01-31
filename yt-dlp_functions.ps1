@@ -49,7 +49,7 @@ function Get-DownloadParameters {
   If ($Options.ImpersonateGeneric) { $DownloadParameters += '--extractor-args', "generic:impersonate" }
 
   $DownloadParameters += '-o', $OutTemplate
-  $DownloadParameters += '--embed-info-json', '--embed-subs', '--embed-metadata', '--embed-chapters'
+  $DownloadParameters += '--embed-info-json', '--embed-subs', '--embed-metadata', '--embed-chapters', '--write-auto-subs'
         
   if ($Options.BestAudioOnly) { $DownloadParameters += '-f', 'bestaudio' }
   else {
