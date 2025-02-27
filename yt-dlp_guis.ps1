@@ -285,7 +285,7 @@ function Show-MainWindow {
     $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
     $wpf_Textbox_CustomName.Text = $DisplayFileName
   }        
-  if ($GivenName) {
+  if ($GivenName -and $GivenName -ne ':default:') {
     $wpf_Textbox_CustomName.Text = $GivenName
     $wpf_Checkbox_CustomName.IsChecked = $true
   }
