@@ -2,6 +2,43 @@
 # Add-Type -AssemblyName System.Windows.Forms
 # Add-Type -AssemblyName System.Drawing
 
+function Show-WpfFormOnMonitor {
+  param (
+    [Parameter(Mandatory = $true)]
+    [System.Windows.Window]$WpfForm,
+
+    [Parameter(Mandatory = $true)]
+    [int]$MonitorIndex
+  )
+
+  # Get all screens (monitors)
+  $screens = [System.Windows.Forms.Screen]::AllScreens
+
+  # Validate the monitor index
+  if ($MonitorIndex -lt 0 -or $MonitorIndex -ge $screens.Count) {
+    Write-Error "Invalid monitor index. Available monitors: 0 to $($screens.Count - 1)"
+    return
+  }
+
+  # Get the target monitor
+  $targetScreen = $screens[$MonitorIndex]
+
+  # Get the monitor's working area (excludes taskbar, etc.)
+  $screenBounds = $targetScreen.WorkingArea
+
+  # Calculate the center position
+  $formWidth = $WpfForm.Width
+  $formHeight = $WpfForm.Height
+  $left = $screenBounds.X + (($screenBounds.Width - $formWidth) / 2)
+  $top = $screenBounds.Y + (($screenBounds.Height - $formHeight) / 2)
+
+  # Set the form's position
+  $WpfForm.Left = $left
+  $WpfForm.Top = $top
+
+  # Show the form
+  $WpfForm.ShowDialog()
+}
 
 function Show-DownloadCompleteWindow {
   param($SavedInfoJson, $FilesList, $Destination)
@@ -290,8 +327,8 @@ function Show-MainWindow {
     $wpf_Checkbox_CustomName.IsChecked = $true
   }
   $wpf_txtVideoUrl.Text = $url
-  $null = $psForm.ShowDialog()
-  # Write-Host $Result
+
+  $null = Show-WpfFormOnMonitor $psForm 0
   Return
 
 }

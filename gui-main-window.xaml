@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="yt-dlp-pwsh" Height="500" Width="700"
         FontSize="13" Background="#1E1E1E"
-        WindowStartupLocation="CenterScreen">
+>
     
 <Window.Resources>
         <Style TargetType="Button">
