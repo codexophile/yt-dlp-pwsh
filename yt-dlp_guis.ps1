@@ -90,8 +90,8 @@ function Show-DownloadCompleteWindow {
       # exitAndCloseTerminal
     })
     
-  # Show the window
-  $window.ShowDialog()
+
+  $null = Show-WpfFormOnMonitor $window 0
 }
 
 function GenerateParameters {
