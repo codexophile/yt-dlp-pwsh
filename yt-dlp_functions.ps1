@@ -36,7 +36,7 @@ function Get-DownloadParameters {
   $DownloadParameters = $BaseParameters
   $DownloadParameters += '-P', $destination
     
-  If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }
+  If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'edge' }
   If ($Options.CustomRange) {
     foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
   }
