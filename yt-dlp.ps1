@@ -132,5 +132,6 @@ $JsonPath = "archive\($extractor)$VideoId-uid_$UniqueId.info.json"
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
+Write-Ascii 'Completion!'
 $Destination = $Options.destination
 Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
