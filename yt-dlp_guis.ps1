@@ -210,6 +210,34 @@ function Show-MainWindow {
     if ( [int]$this.text -lt 0  ) { $this.text = 59 }
     if ( [int]$this.text -gt 59 ) { $this.text = 0 }
   }
+
+  # Set up the destinationsListBox item selection event handler
+  $wpf_destinationsListBox.Add_SelectionChanged({
+      if ($wpf_destinationsListBox.SelectedItem) {
+        # When a destination is selected from the list, populate the custom destination textbox
+        $wpf_txtCustomDestination.Text = $wpf_destinationsListBox.SelectedItem.ToString()
+        
+        # Automatically check the "Use custom destination" checkbox
+        $wpf_cbCustomDestination.IsChecked = $true
+      }
+    })
+
+  # Set up the browse button click event handler
+  $wpf_btnBrowse.Add_Click({
+      # Create folder browser dialog
+      $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
+      $folderBrowser.Description = "Select Destination Folder"
+    
+      # If a path is already entered, start from there
+      if ($txtCustomDestination.Text -and (Test-Path $txtCustomDestination.Text)) {
+        $folderBrowser.SelectedPath = $txtCustomDestination.Text
+      }
+    
+      # Show dialog and update text if user selects a folder
+      if ($folderBrowser.ShowDialog() -eq 'OK') {
+        $txtCustomDestination.Text = $folderBrowser.SelectedPath
+      }
+    })
         
   $wpf_CbCustomranges.add_click( { 
         
