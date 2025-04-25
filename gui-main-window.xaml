@@ -97,11 +97,39 @@
             </Grid.ColumnDefinitions>
 
             <!-- Left Panel - Destinations -->
-            <DockPanel Grid.Column="0" Height="250">
+            <DockPanel Grid.Column="0">
                 <TextBlock DockPanel.Dock="Top" Text="Destinations" FontWeight="Bold" Margin="0,0,0,4"/>
+                <GroupBox Header="Custom Destination" DockPanel.Dock="Bottom" Padding="4" Margin="0,8,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <CheckBox x:Name="cbCustomDestination" Content="Use custom destination" Grid.Row="0" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="txtCustomDestination" 
+                                 Grid.Row="1" 
+                                 Grid.Column="0"
+                                 IsEnabled="{Binding IsChecked, ElementName=cbCustomDestination}"
+                                 Margin="0,4,4,0"/>
+                        <Button x:Name="btnBrowse" 
+                                Content="..." 
+                                Grid.Row="1" 
+                                Grid.Column="1"
+                                Width="30"
+                                Padding="4,2"
+                                IsEnabled="{Binding IsChecked, ElementName=cbCustomDestination}"
+                                Margin="0,4,0,0"/>
+                    </Grid>
+                </GroupBox>
                 <ListBox x:Name="destinationsListBox" 
                          BorderThickness="1"
-                         FontSize="12"/>
+                         FontSize="12"
+                         Height="170"/>
             </DockPanel>
 
             <!-- Right Panel -->
