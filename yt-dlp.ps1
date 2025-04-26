@@ -69,7 +69,9 @@ switch ($mode) {
       Exit
     }
     
-        
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters
+    $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
+
   }
 
   'quick' {
