@@ -8,7 +8,7 @@
         Title="yt-dlp-pwsh" Height="500" Width="700"
         FontSize="13" Background="#1E1E1E"
 >
-    
+
 <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="12,6"/>
@@ -76,12 +76,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="8"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/> <!-- Changed to * to allow main content to fill -->
         </Grid.RowDefinitions>
-        
+
         <!-- URL Display Section -->
         <GroupBox Header="Video URL" Grid.Row="0" Padding="4" Margin="0,0,0,0">
-            <TextBox x:Name="txtVideoUrl" 
+            <TextBox x:Name="txtVideoUrl"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      Height="100"
@@ -99,29 +99,34 @@
             <!-- Left Panel - Destinations -->
             <DockPanel Grid.Column="0">
                 <TextBlock DockPanel.Dock="Top" Text="Destinations" FontWeight="Bold" Margin="0,0,0,4"/>
-                
-                <!-- Custom Destination - Modified to use the full width -->
-                <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="True">
-                    <TextBlock DockPanel.Dock="Top" Text="Custom Destination" Margin="0,0,0,4"/>
-                    <Button x:Name="btnBrowse" 
-                            Content="..." 
-                            DockPanel.Dock="Right"
+
+                <!-- Custom Destination Controls (No GroupBox, No CheckBox) -->
+                <Grid DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/> <!-- TextBox takes available space -->
+                        <ColumnDefinition Width="Auto"/> <!-- Button takes needed space -->
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="txtCustomDestination"
+                             Grid.Column="0"
+                             IsEnabled="True"  
+                             Margin="0,4,4,0"/>
+                    <Button x:Name="btnBrowse"
+                            Content="..."
+                            Grid.Column="1"
                             Width="30"
-                            Height="30"
-                            Padding="4,0"
-                            Margin="4,0,0,0"
-                            VerticalAlignment="Top"/>
-                    <TextBox x:Name="txtCustomDestination" 
-                             TextWrapping="Wrap"
-                             Height="50"
-                             VerticalAlignment="Top"
-                             AcceptsReturn="True"/>
-                </DockPanel>
-                
-                <ListBox x:Name="destinationsListBox" 
+                            Padding="4,2"
+                            IsEnabled="True" 
+                            Margin="0,4,0,0"/>
+                </Grid>
+
+                <!-- Destinations ListBox takes remaining space -->
+                <ListBox x:Name="destinationsListBox"
                          BorderThickness="1"
                          FontSize="12"
-                         Height="140"/>
+                         VerticalAlignment="Stretch" 
+                         MinHeight="100" />          <!-- Give it a minimum height -->
+
             </DockPanel>
 
             <!-- Right Panel -->
@@ -138,7 +143,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        
+
                         <CheckBox x:Name="cbCookies" Content="Cookies from browser" Grid.Column="0" Grid.Row="0" Margin="0,0,12,4"/>
                         <CheckBox x:Name="cbBestAudio" Content="Best audio only" Grid.Column="0" Grid.Row="1" Margin="0,0,12,4"/>
                         <CheckBox x:Name="cbImpersonateGeneric" Content="Impersonate" Grid.Column="1" Grid.Row="0" Margin="0,0,12,4"/>
@@ -157,7 +162,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Time Ranges Group -->
-                    <GroupBox Header="Time Ranges" Grid.Column="0" Padding="4" Margin="0,0,0,4" 
+                    <GroupBox Header="Time Ranges" Grid.Column="0" Padding="4" Margin="0,0,0,4"
                               IsEnabled="{Binding ElementName=cbCustomRanges, Path=IsChecked}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -225,16 +230,16 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <CheckBox x:Name="Checkbox_CustomName" Content="Custom name" Grid.ColumnSpan="2"/>
                             <TextBox x:Name="Textbox_CustomName" Grid.Row="1" Grid.Column="0"
                                      Height="70"
                                      IsEnabled="{Binding IsChecked, ElementName=Checkbox_CustomName}"
                                      TextWrapping="Wrap"
                                      Margin="0,4,0,0"/>
-                            <Button x:Name="BtnPaste" Content="📋" Grid.Row="1" Grid.Column="1" 
-                                    Width="24" Height="24" 
-                                    VerticalAlignment="Top" 
+                            <Button x:Name="BtnPaste" Content="📋" Grid.Row="1" Grid.Column="1"
+                                    Width="24" Height="24"
+                                    VerticalAlignment="Top"
                                     Margin="4,4,0,0"
                                     Padding="0"/>
                         </Grid>
@@ -244,22 +249,22 @@
                 <!-- Action Buttons -->
               <UniformGrid Rows="1" Margin="0,4,0,0">
                   <Button x:Name="buttonRefreshDestinations" Content="Refresh" Margin="0,0,4,0" Padding="8,4"/>
-                  <Button x:Name="btnSaveConfig" Content="Save Config" 
+                  <Button x:Name="btnSaveConfig" Content="Save Config"
                           Margin="4,0"
                           Padding="8,4"/>
-                  <Button x:Name="btnLoadConfig" Content="Load Config" 
+                  <Button x:Name="btnLoadConfig" Content="Load Config"
                           Margin="4,0"
                           Padding="8,4"/>
-                  <Button x:Name="proceedButton" Content="PROCEED" 
-                          FontWeight="Bold" 
+                  <Button x:Name="proceedButton" Content="PROCEED"
+                          FontWeight="Bold"
                           Background="#2E7D32"
                           Margin="4,0"
                           Padding="8,4"/>
-                  <Button x:Name="buttonExit" Content="EXIT" 
+                  <Button x:Name="buttonExit" Content="EXIT"
                           Background="#C62828"
                           Margin="4,0,0,0"
                           Padding="8,4"/>
-                  <Button x:Name="buttonRestart" Content="RESTART" 
+                  <Button x:Name="buttonRestart" Content="RESTART"
                           Background="#FFA000"
                           Margin="4,0,0,0"
                           Padding="8,4"/>
