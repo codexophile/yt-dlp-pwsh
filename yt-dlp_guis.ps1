@@ -96,7 +96,7 @@ function Show-DownloadCompleteWindow {
 
 function GenerateParameters {
 
-  $destination = $wpf_destinationsListBox.SelectedItem ? $wpf_destinationsListBox.SelectedItem : [Environment]::GetFolderPath("Desktop") 
+  $destination = $wpf_txtCustomDestination.Text ? $wpf_txtCustomDestination.Text : [Environment]::GetFolderPath("Desktop") 
   $isCookies = $wpf_cbCookies.IsChecked      ? $true : $false
   $CustomRange = $wpf_CbCustomranges.IsChecked ? $true : $false
   $Items = $wpf_ListBoxRanges.Items
@@ -203,7 +203,7 @@ function Show-MainWindow {
   if ($destination) {
 
     if ( -not (Test-Path $destination)) {
-      Write-Error "Invalid path: $destination"
+      Write-Warning "Invalid path: $destination"
     }
     
     $wpf_destinationsListBox.SelectedItem = $destination
