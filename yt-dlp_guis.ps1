@@ -326,7 +326,12 @@ function Show-MainWindow {
         Write-Host Listbox empty! -ForegroundColor Red
         Return
       }
-            
+      $CustomDestination = $wpf_txtCustomDestination.Text
+      if ( -not ( Test-Path $CustomDestination ) ) {
+        Write-Warning "Invalid path: $CustomDestination"
+        return
+      }
+      
       $psForm.hide()
 
     })
