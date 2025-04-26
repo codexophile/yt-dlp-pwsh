@@ -68,6 +68,10 @@ switch ($mode) {
       Write-Error "A destination must be given with 'NoPrompt' mode!"
       Exit
     }
+    if ( -not (Test-Path $destination)) {
+      Write-Error "Invalid path: $destination"
+      Exit
+    }
     
     $SecondaryBaseParameters = Get-SecondaryBaseParameters
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
