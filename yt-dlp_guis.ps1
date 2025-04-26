@@ -96,7 +96,7 @@ function Show-DownloadCompleteWindow {
 
 function GenerateParameters {
 
-  $destination = $wpf_txtCustomDestination.Text ? $wpf_txtCustomDestination.Text : [Environment]::GetFolderPath("Desktop") 
+  $destination = $wpf_txtCustomDestination.Text ? $wpf_txtCustomDestination.Text : $destination ? $destination : [Environment]::GetFolderPath("Desktop") 
   $isCookies = $wpf_cbCookies.IsChecked      ? $true : $false
   $CustomRange = $wpf_CbCustomranges.IsChecked ? $true : $false
   $Items = $wpf_ListBoxRanges.Items
