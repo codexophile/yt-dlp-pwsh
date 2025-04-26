@@ -200,6 +200,19 @@ function Show-MainWindow {
 
   RefreshAndDisplayDestinations $wpf_destinationsListBox
 
+  if ($destination) {
+
+    if ( -not (Test-Path $destination)) {
+      Write-Error "Invalid path: $destination"
+    }
+    
+    $wpf_destinationsListBox.SelectedItem = $destination
+    $wpf_txtCustomDestination.Text = $destination
+  }
+  else {
+    $wpf_destinationsListBox.SelectedIndex = 0
+  }
+
   #* Generate parameters/initialize variables on GUI events
 
   function WheelEventHandler() {
