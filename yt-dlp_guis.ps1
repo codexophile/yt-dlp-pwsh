@@ -154,7 +154,7 @@ function Save-YtDlpConfig {
   Write-Host "Configuration saved successfully" -ForegroundColor Green
 }
 
-function Load-YtDlpConfig {
+function Get-YtDlpConfig {
   # Construct path to configuration file
   $configPath = Join-Path $PSScriptRoot "gui-main-window-config.json"
 
@@ -301,7 +301,7 @@ function Show-MainWindow {
     })
 
   $wpf_btnLoadConfig.add_click({
-      Load-YtDlpConfig
+      Get-YtDlpConfig
     })
 
   $wpf_proceedButton.add_click({
