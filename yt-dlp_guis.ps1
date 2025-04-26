@@ -216,9 +216,6 @@ function Show-MainWindow {
       if ($wpf_destinationsListBox.SelectedItem) {
         # When a destination is selected from the list, populate the custom destination textbox
         $wpf_txtCustomDestination.Text = $wpf_destinationsListBox.SelectedItem.ToString()
-        
-        # Automatically check the "Use custom destination" checkbox
-        $wpf_cbCustomDestination.IsChecked = $true
       }
     })
 
