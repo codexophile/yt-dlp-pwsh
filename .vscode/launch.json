@@ -18,10 +18,12 @@
         // "max",
         // "list",
         "quick",
-        "-Debug"
+        "-Debug",
         // "-verbose",
         // "-GivenName",
         // "\"test file name\""
+        "-Destination",
+        "c:\\test\\destination"
       ]
     }
   ]
