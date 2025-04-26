@@ -63,6 +63,15 @@ switch ($mode) {
     Exit
   }
 
+  'noprompt' {
+    if (-not $destination) {
+      Write-Error "A destination must be given with 'NoPrompt' mode!"
+      Exit
+    }
+    
+        
+  }
+
   'quick' {
     Show-MainWindow -ytdlPath $ytdlPath
     $SecondaryBaseParameters = Get-SecondaryBaseParameters
