@@ -63,6 +63,19 @@ switch ($mode) {
     Exit
   }
 
+  'instant' {
+    $DefaultPath = "W:\#downloads"
+    $AlternativePath = [Environment]::GetFolderPath("UserDownloads")
+    if (Test-Path $DefaultPath) {
+      $destination = $DefaultPath
+    }
+    else {
+      $destination = $AlternativePath
+    }
+    & $ytdlPath $url -P $destination
+    Exit
+  }
+
   'noprompt' {
     if (-not $destination) {
       Write-Error "A destination must be given with 'NoPrompt' mode!"
