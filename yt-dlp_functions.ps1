@@ -23,7 +23,7 @@ function Test-DownloadedInfoJson {
 function Get-SecondaryBaseParameters {
 
   $Options = GenerateParameters
-  if ($Options.IsCookies) { $OutputParameters += '--cookies-from-browser', 'firefox' }
+  if ($Options.IsCookies) { $OutputParameters += '--cookies-from-browser', 'vivaldi' }
   If ($Options.ImpersonateGeneric) { $OutputParameters += '--extractor-args', "generic:impersonate" }
   return $OutputParameters
   
@@ -36,7 +36,7 @@ function Get-DownloadParameters {
   $DownloadParameters = $BaseParameters
   $DownloadParameters += '-P', $destination
     
-  If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'firefox' }
+  If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }
   If ($Options.CustomRange) {
     foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
   }
