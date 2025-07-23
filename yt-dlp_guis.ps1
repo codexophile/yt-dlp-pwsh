@@ -127,6 +127,9 @@ function RefreshAndDisplayDestinations {
   if ( Test-Path W: ) {
     get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $ListBox.Items.Add( $_.fullname ) } 
   }
+  if ( Test-Path X: ) {
+    get-childitem -path 'X:\' -directory | ForEach-Object { [void] $ListBox.Items.Add( $_.fullname ) } 
+  }
   [void] $ListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
   [void] $ListBox.Items.Add("$HOME\Downloads")
 }
