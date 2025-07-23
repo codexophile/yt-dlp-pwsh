@@ -384,10 +384,10 @@ function guiAlreadyExistsPrompt {
   $objLabel = addLabel  "An entry for this video id already exists. Continue with download?" 
   $okButton = addButton 'Yes'          -below $objLabel -dialogRes Yes
   $cancelButton = addButton 'No'           -after $okButton -dialogRes No #-EventClick { [Environment]::Exit(0) }
-  $ButtonDelEnt = addButton 'Delete Entry' -after $cancelButton -dialogRes Abort
-  $continueButton = addButton 'More ...'     -after $ButtonDelEnt -dialogRes Continue
+  $EverythingButton = addButton 'Everything' -after $cancelButton -dialogRes Abort
+  $continueButton = addButton 'More ...'     -after $EverythingButton -dialogRes Continue
     
-  $formAlreadyExistsPrompt = addForm '' -controls $objLabel, $okButton, $cancelButton, $ButtonDelEnt, $continueButton `
+  $formAlreadyExistsPrompt = addForm '' -controls $objLabel, $okButton, $cancelButton, $EverythingButton, $continueButton `
     -minSize
 
   $result = $formAlreadyExistsPrompt.ShowDialog()

@@ -135,7 +135,7 @@ if ( $pathToJson ) {
   switch ( $response ) {
     Yes { Remove-Item $pathToJson }
     No { exitAndCloseTerminal }
-    Abort { Remove-Item $pathToJson }
+    Abort { Start-Process "ES:$videoId"; exitAndCloseTerminal }
     Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
   }
         
