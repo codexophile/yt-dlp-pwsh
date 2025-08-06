@@ -72,6 +72,7 @@
                 <Button x:Name="OpenJsonButton" Content="Open JSON" Margin="0,0,5,0" Padding="15,5"/>
                 <Button x:Name="LocateJsonButton" Content="Locate JSON" Margin="0,0,5,0" Padding="15,5"/>
                 <Button x:Name="CommentsButton" Content="View Comments" Margin="0,0,5,0" Padding="15,5"/>
+                <Button x:Name="RestartDownloadButton" Content="Restart Download" Margin="0,0,0,5" Padding="15,5"/>
             </StackPanel>
         </GroupBox>
 
