@@ -77,13 +77,18 @@ switch ($mode) {
   }
 
   'noprompt' {
+
     if (-not $destination) {
       Write-Error "A destination must be given with 'NoPrompt' mode!"
       Exit
     }
+
     if ( -not (Test-Path $destination)) {
       Write-Error "Invalid path: $destination"
-      Exit
+      $newParams = $PSBoundParameters
+      $newParams['mode'] = 'quick'  
+      & $PSCommandPath @newParams
+      exit $LASTEXITCODE
     }
     
     $SecondaryBaseParameters = Get-SecondaryBaseParameters
