@@ -79,6 +79,14 @@ function Show-DownloadCompleteWindow {
       $window.Close()
       # exitAndCloseTerminal
     })
+
+  $wpf_RestartDownloadButton.Add_Click({
+      $scriptPath = $MyInvocation.MyCommand.Path
+      $scriptArgs = $MyInvocation.BoundParameters.GetEnumerator() | ForEach-Object { "-$_ $_.Value" }
+
+      # Start a new terminal window and run the script with the same parameters
+      Start-Process -FilePath "pwsh" -ArgumentList @("-NoExit", "-File", $scriptPath) -WorkingDirectory (Get-Location).Path
+  })
     
   # Add Loaded event handler to ensure focus
   $window.Add_Loaded({
