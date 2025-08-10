@@ -41,7 +41,7 @@ function Get-DownloadParameters {
     foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
   }
   If ($Options.CustomName) {
-    $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o][bQ].%(ext)s"
+    $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o].%(ext)s"
   }
   Else {
     $OutTemplate = Get-OutputTemplate $InfoJson $UniqueId
@@ -122,7 +122,7 @@ function Get-OutputFileNames {
   param( $OptionsObj, $InfoJSON, $OutTemplate )
 
   if ( $OptionsObj.CustomName ) {
-    $OutTemplate = "$($OptionsObj.CustomName) - $( $OptionsObj.customRange ? '_%(section_start)s' : '' ) @[o][bQ].%(ext)s"
+    $OutTemplate = "$($OptionsObj.CustomName) - $( $OptionsObj.customRange ? '_%(section_start)s' : '' ) @[o].%(ext)s"
   }
     
   $OutputFiles = @()
@@ -164,7 +164,7 @@ function Get-OutputTemplate {
     
   # Build the template conditionally based on extractor
   $TitlePart = if ($Extractor -ne "facebook") { " - %(title)s" } else { "" }
-  $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o][bQ].%(ext)s"
+  $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o].%(ext)s"
     
   Return $OutTemplate
 }
