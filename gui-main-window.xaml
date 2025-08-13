@@ -133,28 +133,38 @@
             <StackPanel Grid.Column="2">
                 <!-- Options Group -->
                 <GroupBox Header="Options" Padding="4" Margin="0,0,0,4">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <StackPanel>
+                        <!-- Checkboxes in a Grid -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Margin="0,0,12,4">
-                            <CheckBox x:Name="cbCookies" Content="Cookies from browser" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="browserComboBox" Width="100" Margin="4,0,0,0" Visibility="Collapsed"/>
-                            <ComboBox x:Name="profileComboBox" Width="100" Margin="4,0,0,0" Visibility="Collapsed"/>
+                            <CheckBox x:Name="cbBestAudio" Content="Best audio only" Grid.Column="0" Grid.Row="0" Margin="0,0,12,4"/>
+                            <CheckBox x:Name="cbImpersonateGeneric" Content="Impersonate" Grid.Column="1" Grid.Row="0" Margin="0,0,12,4"/>
+                            <CheckBox x:Name="cb720p" Content="720p" Grid.Column="2" Grid.Row="0" Margin="0,0,12,4"/>
+                            
+                            <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Grid.Column="0" Grid.Row="1" Margin="0,0,12,4"/>
+                            <CheckBox x:Name="cb1080p" Content="1080p" Grid.Column="2" Grid.Row="1" Margin="0,0,12,4"/>
+                        </Grid>
+
+                        <!-- Cookies Section -->
+                        <StackPanel Orientation="Vertical" Margin="0,4,0,0">
+                            <CheckBox x:Name="cbCookies" Content="Cookies from browser"/>
+                            <StackPanel x:Name="spBrowser" Orientation="Horizontal" Visibility="Collapsed" Margin="20,0,0,0">
+                                <Label Content="Browser:" Padding="0,5,4,5" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="browserComboBox" Width="100" />
+                                <Label Content="Profile:" Padding="10,5,4,5" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="profileComboBox" Width="120" />
+                            </StackPanel>
                         </StackPanel>
-                        <CheckBox x:Name="cbBestAudio" Content="Best audio only" Grid.Column="0" Grid.Row="1" Margin="0,0,12,4"/>
-                        <CheckBox x:Name="cbImpersonateGeneric" Content="Impersonate" Grid.Column="1" Grid.Row="0" Margin="0,0,12,4"/>
-                        <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Grid.Column="1" Grid.Row="1" Margin="0,0,12,4"/>
-                        <CheckBox x:Name="cb720p" Content="720p" Grid.Column="2" Grid.Row="0" Margin="0,0,12,4"/>
-                        <CheckBox x:Name="cb1080p" Content="1080p" Grid.Column="2" Grid.Row="1" Margin="0,0,12,4"/>
-                    </Grid>
+                    </StackPanel>
                 </GroupBox>
 
                 <!-- Two Column Layout for Time Ranges and Naming -->

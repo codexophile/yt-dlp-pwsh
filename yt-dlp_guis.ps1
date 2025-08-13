@@ -242,11 +242,9 @@ function Show-MainWindow {
   # Add event handlers for browser and profile selection
   $wpf_cbCookies.Add_Click({
     if ($wpf_cbCookies.IsChecked) {
-        $wpf_browserComboBox.Visibility = 'Visible'
-        $wpf_profileComboBox.Visibility = 'Visible'
+        $wpf_spBrowser.Visibility = 'Visible'
     } else {
-        $wpf_browserComboBox.Visibility = 'Collapsed'
-        $wpf_profileComboBox.Visibility = 'Collapsed'
+        $wpf_spBrowser.Visibility = 'Collapsed'
     }
   })
 

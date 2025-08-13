@@ -289,7 +289,7 @@ function Get-BrowserProfiles {
     }
     
     # Specific handling for Opera if needed, as it's less standard with profiles
-    if (Test-Path $browserPaths.opera -and !$browsers.ContainsKey('opera')) {
+    if ((Test-Path $browserPaths.opera) -and !$browsers.ContainsKey('opera')) {
         $browsers.opera = @('Default') # Assume default profile
     }
 
