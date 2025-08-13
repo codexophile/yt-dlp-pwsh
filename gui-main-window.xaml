@@ -144,7 +144,11 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <CheckBox x:Name="cbCookies" Content="Cookies from browser" Grid.Column="0" Grid.Row="0" Margin="0,0,12,4"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Margin="0,0,12,4">
+                            <CheckBox x:Name="cbCookies" Content="Cookies from browser" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="browserComboBox" Width="100" Margin="4,0,0,0" Visibility="Collapsed"/>
+                            <ComboBox x:Name="profileComboBox" Width="100" Margin="4,0,0,0" Visibility="Collapsed"/>
+                        </StackPanel>
                         <CheckBox x:Name="cbBestAudio" Content="Best audio only" Grid.Column="0" Grid.Row="1" Margin="0,0,12,4"/>
                         <CheckBox x:Name="cbImpersonateGeneric" Content="Impersonate" Grid.Column="1" Grid.Row="0" Margin="0,0,12,4"/>
                         <CheckBox x:Name="cbCustomRanges" Content="Custom ranges" Grid.Column="1" Grid.Row="1" Margin="0,0,12,4"/>

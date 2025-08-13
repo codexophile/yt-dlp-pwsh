@@ -23,7 +23,9 @@ function Test-DownloadedInfoJson {
 function Get-SecondaryBaseParameters {
 
   $Options = GenerateParameters
-  if ($Options.IsCookies) { $OutputParameters += '--cookies-from-browser', 'vivaldi' }
+  if ($Options.IsCookies) { 
+    $OutputParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
+  }
   If ($Options.ImpersonateGeneric) { $OutputParameters += '--extractor-args', "generic:impersonate" }
   return $OutputParameters
   
@@ -36,7 +38,9 @@ function Get-DownloadParameters {
   $DownloadParameters = $BaseParameters
   $DownloadParameters += '-P', $destination
     
-  If ($Options.IsCookies) { $DownloadParameters += '--cookies-from-browser', 'vivaldi' }
+  If ($Options.IsCookies) { 
+    $DownloadParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
+  }
   If ($Options.CustomRange) {
     foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
   }
@@ -240,4 +244,54 @@ function exitAndCloseTerminal {
   else {
     [Environment]::Exit(0)
   }
+}
+
+function Get-BrowserProfiles {
+    $browsers = @{}
+
+    # Helper function for Chromium-based browsers
+    function Get-ChromiumProfiles {
+        param ($path)
+        if (Test-Path $path) {
+            $profiles = Get-ChildItem -Path $path -Directory -Filter "Profile *" -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }
+            if (Test-Path "$path\Default") {
+                # Ensure "Default" is at the beginning
+                $profiles = @("Default") + $profiles
+            }
+            return $profiles
+        }
+        return $null
+    }
+
+    # Firefox
+    $firefoxProfilesIni = Join-Path $env:APPDATA "Mozilla\Firefox\profiles.ini"
+    if (Test-Path $firefoxProfilesIni) {
+        $profiles = Select-String -Path $firefoxProfilesIni -Pattern 'Name=(.+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }
+        if ($profiles) {
+            $browsers.firefox = $profiles
+        }
+    }
+
+    # Chromium-based browsers
+    $browserPaths = @{
+        brave   = Join-Path $env:LOCALAPPDATA "BraveSoftware\Brave-Browser\User Data"
+        chrome  = Join-Path $env:LOCALAPPDATA "Google\Chrome\User Data"
+        edge    = Join-Path $env:LOCALAPPDATA "Microsoft\Edge\User Data"
+        vivaldi = Join-Path $env:LOCALAPPDATA "Vivaldi\User Data"
+        opera   = Join-Path $env:APPDATA "Opera Software\Opera Stable" # Opera has a different structure
+    }
+
+    foreach ($browser in $browserPaths.GetEnumerator()) {
+        $profiles = Get-ChromiumProfiles -path $browser.Value
+        if ($profiles) {
+            $browsers[$browser.Name] = $profiles
+        }
+    }
+    
+    # Specific handling for Opera if needed, as it's less standard with profiles
+    if (Test-Path $browserPaths.opera -and !$browsers.ContainsKey('opera')) {
+        $browsers.opera = @('Default') # Assume default profile
+    }
+
+    return $browsers
 }

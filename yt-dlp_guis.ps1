@@ -106,6 +106,8 @@ function GenerateParameters {
 
   $destination = $wpf_txtCustomDestination.Text ? $wpf_txtCustomDestination.Text : $destination ? $destination : [Environment]::GetFolderPath("Desktop") 
   $isCookies = $wpf_cbCookies.IsChecked      ? $true : $false
+  $Browser = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
+  $BrowserProfile = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
   $CustomRange = $wpf_CbCustomranges.IsChecked ? $true : $false
   $Items = $wpf_ListBoxRanges.Items
   $CustomName = $wpf_Checkbox_CustomName.IsChecked ? $wpf_Textbox_CustomName.Text : $False
@@ -117,6 +119,8 @@ function GenerateParameters {
   Return @{
     Destination        = $destination
     IsCookies          = $isCookies
+    Browser            = $Browser
+    BrowserProfile     = $BrowserProfile
     CustomRange        = $CustomRange
     Items              = $Items
     CustomName         = $CustomName
@@ -233,6 +237,37 @@ function Show-MainWindow {
   function ForMinutesAndSeconds() {
     if ( [int]$this.text -lt 0  ) { $this.text = 59 }
     if ( [int]$this.text -gt 59 ) { $this.text = 0 }
+  }
+
+  # Add event handlers for browser and profile selection
+  $wpf_cbCookies.Add_Click({
+    if ($wpf_cbCookies.IsChecked) {
+        $wpf_browserComboBox.Visibility = 'Visible'
+        $wpf_profileComboBox.Visibility = 'Visible'
+    } else {
+        $wpf_browserComboBox.Visibility = 'Collapsed'
+        $wpf_profileComboBox.Visibility = 'Collapsed'
+    }
+  })
+
+  $wpf_browserComboBox.Add_SelectionChanged({
+    $selectedBrowser = $wpf_browserComboBox.SelectedItem
+    $wpf_profileComboBox.Items.Clear()
+    if ($selectedBrowser -and $availableBrowsers.ContainsKey($selectedBrowser)) {
+        foreach ($profile in $availableBrowsers[$selectedBrowser]) {
+            $wpf_profileComboBox.Items.Add($profile)
+        }
+        $wpf_profileComboBox.SelectedIndex = 0
+    }
+  })
+
+  # Populate browser combo box
+  $availableBrowsers = Get-BrowserProfiles
+  foreach ($browserName in $availableBrowsers.Keys) {
+    $wpf_browserComboBox.Items.Add($browserName)
+  }
+  if ($wpf_browserComboBox.Items.Count -gt 0) {
+    $wpf_browserComboBox.SelectedIndex = 0
   }
 
   # Set up the destinationsListBox item selection event handler
