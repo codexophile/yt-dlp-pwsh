@@ -149,10 +149,15 @@ function RefreshAndDisplayDestinations {
 function Save-YtDlpConfig {
   # Get current configuration from GUI controls
   $config = @{
+    Destination        = $wpf_txtCustomDestination.Text
     Cookies            = $wpf_cbCookies.IsChecked
+    Browser            = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
+    BrowserProfile     = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
     BestAudioOnly      = $wpf_cbBestAudio.IsChecked
     ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked
     CustomRanges       = $wpf_CbCustomranges.IsChecked
+    CustomNameEnabled  = $wpf_Checkbox_CustomName.IsChecked
+    CustomNameText     = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
     Resolution720p     = $wpf_cb720p.IsChecked
     Resolution1080p    = $wpf_cb1080p.IsChecked
     TimeRanges         = @()
@@ -165,7 +170,7 @@ function Save-YtDlpConfig {
 
   # Save configuration to JSON file
   $configPath = Join-Path $PSScriptRoot "gui-main-window-config.json"
-  $config | ConvertTo-Json | Set-Content -Path $configPath
+  $config | ConvertTo-Json -Depth 3 | Set-Content -Path $configPath
   Write-Host "Configuration saved successfully" -ForegroundColor Green
 }
 
@@ -184,10 +189,21 @@ function Get-YtDlpConfig {
     $config = Get-Content -Path $configPath | ConvertFrom-Json
 
     # Apply configuration to GUI controls
+    $wpf_txtCustomDestination.Text = $config.Destination
     $wpf_cbCookies.IsChecked = $config.Cookies
+    if ($wpf_cbCookies.IsChecked) {
+        $wpf_browserComboBox.SelectedItem = $config.Browser
+        # Wait for profiles to populate
+        Start-Sleep -Milliseconds 100
+        $wpf_profileComboBox.SelectedItem = $config.BrowserProfile
+    }
     $wpf_cbBestAudio.IsChecked = $config.BestAudioOnly
     $wpf_cbImpersonateGeneric.IsChecked = $config.ImpersonateGeneric
     $wpf_CbCustomranges.IsChecked = $config.CustomRanges
+    $wpf_Checkbox_CustomName.IsChecked = $config.CustomNameEnabled
+    if ($config.CustomNameEnabled) {
+        $wpf_Textbox_CustomName.Text = $config.CustomNameText
+    }
     $wpf_cb720p.IsChecked = $config.Resolution720p
     $wpf_cb1080p.IsChecked = $config.Resolution1080p
 
