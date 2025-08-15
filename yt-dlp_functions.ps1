@@ -264,9 +264,9 @@ function Get-BrowserProfiles {
     }
 
     # Firefox
-    $firefoxProfilesIni = Join-Path $env:APPDATA "Mozilla\Firefox\profiles.ini"
-    if (Test-Path $firefoxProfilesIni) {
-        $profiles = Select-String -Path $firefoxProfilesIni -Pattern 'Name=(.+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }
+    $firefoxProfilesPath = Join-Path $env:APPDATA "Mozilla\Firefox\Profiles"
+    if (Test-Path $firefoxProfilesPath) {
+        $profiles = Get-ChildItem -Path $firefoxProfilesPath -Directory | Select-Object -ExpandProperty Name
         if ($profiles) {
             $browsers.firefox = $profiles
         }
