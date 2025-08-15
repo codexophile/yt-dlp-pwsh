@@ -268,8 +268,8 @@ function Show-MainWindow {
     $selectedBrowser = $wpf_browserComboBox.SelectedItem
     $wpf_profileComboBox.Items.Clear()
     if ($selectedBrowser -and $availableBrowsers.ContainsKey($selectedBrowser)) {
-        foreach ($profile in $availableBrowsers[$selectedBrowser]) {
-            $wpf_profileComboBox.Items.Add($profile)
+        foreach ($BrowserProfile in $availableBrowsers[$selectedBrowser]) {
+            $wpf_profileComboBox.Items.Add($BrowserProfile)
         }
         $wpf_profileComboBox.SelectedIndex = 0
     }
