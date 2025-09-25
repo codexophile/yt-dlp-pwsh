@@ -24,7 +24,7 @@ If (-Not($url -OR $mode)) {
   return     
 }
 
-$ytdlPath = 'B:\Program Files - Portable\youtube-dl\yt-dlp.exe'
+$ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
 
 $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' )
 $CurrentProxySettings = Get-Proxy
