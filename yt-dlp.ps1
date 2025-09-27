@@ -155,7 +155,7 @@ Show-DownloadInfo
 Write-Host
 Write-Host
 # if ($Debug) { Pause }
-& $ytdlPath -U                    # perform an update before the execution
+& $ytdlPath --update-to nightly   # perform an update before the execution
 & $YtdlPath $DownloadParameters   # 🔥 
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
