@@ -64,7 +64,7 @@ switch ($mode) {
   }
 
   'instant' {
-    $DefaultPath = "W:\#downloads"
+    $DefaultPath = "x:\#downloads"
     $AlternativePath = [Environment]::GetFolderPath("UserDownloads")
     if (Test-Path $DefaultPath) {
       $destination = $DefaultPath
@@ -82,9 +82,11 @@ switch ($mode) {
       Write-Error "A destination must be given with 'NoPrompt' mode!"
       Exit
     }
-
+    
     if ( -not (Test-Path $destination)) {
       Write-Error "Invalid path: $destination"
+      Read-Host -Prompt "Press Enter to continue..."
+      Pause
       $newParams = $PSBoundParameters
       $newParams['mode'] = 'quick'  
       & $PSCommandPath @newParams
