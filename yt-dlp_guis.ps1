@@ -236,8 +236,10 @@ function Show-MainWindow {
     if ( -not (Test-Path $destination)) {
       Write-Warning "Invalid path: $destination"
     }
-    
+    write-host "Preselecting destination: $destination"
     $wpf_destinationsListBox.SelectedItem = $destination
+    # // scroll to the selected list item
+    $wpf_destinationsListBox.ScrollIntoView($destination)
     $wpf_txtCustomDestination.Text = $destination
   }
   else {
