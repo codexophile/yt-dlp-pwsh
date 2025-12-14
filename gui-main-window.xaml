@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="yt-dlp-pwsh" Height="500" Width="700"
+        Title="yt-dlp-pwsh" Height="700" Width="700"
         FontSize="13" Background="#1E1E1E"
 >
 
