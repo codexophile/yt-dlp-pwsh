@@ -115,6 +115,8 @@ function GenerateParameters {
   $1080p = $wpf_cb1080p.IsChecked ? $true : $false
   $BestAudioOnly = $wpf_cbBestAudio.IsChecked ? $true : $false
   $ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked ? $true : $false
+  $CustomFormat = $wpf_cbCustomFormat.IsChecked ? $true : $false
+  $SelectedFormatId = if ($CustomFormat -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
 
   Return @{
     Destination        = $destination
@@ -128,6 +130,8 @@ function GenerateParameters {
     TenEighty          = $1080p
     BestAudioOnly      = $BestAudioOnly
     ImpersonateGeneric = $ImpersonateGeneric
+    CustomFormat       = $CustomFormat
+    SelectedFormatId   = $SelectedFormatId
   }
 
 }
@@ -146,6 +150,33 @@ function RefreshAndDisplayDestinations {
   [void] $ListBox.Items.Add("$HOME\Downloads")
 }
 
+function PopulateFormatsListbox {
+  param( $InfoJson )
+  
+  $wpf_listboxFormats.Items.Clear()
+  
+  if (-not $InfoJson) {
+    return
+  }
+  
+  try {
+    $InfoJsonFormatted = $InfoJson | ConvertFrom-Json
+    if ($InfoJsonFormatted.formats -and $InfoJsonFormatted.formats.Count -gt 0) {
+      foreach ($format in $InfoJsonFormatted.formats) {
+        $formatString = if ($format.format_id) {
+          "$($format.format_id) - $($format.format_note) ($($format.ext))"
+        } else {
+          $format.format
+        }
+        [void] $wpf_listboxFormats.Items.Add($format.format_id)
+      }
+    }
+  }
+  catch {
+    Write-Warning "Could not populate formats: $_"
+  }
+}
+
 function Save-YtDlpConfig {
   # Get current configuration from GUI controls
   $config = @{
@@ -158,6 +189,8 @@ function Save-YtDlpConfig {
     CustomRanges       = $wpf_CbCustomranges.IsChecked
     CustomNameEnabled  = $wpf_Checkbox_CustomName.IsChecked
     CustomNameText     = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
+    CustomFormatEnabled = $wpf_cbCustomFormat.IsChecked
+    SelectedFormatId   = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
     Resolution720p     = $wpf_cb720p.IsChecked
     Resolution1080p    = $wpf_cb1080p.IsChecked
     TimeRanges         = @()
@@ -204,6 +237,7 @@ function Get-YtDlpConfig {
     if ($config.CustomNameEnabled) {
         $wpf_Textbox_CustomName.Text = $config.CustomNameText
     }
+    $wpf_cbCustomFormat.IsChecked = $config.CustomFormatEnabled
     $wpf_cb720p.IsChecked = $config.Resolution720p
     $wpf_cb1080p.IsChecked = $config.Resolution1080p
 
@@ -362,6 +396,13 @@ function Show-MainWindow {
 
   $wpf_Checkbox_CustomName.add_click({
       $wpf_Textbox_CustomName.IsEnabled = $This.IsChecked
+    })
+
+  $wpf_cbCustomFormat.add_click({
+      if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.Items.Count -eq 0 -and $InfoJson) {
+        # Populate formats from InfoJson if not already populated
+        PopulateFormatsListbox $InfoJson
+      }
     })
 
   $wpf_BtnPaste.add_click({

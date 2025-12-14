@@ -57,6 +57,9 @@ function Get-DownloadParameters {
   # $DownloadParameters += '--write-auto-subs'
         
   if ($Options.BestAudioOnly) { $DownloadParameters += '-f', 'bestaudio' }
+  elseif ($Options.CustomFormat -and $Options.SelectedFormatId) {
+    $DownloadParameters += '-f', $Options.SelectedFormatId
+  }
   else {
     If ($Options.SevenTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
     If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }

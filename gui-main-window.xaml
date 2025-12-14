@@ -167,6 +167,21 @@
                     </StackPanel>
                 </GroupBox>
 
+                <!-- Format Selection Group -->
+                <GroupBox Header="Format Selection" Padding="4" Margin="0,0,0,4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox x:Name="cbCustomFormat" Content="Select specific format" Grid.Row="0"/>
+                        <ListBox x:Name="listboxFormats" Height="80" Grid.Row="1" 
+                                 IsEnabled="{Binding IsChecked, ElementName=cbCustomFormat}"
+                                 Margin="0,4,0,0"/>
+                    </Grid>
+                </GroupBox>
+
                 <!-- Two Column Layout for Time Ranges and Naming -->
                 <Grid>
                     <Grid.ColumnDefinitions>
