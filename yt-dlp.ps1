@@ -132,6 +132,7 @@ $DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId
 $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
 $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
+$UploaderId = $InfoJSONFormatted.uploader_id
 
 $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if ( $pathToJson ) {
@@ -162,7 +163,7 @@ Write-Host
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
 
-$JsonPath = "archive\($extractor)$VideoId-uid_$UniqueId.info.json"
+$JsonPath = "archive\$UploaderId- ($extractor)$VideoId-uid_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
