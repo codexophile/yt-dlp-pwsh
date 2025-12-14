@@ -467,6 +467,8 @@ function Show-MainWindow {
     $DisplayTemplate = Get-OutputTemplate($InfoJson)
     $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
     $wpf_Textbox_CustomName.Text = $DisplayFileName
+
+    $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
     PopulateFormatsListbox $InfoJson
   }        
   if ($GivenName -and $GivenName -ne ':default:') {
