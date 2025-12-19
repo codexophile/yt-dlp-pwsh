@@ -169,5 +169,6 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
 Write-Ascii 'Completion!'
+if($mode -eq 'noprompt') { Pause; exitAndCloseTerminal }
 $Destination = $Options.destination
 Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
