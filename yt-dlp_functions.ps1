@@ -1,3 +1,54 @@
+function Get-WingetFFmpeg {
+    <#
+    .SYNOPSIS
+        Locates the ffmpeg.exe installed via Winget (yt-dlp.FFmpeg),
+        handling missing Symlinks and changing version numbers.
+    #>
+    [CmdletBinding()]
+    param()
+
+    process {
+        # 1. Check the standard Winget 'Links' folder (The "Correct" Path)
+        # Even if empty now, if Winget fixes itself later, this is the fastest check.
+        $wingetLinks = "$env:LOCALAPPDATA\Microsoft\WinGet\Links\ffmpeg.exe"
+        if (Test-Path -Path $wingetLinks -PathType Leaf) {
+            Write-Verbose "Found FFmpeg in Winget Links."
+            return $wingetLinks
+        }
+
+        # 2. Search the Packages folder (The "Fallback" Path)
+        Write-Verbose "Links folder empty. Searching Winget Packages directory..."
+        $pkgRoot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages"
+
+        if (Test-Path $pkgRoot) {
+            # Optimization: First find the package folder (fast), THEN search inside it (recurse)
+            # This prevents scanning your entire library of installed apps.
+            $packageDir = Get-ChildItem -Path $pkgRoot -Directory -Filter "*yt-dlp.FFmpeg*" | 
+                          Sort-Object LastWriteTime -Descending | 
+                          Select-Object -First 1
+
+            if ($packageDir) {
+                $exe = Get-ChildItem -Path $packageDir.FullName -Filter "ffmpeg.exe" -Recurse -ErrorAction SilentlyContinue | 
+                       Select-Object -First 1
+                
+                if ($exe) {
+                    Write-Verbose "Found FFmpeg deep inside package: $($exe.FullName)"
+                    return $exe.FullName
+                }
+            }
+        }
+
+        # 3. Last Resort: Check Windows PATH
+        Write-Verbose "Checking System PATH..."
+        $sysPath = Get-Command "ffmpeg.exe" -ErrorAction SilentlyContinue
+        if ($sysPath) { return $sysPath.Source }
+
+        # 4. Give up
+        Write-Warning "FFmpeg executable could not be found."
+        return $null
+    }
+}
+
 function Test-DownloadedInfoJson {
   param( $extractor, $VideoId)
 
