@@ -4,3 +4,4 @@ dummy.info.json
 archive/
 gui-main-window-config.json
 .vscode/launch.json
+.specstory/
