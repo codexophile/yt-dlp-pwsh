@@ -30,6 +30,15 @@ $BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certific
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
+# Get FFmpeg location and add to base parameters
+$ffmpegPath = Get-WingetFFmpeg
+if ($ffmpegPath) {
+  Write-Verbose "Using FFmpeg from: $ffmpegPath"
+  $BaseParameters += '--ffmpeg-location', $ffmpegPath
+} else {
+  Write-Warning "FFmpeg not found. Download may fail if media merging is required."
+}
+
 if ( $Debug ) {
   debug-mainWindow
   return
