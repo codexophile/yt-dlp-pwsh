@@ -72,14 +72,39 @@ function Test-DownloadedInfoJson {
 }
 
 function Get-SecondaryBaseParameters {
+  param(
+    [String]$Browser,
+    [String]$BrowserProfile,
+    [Switch]$ImpersonateGeneric
+  )
 
-  $Options = GenerateParameters
-  if ($Options.IsCookies) { 
-    $OutputParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
-  }
-  If ($Options.ImpersonateGeneric) { $OutputParameters += '--extractor-args', "generic:impersonate" }
-  return $OutputParameters
+  $OutputParameters = @()
   
+  # If browser parameters are provided via command line, use them directly
+  if ($Browser -and $BrowserProfile) { 
+    $OutputParameters += '--cookies-from-browser', "${Browser}:${BrowserProfile}"
+  }
+  # Otherwise, try to get from GUI if it exists
+  elseif (Get-Command GenerateParameters -ErrorAction SilentlyContinue) {
+    try {
+      $Options = GenerateParameters
+      if ($Options.IsCookies) { 
+        $OutputParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
+      }
+      if ($Options.ImpersonateGeneric) { 
+        $ImpersonateGeneric = $true 
+      }
+    }
+    catch {
+      # GUI controls don't exist, skip
+    }
+  }
+  
+  If ($ImpersonateGeneric) { 
+    $OutputParameters += '--extractor-args', "generic:impersonate" 
+  }
+  
+  return $OutputParameters
 }
 function Get-DownloadParameters {
   param( $InfoJson, $UniqueId )

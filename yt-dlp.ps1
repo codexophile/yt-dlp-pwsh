@@ -1,7 +1,9 @@
 param( 
   [string]$url, [string]$mode, [string]$destination, 
   [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
-  [Switch]$Verbose = $false, [String]$GivenName
+  [Switch]$Verbose = $false, [String]$GivenName,
+  [String]$Browser, [String]$BrowserProfile,
+  [Switch]$ImpersonateGeneric
 )
 
 if ( $Verbose) {
@@ -102,14 +104,14 @@ switch ($mode) {
       exit $LASTEXITCODE
     }
     
-    $SecondaryBaseParameters = Get-SecondaryBaseParameters
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
 
   }
 
   'quick' {
     Show-MainWindow -ytdlPath $ytdlPath
-    $SecondaryBaseParameters = Get-SecondaryBaseParameters
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
   }
 
@@ -168,6 +170,31 @@ Write-Host
 Write-Host
 # if ($Debug) { Pause }
 & $ytdlPath --update-to nightly   # perform an update before the execution
+<#
+  Ensure runtime parameters from CLI (Browser, Profile, Destination, Impersonate)
+  are included in final download command. Previously only info-json retrieval
+  used these, causing authenticated downloads to miss cookies.
+#>
+
+# Recompute or reuse secondary parameters (cookies, impersonation)
+if (-not $SecondaryBaseParameters) {
+  $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
+}
+if ($SecondaryBaseParameters) {
+  $DownloadParameters = $DownloadParameters + $SecondaryBaseParameters
+}
+
+# Ensure destination from CLI is honored for the actual download
+if ($destination) {
+  $pIndex = [Array]::IndexOf($DownloadParameters, '-P')
+  if ($pIndex -ge 0 -and ($pIndex + 1) -lt $DownloadParameters.Count) {
+    $DownloadParameters[$pIndex + 1] = $destination
+  }
+  else {
+    $DownloadParameters += '-P', $destination
+  }
+}
+
 & $YtdlPath $DownloadParameters   # 🔥 
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
