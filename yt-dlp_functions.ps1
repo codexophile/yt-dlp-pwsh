@@ -75,7 +75,8 @@ function Get-SecondaryBaseParameters {
   param(
     [String]$Browser,
     [String]$BrowserProfile,
-    [Switch]$ImpersonateGeneric
+    [Switch]$ImpersonateGeneric,
+    [String]$Referer
   )
 
   $OutputParameters = @()
@@ -91,6 +92,9 @@ function Get-SecondaryBaseParameters {
       if ($Options.IsCookies) { 
         $OutputParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
       }
+      if (-not $Referer -and $Options.Referer) {
+        $Referer = $Options.Referer
+      }
       if ($Options.ImpersonateGeneric) { 
         $ImpersonateGeneric = $true 
       }
@@ -102,6 +106,9 @@ function Get-SecondaryBaseParameters {
   
   If ($ImpersonateGeneric) { 
     $OutputParameters += '--extractor-args', "generic:impersonate" 
+  }
+  if ($Referer) {
+    $OutputParameters += '--referer', $Referer
   }
   
   return $OutputParameters
@@ -119,6 +126,9 @@ function Get-DownloadParameters {
   }
   If ($Options.CustomRange) {
     foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
+  }
+  if ($Options.Referer) {
+    $DownloadParameters += '--referer', $Options.Referer
   }
   If ($Options.CustomName) {
     $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o].%(ext)s"

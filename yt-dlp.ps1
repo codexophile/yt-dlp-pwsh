@@ -3,7 +3,8 @@ param(
   [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
   [Switch]$Verbose = $false, [String]$GivenName,
   [String]$Browser, [String]$BrowserProfile,
-  [Switch]$ImpersonateGeneric
+  [Switch]$ImpersonateGeneric,
+  [String]$Referer
 )
 
 if ( $Verbose) {
@@ -54,7 +55,8 @@ $mode = $mode.ToLower()
 switch ($mode) {
     
   'list' {
-    $InfoJson = Get-InfoJson $ytdlPath
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
+    $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
     $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
     $AfterListGui = GuiFromXaml($AfterListXaml)
     $AfterListGui.add_Loaded({
@@ -104,19 +106,20 @@ switch ($mode) {
       exit $LASTEXITCODE
     }
     
-    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
 
   }
 
   'quick' {
     Show-MainWindow -ytdlPath $ytdlPath
-    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
   }
 
   'max' {
-    $InfoJSON = Get-InfoJson $ytdlPath
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
+    $InfoJSON = Get-InfoJson $ytdlPath $SecondaryBaseParameters
     Show-MainWindow -ytdlPath $ytdlPath $InfoJson
   }
 
@@ -127,7 +130,8 @@ switch ($mode) {
   }
 
   'check' {
-    $InfoJson = Get-InfoJson $ytdlPath
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
+    $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
     $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
     $extractor = $InfoJSONFormatted.extractor
     $videoId = $InfoJSONFormatted.id
@@ -178,7 +182,7 @@ Write-Host
 
 # Recompute or reuse secondary parameters (cookies, impersonation)
 if (-not $SecondaryBaseParameters) {
-  $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric
+  $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
 }
 if ($SecondaryBaseParameters) {
   $DownloadParameters = $DownloadParameters + $SecondaryBaseParameters

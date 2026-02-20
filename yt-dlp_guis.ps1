@@ -117,6 +117,7 @@ function GenerateParameters {
   $ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked ? $true : $false
   $CustomFormat = $wpf_cbCustomFormat.IsChecked ? $true : $false
   $SelectedFormatId = if ($CustomFormat -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
+  $Referer = if ([string]::IsNullOrWhiteSpace($wpf_txtReferer.Text)) { $null } else { $wpf_txtReferer.Text.Trim() }
 
   Return @{
     Destination        = $destination
@@ -132,6 +133,7 @@ function GenerateParameters {
     ImpersonateGeneric = $ImpersonateGeneric
     CustomFormat       = $CustomFormat
     SelectedFormatId   = $SelectedFormatId
+    Referer            = $Referer
   }
 
 }
@@ -191,6 +193,7 @@ function Save-YtDlpConfig {
     CustomNameText     = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
     CustomFormatEnabled = $wpf_cbCustomFormat.IsChecked
     SelectedFormatId   = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
+    Referer            = $wpf_txtReferer.Text
     Resolution720p     = $wpf_cb720p.IsChecked
     Resolution1080p    = $wpf_cb1080p.IsChecked
     TimeRanges         = @()
@@ -240,6 +243,7 @@ function Get-YtDlpConfig {
     $wpf_cbCustomFormat.IsChecked = $config.CustomFormatEnabled
     $wpf_cb720p.IsChecked = $config.Resolution720p
     $wpf_cb1080p.IsChecked = $config.Resolution1080p
+    $wpf_txtReferer.Text = $config.Referer
 
     # Clear and load time ranges
     $wpf_ListBoxRanges.Items.Clear()
@@ -474,6 +478,9 @@ function Show-MainWindow {
   if ($GivenName -and $GivenName -ne ':default:') {
     $wpf_Textbox_CustomName.Text = $GivenName
     $wpf_Checkbox_CustomName.IsChecked = $true
+  }
+  if ($Referer) {
+    $wpf_txtReferer.Text = $Referer
   }
   $wpf_txtVideoUrl.Text = $url
 
