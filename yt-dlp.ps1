@@ -168,6 +168,12 @@ $Options = generateParameters
 $OutTemplate = Get-OutputTemplate $InfoJSON $UniqueId
 $OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
 
+# Prefer GUI/manual destination when available; keep CLI destination as fallback.
+$effectiveDestination = $destination
+if ($Options -and -not [string]::IsNullOrWhiteSpace($Options.Destination)) {
+  $effectiveDestination = $Options.Destination
+}
+
 Show-DownloadInfo 
 
 Write-Host
@@ -188,14 +194,14 @@ if ($SecondaryBaseParameters) {
   $DownloadParameters = $DownloadParameters + $SecondaryBaseParameters
 }
 
-# Ensure destination from CLI is honored for the actual download
-if ($destination) {
+# Ensure final destination uses GUI/manual selection when present.
+if ($effectiveDestination) {
   $pIndex = [Array]::IndexOf($DownloadParameters, '-P')
   if ($pIndex -ge 0 -and ($pIndex + 1) -lt $DownloadParameters.Count) {
-    $DownloadParameters[$pIndex + 1] = $destination
+    $DownloadParameters[$pIndex + 1] = $effectiveDestination
   }
   else {
-    $DownloadParameters += '-P', $destination
+    $DownloadParameters += '-P', $effectiveDestination
   }
 }
 
@@ -210,5 +216,5 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 #* After download
 Write-Ascii 'Completion!'
 if($mode -eq 'noprompt') { Pause; exitAndCloseTerminal }
-$Destination = $Options.destination
+$Destination = $effectiveDestination
 Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination

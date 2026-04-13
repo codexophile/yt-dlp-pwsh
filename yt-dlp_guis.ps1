@@ -104,7 +104,18 @@ function Show-DownloadCompleteWindow {
 
 function GenerateParameters {
 
-  $destination = $wpf_txtCustomDestination.Text ? $wpf_txtCustomDestination.Text : $destination ? $destination : [Environment]::GetFolderPath("Desktop") 
+  $destination = if (-not [string]::IsNullOrWhiteSpace($wpf_txtCustomDestination.Text)) {
+    $wpf_txtCustomDestination.Text.Trim()
+  }
+  elseif ($wpf_destinationsListBox -and $wpf_destinationsListBox.SelectedItem) {
+    $wpf_destinationsListBox.SelectedItem.ToString()
+  }
+  elseif ($destination) {
+    $destination
+  }
+  else {
+    [Environment]::GetFolderPath("Desktop")
+  }
   $isCookies = $wpf_cbCookies.IsChecked      ? $true : $false
   $Browser = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
   $BrowserProfile = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
@@ -269,11 +280,7 @@ function Show-MainWindow {
 
   RefreshAndDisplayDestinations $wpf_destinationsListBox
 
-  if ($destination) {
-
-    if ( -not (Test-Path $destination)) {
-      Write-Warning "Invalid path: $destination"
-    }
+  if ($destination -and (Test-Path $destination)) {
     write-host "Preselecting destination: $destination"
     $wpf_destinationsListBox.SelectedItem = $destination
     # // scroll to the selected list item
@@ -282,6 +289,9 @@ function Show-MainWindow {
   }
   else {
     $wpf_destinationsListBox.SelectedIndex = 0
+    if ($wpf_destinationsListBox.SelectedItem) {
+      $wpf_txtCustomDestination.Text = $wpf_destinationsListBox.SelectedItem.ToString()
+    }
   }
 
   #* Generate parameters/initialize variables on GUI events
@@ -339,13 +349,13 @@ function Show-MainWindow {
       $folderBrowser.Description = "Select Destination Folder"
     
       # If a path is already entered, start from there
-      if ($txtCustomDestination.Text -and (Test-Path $txtCustomDestination.Text)) {
-        $folderBrowser.SelectedPath = $txtCustomDestination.Text
+      if ($wpf_txtCustomDestination.Text -and (Test-Path $wpf_txtCustomDestination.Text)) {
+        $folderBrowser.SelectedPath = $wpf_txtCustomDestination.Text
       }
     
       # Show dialog and update text if user selects a folder
       if ($folderBrowser.ShowDialog() -eq 'OK') {
-        $txtCustomDestination.Text = $folderBrowser.SelectedPath
+        $wpf_txtCustomDestination.Text = $folderBrowser.SelectedPath
       }
     })
         
@@ -449,7 +459,11 @@ function Show-MainWindow {
     })
 
   $wpf_buttonRefreshDestinations.add_click({
-      RefreshAndDisplayDestinations $wpf_destinationsListBox   
+      RefreshAndDisplayDestinations $wpf_destinationsListBox
+      $wpf_destinationsListBox.SelectedIndex = 0
+      if ($wpf_destinationsListBox.SelectedItem -and [string]::IsNullOrWhiteSpace($wpf_txtCustomDestination.Text)) {
+        $wpf_txtCustomDestination.Text = $wpf_destinationsListBox.SelectedItem.ToString()
+      }
     })
 
   # Add Loaded event handler to ensure focus
