@@ -38,6 +38,7 @@ $ffmpegPath = Get-WingetFFmpeg
 if ($ffmpegPath) {
   Write-Verbose "Using FFmpeg from: $ffmpegPath"
   $BaseParameters += '--ffmpeg-location', $ffmpegPath
+  $BaseParameters += '--downloader-args', "ffmpeg_i:-extension_picky 0 -allowed_segment_extensions ALL"
 } else {
   Write-Warning "FFmpeg not found. Download may fail if media merging is required."
 }
