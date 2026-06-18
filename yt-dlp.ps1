@@ -29,7 +29,7 @@ If (-Not($url -OR $mode)) {
 
 $ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
 
-$BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' )
+$BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' , '--compat-options', 'allow-unsafe-ext')
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
