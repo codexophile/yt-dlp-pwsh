@@ -34,12 +34,13 @@ $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
 # Get FFmpeg location and add to base parameters
-$ffmpegPath = Get-WingetFFmpeg
-if ($ffmpegPath) {
+$ffmpegPath = . "C:\mega\IDEs\powershell\ffmpeg\ffmpeg-find.ps1" -Variety yt-dlp
+if  ($ffmpegPath) {
   Write-Verbose "Using FFmpeg from: $ffmpegPath"
   $BaseParameters += '--ffmpeg-location', $ffmpegPath
   # $BaseParameters += '--downloader-args', ""
 } else {
+  Write-Host $ffmpegPath
   Write-Warning "FFmpeg not found. Download may fail if media merging is required."
 }
 
