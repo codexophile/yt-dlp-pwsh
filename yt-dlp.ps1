@@ -86,11 +86,11 @@ switch ($mode) {
 
   'instant' {
     $DefaultPath = "x:\#downloads"
-    $AlternativePath = [Environment]::GetFolderPath("UserDownloads")
     if (Test-Path $DefaultPath) {
       $destination = $DefaultPath
     }
     else {
+      $AlternativePath = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
       $destination = $AlternativePath
     }
     & $ytdlPath $url -P $destination
