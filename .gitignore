@@ -3,6 +3,5 @@ yt-dlp-debug.ps1
 dummy.info.json
 archive/
 gui-main-window-config.json
-.vscode/launch.json
 .specstory/
 \#default#/
