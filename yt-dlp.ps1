@@ -1,8 +1,14 @@
+[CmdletBinding()]
 param( 
-  [string]$url, [string]$mode, [string]$destination, 
-  [Switch]$Debug, [Switch]$SkipPrompt, $InfoJson,
-  [Switch]$Verbose = $false, [String]$GivenName,
-  [String]$Browser, [String]$BrowserProfile,
+  [Parameter(Mandatory)][string]$url,
+  [ValidateSet('list', 'instant', 'noprompt', 'quick', 'max', 'min', 'check')]
+  [Parameter(Mandatory)][string]$mode,
+  [string]$destination, 
+  [Switch]$SkipPrompt,
+  $InfoJson,
+  [String]$GivenName,
+  [String]$Browser,
+  [String]$BrowserProfile,
   [Switch]$ImpersonateGeneric,
   [String]$Referer
 )
