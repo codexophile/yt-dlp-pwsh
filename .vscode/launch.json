@@ -11,9 +11,11 @@
       "script": "./yt-dlp.ps1",
       "args": [
         "-url",
-        "https://www.instagram.com/p/DbV7DCTG7Ds/",
+        "https://www.instagram.com/reel/DbJYNtev_HM/",
         "-mode",
-        "instant"
+        "noprompt",
+        "-destination",
+        "C:\\Users\\xq151\\Downloads"
       ]
     }
   ]
