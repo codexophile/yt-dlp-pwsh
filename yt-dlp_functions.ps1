@@ -114,7 +114,7 @@ function Get-SecondaryBaseParameters {
   return $OutputParameters
 }
 function Get-DownloadParameters {
-  param( $InfoJson, $UniqueId )
+  param( $InfoJson, $UniqueId, $BaseParameters )
 
   $Options = GenerateParameters
   $destination = $Options.destination

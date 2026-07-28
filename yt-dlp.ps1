@@ -153,7 +153,7 @@ switch ($mode) {
   Default {}
 }
 
-$DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId
+$DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId $BaseParameters
 $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
 $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
@@ -161,7 +161,6 @@ $UploaderId = $InfoJSONFormatted.uploader_id
 
 $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if ( $pathToJson ) {
-   
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
   if($SkipCheckExisting) {
@@ -175,7 +174,7 @@ if ( $pathToJson ) {
     No { exitAndCloseTerminal }
     Abort { Start-Process "ES:$videoId"; exitAndCloseTerminal }
     Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
-  }   
+  }
 }
 
 $Options = generateParameters
