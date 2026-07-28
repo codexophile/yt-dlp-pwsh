@@ -13,10 +13,16 @@ param(
   [String]$Referer
 )
 
+Clear-Host
+$Debug = $false
+if ($PSBoundParameters.ContainsKey('Debug')) {
+  $DebugPreference = 'Inquire'
+  $Debug = $true
+}
+
 if ( $Verbose) {
   $VerbosePreference = 'Continue'
 }
-Clear-Host
 Set-Location $PSScriptRoot
 
 . ..\#lib\functions.ps1
@@ -48,11 +54,6 @@ if  ($ffmpegPath) {
 } else {
   Write-Host $ffmpegPath
   Write-Warning "FFmpeg not found."
-}
-
-if ( $Debug ) {
-  debug-mainWindow
-  return
 }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
@@ -223,6 +224,12 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
 Write-Ascii 'Completion!'
-if($mode -eq 'noprompt') { Pause; exitAndCloseTerminal }
+if($Debug) {
+  Exit
+}
+if($mode -eq 'noprompt') {
+  Pause;
+  exitAndCloseTerminal
+}
 $Destination = $effectiveDestination
 Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
