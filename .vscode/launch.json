@@ -9,7 +9,12 @@
       "type": "PowerShell",
       "request": "launch",
       "script": "./yt-dlp.ps1",
-      "args": []
+      "args": [
+        "-url",
+        "https://www.instagram.com/p/DbV7DCTG7Ds/",
+        "-mode",
+        "instant"
+      ]
     }
   ]
 }
