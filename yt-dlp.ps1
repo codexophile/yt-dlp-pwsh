@@ -180,7 +180,7 @@ if ( $pathToJson ) {
 
 $Options = generateParameters
 $OutTemplate = Get-OutputTemplate $InfoJSON $UniqueId
-$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate
+$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate $BaseParameters
 
 # Prefer GUI/manual destination when available; keep CLI destination as fallback.
 $effectiveDestination = $destination

@@ -212,14 +212,15 @@ function Show-DownloadInfo {
 }
 
 function Get-OutputFileNames {
-  param( $OptionsObj, $InfoJSON, $OutTemplate )
+  param( $OptionsObj, $InfoJSON, $OutTemplate, $BaseParameters )
 
   if ( $OptionsObj.CustomName ) {
     $OutTemplate = "$($OptionsObj.CustomName) - $( $OptionsObj.customRange ? '_%(section_start)s' : '' ) @[o].%(ext)s"
   }
     
   $OutputFiles = @()
-  $outFileName = $InfoJSON | & $ytdlPath '--load-info-json' - -O $OutTemplate
+  
+  $outFileName = $InfoJSON | & $ytdlPath '--load-info-json' - -O $OutTemplate $BaseParameters
 
   if ($OptionsObj.CustomRange) {
     foreach ($Item in $OptionsObj.Items) {
