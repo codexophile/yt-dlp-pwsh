@@ -10,7 +10,8 @@ param(
   [String]$Browser,
   [String]$BrowserProfile,
   [Switch]$ImpersonateGeneric,
-  [String]$Referer
+  [String]$Referer,
+  [Switch]$SkipCheckExisting
 )
 
 Clear-Host
@@ -163,14 +164,18 @@ if ( $pathToJson ) {
    
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
-  $response = guiAlreadyExistsPrompt
+  if($SkipCheckExisting) {
+    $response = "Yes"
+  }
+  else {
+    $response = guiAlreadyExistsPrompt
+  }
   switch ( $response ) {
     Yes { Remove-Item $pathToJson }
     No { exitAndCloseTerminal }
     Abort { Start-Process "ES:$videoId"; exitAndCloseTerminal }
     Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
-  }
-        
+  }   
 }
 
 $Options = generateParameters
