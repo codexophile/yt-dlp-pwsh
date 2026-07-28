@@ -41,7 +41,7 @@ if  ($ffmpegPath) {
   # $BaseParameters += '--downloader-args', ""
 } else {
   Write-Host $ffmpegPath
-  Write-Warning "FFmpeg not found. Download may fail if media merging is required."
+  Write-Warning "FFmpeg not found."
 }
 
 if ( $Debug ) {
