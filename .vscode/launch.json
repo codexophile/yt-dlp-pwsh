@@ -10,7 +10,7 @@
       "request": "launch",
       "script": "./yt-dlp.ps1",
       "args": [
-        "-SkipCheckExisting",
+        "-skipAlreadyExistsPrompt",
         "-Debug",
         "-url",
         "https://www.instagram.com/reel/DbJYNtev_HM/",

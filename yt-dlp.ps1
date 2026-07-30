@@ -11,7 +11,7 @@ param(
   [String]$BrowserProfile,
   [Switch]$ImpersonateGeneric,
   [String]$Referer,
-  [Switch]$SkipCheckExisting
+  [Switch]$skipAlreadyExistsPrompt
 )
 
 Clear-Host
@@ -163,7 +163,7 @@ $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if ( $pathToJson ) {
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
-  if($SkipCheckExisting) {
+  if($skipAlreadyExistsPrompt) {
     $response = "Yes"
   }
   else {
