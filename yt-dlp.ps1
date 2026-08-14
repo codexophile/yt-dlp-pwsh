@@ -42,7 +42,7 @@ If (-Not($url -OR $mode)) {
 
 $ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
 
-$BaseParameters = @( $url, '--console-title', '--progress', '--no-check-certificates' )
+$BaseParameters = @( $url, '--progress', '--no-check-certificates' )
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
@@ -60,6 +60,8 @@ if  ($ffmpegPath) {
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 
 $UniqueId = Get-UniqueId
+
+$CustomRanges = @()
 
 $mode = $mode.ToLower()
 switch ($mode) {

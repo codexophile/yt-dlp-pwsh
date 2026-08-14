@@ -74,7 +74,10 @@ function Get-DownloadParameters {
     $DownloadParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
   }
   If ($Options.CustomRange) {
-    foreach ( $currentItem in $Options.Items ) { $DownloadParameters += '--download-sections', "*$currentItem" } 
+    foreach ( $currentItem in $Options.Items ) {
+      $DownloadParameters += '--download-sections', "*$currentItem"
+      $CustomRanges += $currentItem
+    } 
   }
   if ($Options.Referer) {
     $DownloadParameters += '--referer', $Options.Referer
