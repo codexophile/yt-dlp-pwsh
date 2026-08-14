@@ -41,6 +41,7 @@ If (-Not($url -OR $mode)) {
 }
 
 $ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
+$EsPath = "C:\mega\program-files\Everything\es.exe"
 
 $BaseParameters = @( $url, '--progress', '--no-check-certificates' )
 $CurrentProxySettings = Get-Proxy
@@ -62,6 +63,7 @@ $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
 $UniqueId = Get-UniqueId
 
 $CustomRanges = @()
+$CustomRanges
 
 $mode = $mode.ToLower()
 switch ($mode) {
@@ -165,6 +167,7 @@ $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if ( $pathToJson ) {
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
+  & $EsPath $videoId
   if($skipAlreadyExistsPrompt) {
     $response = "Yes"
   }
