@@ -11,10 +11,17 @@ param(
   [String]$BrowserProfile,
   [Switch]$ImpersonateGeneric,
   [String]$Referer,
-  [Switch]$skipAlreadyExistsPrompt
+  [Switch]$skipAlreadyExistsPrompt,
+  [Switch]$AutoRetryInfoJson
 )
 
 Clear-Host
+
+# Capture how the script itself was originally invoked
+$script:MainScriptPath = $PSCommandPath
+$script:OriginalBoundParameters = $PSBoundParameters
+$script:OriginalArgs = $args
+
 $Debug = $false
 if ($PSBoundParameters.ContainsKey('Debug')) {
   $DebugPreference = 'Inquire'
@@ -165,7 +172,7 @@ $VideoId = $InfoJSONFormatted.id
 $UploaderId = $InfoJSONFormatted.uploader_id
 
 $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
-if ( $pathToJson ) {
+if (Test-DownloadSuccess $videoId) {
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
   & $EsPath $videoId
@@ -233,13 +240,20 @@ $JsonPath = "archive\$UploaderId- ($extractor)$VideoId-uid_$UniqueId.info.json"
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
-Write-Ascii 'Completion!'
-if ($Debug) {
-  Exit
+Start-Sleep -Seconds 5
+if (Test-DownloadSuccess $videoId) {
+  Write-Ascii 'Success!'
+  if ($Debug) {
+    Exit
+  }
+  if ($mode -eq 'noprompt') {
+    Pause;
+    exitAndCloseTerminal
+  }
+  $Destination = $effectiveDestination
+  Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
 }
-if ($mode -eq 'noprompt') {
-  Pause;
-  exitAndCloseTerminal
+else {
+  Write-Host "Download failed for video: $videoId" -ForegroundColor Red
+  restart -prompt
 }
-$Destination = $effectiveDestination
-Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination

@@ -1,3 +1,53 @@
+function restart {
+  param(
+    [Switch] $Prompt
+  )
+
+  $MsgboxResult = 'Yes'
+  if ($Prompt) {
+    $MsgboxResult = [System.Windows.MessageBox]::Show("$stderr`n`nRetry?", 'Yt-ldp Error', 4, 32)
+  }
+
+  if ($MsgboxResult -eq 'Yes') {
+    $scriptPath = $script:MainScriptPath
+    $argList = @('-NoExit', '-File', "`"$scriptPath`"")
+
+    foreach ($key in $script:OriginalBoundParameters.Keys) {
+      $value = $script:OriginalBoundParameters[$key]
+
+      if ($value -is [switch] -or $value -is [bool]) {
+        if ($value) { $argList += "-$key" }
+      }
+      else {
+        $argList += "-$key"
+        $argList += "`"$value`""
+      }
+    }
+
+    foreach ($arg in $script:OriginalArgs) {
+      $argList += "`"$arg`""
+    }
+
+    Start-Process -FilePath 'pwsh' -ArgumentList $argList -WorkingDirectory (Get-Location).Path
+    # & pwsh -File $scriptPath @paramsToPass @script:OriginalArgs
+  }
+  else {
+    return $null
+  }
+}
+
+function Test-DownloadSuccess {
+  param($VideoId)
+
+  $EsResult = & $EsPath $VideoId
+
+  $matches = $EsResult | Where-Object {
+    (Test-Path -LiteralPath $_ -PathType Leaf) -and ($_ -notlike "*.json")
+  }
+
+  return [bool]$matches
+}
+
 function Test-DownloadedInfoJson {
   param( $extractor, $VideoId)
 
@@ -257,6 +307,10 @@ function Get-InfoJson {
         
     if ($stderr) {
       Write-Warning "Error occurred: $stderr"
+      if ( $AutoRetryInfoJson ) {
+        Write-Host "AutoRetryInfoJson is enabled. Retrying..."
+        Return Get-InfoJson $YtdlPath $InfoJsonParameters
+      }
       $MsgboxResult = [System.Windows.MessageBox]::Show("$stderr`n`nRetry?", 'Yt-ldp Error', 4, 32)
       If ( $MsgboxResult -eq 'Yes') { Return Get-InfoJson $YtdlPath $InfoJsonParameters }
       Else { Return $null }
