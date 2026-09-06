@@ -43,7 +43,7 @@ If (-Not($url -OR $mode)) {
 $ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
 $EsPath = "C:\mega\program-files\Everything\es.exe"
 
-$BaseParameters = @( $url, '--progress', '--no-check-certificates' )
+$BaseParameters = @( $url, '--progress')
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
