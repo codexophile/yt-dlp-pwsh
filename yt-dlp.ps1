@@ -49,11 +49,12 @@ if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy',
 
 # Get FFmpeg location and add to base parameters
 $ffmpegPath = . "C:\mega\IDEs\powershell\ffmpeg\ffmpeg-find.ps1" -Variety yt-dlp
-if  ($ffmpegPath) {
+if ($ffmpegPath) {
   Write-Verbose "Using FFmpeg from: $ffmpegPath"
   $BaseParameters += '--ffmpeg-location', $ffmpegPath
   # $BaseParameters += '--downloader-args', ""
-} else {
+}
+else {
   Write-Host $ffmpegPath
   Write-Warning "FFmpeg not found."
 }
@@ -168,7 +169,7 @@ if ( $pathToJson ) {
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
   & $EsPath $videoId
-  if($skipAlreadyExistsPrompt) {
+  if ($skipAlreadyExistsPrompt) {
     $response = "Yes"
   }
   else {
@@ -233,10 +234,10 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
 Write-Ascii 'Completion!'
-if($Debug) {
+if ($Debug) {
   Exit
 }
-if($mode -eq 'noprompt') {
+if ($mode -eq 'noprompt') {
   Pause;
   exitAndCloseTerminal
 }

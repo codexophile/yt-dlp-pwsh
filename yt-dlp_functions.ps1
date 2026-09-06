@@ -24,7 +24,7 @@ function Get-SecondaryBaseParameters {
   param(
     [String]$Browser,
     [String]$BrowserProfile,
-    [Switch]$ImpersonateGeneric,
+    [string]$ImpersonateGeneric = $false,
     [String]$Referer
   )
 
@@ -53,7 +53,7 @@ function Get-SecondaryBaseParameters {
     }
   }
   
-  If ($ImpersonateGeneric) { 
+  If ($ImpersonateGeneric -eq $true) { 
     $OutputParameters += '--extractor-args', "generic:impersonate" 
   }
   if ($Referer) {
@@ -289,51 +289,51 @@ function exitAndCloseTerminal {
 }
 
 function Get-BrowserProfiles {
-    $browsers = @{}
+  $browsers = @{}
 
-    # Helper function for Chromium-based browsers
-    function Get-ChromiumProfiles {
-        param ($path)
-        if (Test-Path $path) {
-            $profiles = Get-ChildItem -Path $path -Directory -Filter "Profile *" -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }
-            if (Test-Path "$path\Default") {
-                # Ensure "Default" is at the beginning
-                $profiles = @("Default") + $profiles
-            }
-            return $profiles
-        }
-        return $null
+  # Helper function for Chromium-based browsers
+  function Get-ChromiumProfiles {
+    param ($path)
+    if (Test-Path $path) {
+      $profiles = Get-ChildItem -Path $path -Directory -Filter "Profile *" -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }
+      if (Test-Path "$path\Default") {
+        # Ensure "Default" is at the beginning
+        $profiles = @("Default") + $profiles
+      }
+      return $profiles
     }
+    return $null
+  }
 
-    # Firefox
-    $firefoxProfilesPath = Join-Path $env:APPDATA "Mozilla\Firefox\Profiles"
-    if (Test-Path $firefoxProfilesPath) {
-        $profiles = Get-ChildItem -Path $firefoxProfilesPath -Directory | Select-Object -ExpandProperty Name
-        if ($profiles) {
-            $browsers.firefox = $profiles
-        }
+  # Firefox
+  $firefoxProfilesPath = Join-Path $env:APPDATA "Mozilla\Firefox\Profiles"
+  if (Test-Path $firefoxProfilesPath) {
+    $profiles = Get-ChildItem -Path $firefoxProfilesPath -Directory | Select-Object -ExpandProperty Name
+    if ($profiles) {
+      $browsers.firefox = $profiles
     }
+  }
 
-    # Chromium-based browsers
-    $browserPaths = @{
-        brave   = Join-Path $env:LOCALAPPDATA "BraveSoftware\Brave-Browser\User Data"
-        chrome  = Join-Path $env:LOCALAPPDATA "Google\Chrome\User Data"
-        edge    = Join-Path $env:LOCALAPPDATA "Microsoft\Edge\User Data"
-        vivaldi = Join-Path $env:LOCALAPPDATA "Vivaldi\User Data"
-        opera   = Join-Path $env:APPDATA "Opera Software\Opera Stable" # Opera has a different structure
-    }
+  # Chromium-based browsers
+  $browserPaths = @{
+    brave   = Join-Path $env:LOCALAPPDATA "BraveSoftware\Brave-Browser\User Data"
+    chrome  = Join-Path $env:LOCALAPPDATA "Google\Chrome\User Data"
+    edge    = Join-Path $env:LOCALAPPDATA "Microsoft\Edge\User Data"
+    vivaldi = Join-Path $env:LOCALAPPDATA "Vivaldi\User Data"
+    opera   = Join-Path $env:APPDATA "Opera Software\Opera Stable" # Opera has a different structure
+  }
 
-    foreach ($browser in $browserPaths.GetEnumerator()) {
-        $profiles = Get-ChromiumProfiles -path $browser.Value
-        if ($profiles) {
-            $browsers[$browser.Name] = $profiles
-        }
+  foreach ($browser in $browserPaths.GetEnumerator()) {
+    $profiles = Get-ChromiumProfiles -path $browser.Value
+    if ($profiles) {
+      $browsers[$browser.Name] = $profiles
     }
+  }
     
-    # Specific handling for Opera if needed, as it's less standard with profiles
-    if ((Test-Path $browserPaths.opera) -and !$browsers.ContainsKey('opera')) {
-        $browsers.opera = @('Default') # Assume default profile
-    }
+  # Specific handling for Opera if needed, as it's less standard with profiles
+  if ((Test-Path $browserPaths.opera) -and !$browsers.ContainsKey('opera')) {
+    $browsers.opera = @('Default') # Assume default profile
+  }
 
-    return $browsers
+  return $browsers
 }
