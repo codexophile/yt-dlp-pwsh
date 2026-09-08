@@ -17,6 +17,9 @@ param(
 
 Clear-Host
 
+chcp 65001 > $null
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 # Capture how the script itself was originally invoked
 $script:MainScriptPath = $PSCommandPath
 $script:OriginalBoundParameters = $PSBoundParameters
@@ -240,14 +243,22 @@ $JsonPath = "archive\$UploaderId- ($extractor)$VideoId-uid_$UniqueId.info.json"
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
-Start-Sleep -Seconds 5
+Start-Sleep -Seconds 2
+Write-Host 'video id: ' $videoId
+Write-Host 'video id type: ' $videoId.GetType().FullName
+Write-Host "is array: " ($videoId -is [array])
+write-Host "is IEnumerable: " ($videoId -is [System.Collections.IEnumerable])
+Write-Host "length: " $videoId.Length
+if ($videoId -is [object[]]) {
+  $videoId = $videoId[0]
+}
 if (Test-DownloadSuccess $videoId) {
   Write-Ascii 'Success!'
   if ($Debug) {
     Exit
   }
   if ($mode -eq 'noprompt') {
-    Pause;
+    Start-Sleep -Seconds 60
     exitAndCloseTerminal
   }
   $Destination = $effectiveDestination

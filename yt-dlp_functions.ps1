@@ -28,7 +28,7 @@ function restart {
       $argList += "`"$arg`""
     }
 
-    Start-Process -FilePath 'pwsh' -ArgumentList $argList -WorkingDirectory (Get-Location).Path
+    Start-Process -FilePath 'pwsh' -ArgumentList $argList -WorkingDirectory (Get-Location).Path -NoNewWindow
     # & pwsh -File $scriptPath @paramsToPass @script:OriginalArgs
   }
   else {
@@ -41,11 +41,14 @@ function Test-DownloadSuccess {
 
   $EsResult = & $EsPath $VideoId
 
-  $matches = $EsResult | Where-Object {
-    (Test-Path -LiteralPath $_ -PathType Leaf) -and ($_ -notlike "*.json")
+
+  $matches_ = $EsResult | Where-Object {
+    Write-Host "Testing: $_" -ForegroundColor Cyan
+    write-Host "Is file: $(Test-Path -LiteralPath $_ -PathType Leaf)" -ForegroundColor Cyan
+    ($_ -notlike "*.json")
   }
 
-  return [bool]$matches
+  return [bool]$matches_
 }
 
 function Test-DownloadedInfoJson {
