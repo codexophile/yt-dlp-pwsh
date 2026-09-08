@@ -258,7 +258,7 @@ if (Test-DownloadSuccess $videoId) {
     Exit
   }
   if ($mode -eq 'noprompt') {
-    Start-Sleep -Seconds 60
+    Countdown -TotalSeconds 30
     exitAndCloseTerminal
   }
   $Destination = $effectiveDestination
