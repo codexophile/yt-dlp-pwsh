@@ -39,10 +39,21 @@ function restart {
 function Test-DownloadSuccess {
   param($VideoId)
 
+  if ($VideoId -eq "") {
+    return $false
+  }
+
   $EsResult = & $EsPath $VideoId
+  $FilesListArr = $EsResult -split "\r?\n"
+  | ForEach-Object { $_.Trim() }
+  | Where-Object { $_ -ne "" }
 
+  if ( $FilesListArr.Count -gt 100) {
+    Write-Host "More than 100 files found for video ID $VideoId."
+    Pause
+  }
 
-  $matches_ = $EsResult | Where-Object {
+  $FilesListArr = $EsResult | Where-Object {
     Write-Host "Testing: $_" -ForegroundColor Cyan
     write-Host "Is file: $(Test-Path -LiteralPath $_ -PathType Leaf)" -ForegroundColor Cyan
     ($_ -notlike "*.json")
@@ -264,7 +275,7 @@ function Get-OutputTemplate {
   # Build the template conditionally based on extractor
   $TitlePart = if ($Extractor -ne "facebook") { " - %(title)s" } else { "" }
   $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o].%(ext)s"
-    
+
   Return $OutTemplate
 }
 
