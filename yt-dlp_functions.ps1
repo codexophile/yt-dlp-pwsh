@@ -44,22 +44,23 @@ function Test-DownloadSuccess {
   }
 
   $EsResult = & $EsPath $VideoId
-  $FilesListArr = $EsResult -split "\r?\n"
-  | ForEach-Object { $_.Trim() }
-  | Where-Object { $_ -ne "" }
+  $FilesListArr = $EsResult -split "\r?\n" |
+  ForEach-Object { $_.Trim() } |
+  Where-Object { $_ -ne "" }
 
-  if ( $FilesListArr.Count -gt 100) {
+  if ($FilesListArr.Count -gt 100) {
     Write-Host "More than 100 files found for video ID $VideoId."
     Pause
   }
 
-  $FilesListArr = $EsResult | Where-Object {
+  $ValidFiles = $FilesListArr | Where-Object {
+    $IsFile = Test-Path -LiteralPath $_ -PathType Leaf
     Write-Host "Testing: $_" -ForegroundColor Cyan
-    write-Host "Is file: $(Test-Path -LiteralPath $_ -PathType Leaf)" -ForegroundColor Cyan
-    ($_ -notlike "*.json")
+    Write-Host "Is file: $IsFile" -ForegroundColor Cyan
+    ($_ -notlike "*.json") -and $IsFile
   }
 
-  return [bool]$matches_
+  return [bool]$ValidFiles
 }
 
 function Test-DownloadedInfoJson {
