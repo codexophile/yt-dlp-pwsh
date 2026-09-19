@@ -252,6 +252,9 @@ Write-Host "length: " $videoId.Length
 if ($videoId -is [object[]]) {
   $videoId = $videoId[0]
 }
+if ( -not $videoId) {
+  $videoId = $UniqueId
+}
 if (Test-DownloadSuccess $videoId) {
   Write-Ascii 'Success!'
   if ($Debug) {
