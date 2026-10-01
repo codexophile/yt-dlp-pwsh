@@ -187,6 +187,7 @@ if (Test-DownloadSuccess $videoId) {
   }
   switch ( $response ) {
     Yes { Remove-Item $pathToJson }
+    Cancel { exitAndCloseTerminal }
     No { exitAndCloseTerminal }
     Abort { Start-Process "ES:$videoId"; exitAndCloseTerminal }
     Continue { infoJsonOperations -pathToJson $pathToJson; exitAndCloseTerminal }
@@ -252,7 +253,7 @@ Write-Host "length: " $videoId.Length
 if ($videoId -is [object[]]) {
   $videoId = $videoId[0]
 }
-if ( -not $videoId) {
+if ( -not $videoId -or $videoId -eq 'master') {
   $videoId = $UniqueId
 }
 if (Test-DownloadSuccess $videoId) {

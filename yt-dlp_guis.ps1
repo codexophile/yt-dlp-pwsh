@@ -2,43 +2,7 @@
 # Add-Type -AssemblyName System.Windows.Forms
 # Add-Type -AssemblyName System.Drawing
 
-function Show-WpfFormOnMonitor {
-  param (
-    [Parameter(Mandatory = $true)]
-    [System.Windows.Window]$WpfForm,
 
-    [Parameter(Mandatory = $true)]
-    [int]$MonitorIndex
-  )
-
-  # Get all screens (monitors)
-  $screens = [System.Windows.Forms.Screen]::AllScreens
-
-  # Validate the monitor index
-  if ($MonitorIndex -lt 0 -or $MonitorIndex -ge $screens.Count) {
-    Write-Error "Invalid monitor index. Available monitors: 0 to $($screens.Count - 1)"
-    return
-  }
-
-  # Get the target monitor
-  $targetScreen = $screens[$MonitorIndex]
-
-  # Get the monitor's working area (excludes taskbar, etc.)
-  $screenBounds = $targetScreen.WorkingArea
-
-  # Calculate the center position
-  $formWidth = $WpfForm.Width
-  $formHeight = $WpfForm.Height
-  $left = $screenBounds.X + (($screenBounds.Width - $formWidth) / 2)
-  $top = $screenBounds.Y + (($screenBounds.Height - $formHeight) / 2)
-
-  # Set the form's position
-  $WpfForm.Left = $left
-  $WpfForm.Top = $top
-
-  # Show the form
-  $WpfForm.ShowDialog()
-}
 
 function Show-DownloadCompleteWindow {
   param($SavedInfoJson, $FilesList, $Destination)
@@ -86,7 +50,7 @@ function Show-DownloadCompleteWindow {
 
       # Start a new terminal window and run the script with the same parameters
       Start-Process -FilePath "pwsh" -ArgumentList @("-NoExit", "-File", $scriptPath) -WorkingDirectory (Get-Location).Path
-  })
+    })
     
   # Add Loaded event handler to ensure focus
   $window.Add_Loaded({
@@ -178,7 +142,8 @@ function PopulateFormatsListbox {
       foreach ($format in $InfoJsonFormatted.formats) {
         $formatString = if ($format.format_id) {
           "$($format.format_id) - $($format.format_note) ($($format.ext))"
-        } else {
+        }
+        else {
           $format.format
         }
         [void] $wpf_listboxFormats.Items.Add($format.format_id)
@@ -193,21 +158,21 @@ function PopulateFormatsListbox {
 function Save-YtDlpConfig {
   # Get current configuration from GUI controls
   $config = @{
-    Destination        = $wpf_txtCustomDestination.Text
-    Cookies            = $wpf_cbCookies.IsChecked
-    Browser            = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
-    BrowserProfile     = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
-    BestAudioOnly      = $wpf_cbBestAudio.IsChecked
-    ImpersonateGeneric = $wpf_cbImpersonateGeneric.IsChecked
-    CustomRanges       = $wpf_CbCustomranges.IsChecked
-    CustomNameEnabled  = $wpf_Checkbox_CustomName.IsChecked
-    CustomNameText     = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
+    Destination         = $wpf_txtCustomDestination.Text
+    Cookies             = $wpf_cbCookies.IsChecked
+    Browser             = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
+    BrowserProfile      = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
+    BestAudioOnly       = $wpf_cbBestAudio.IsChecked
+    ImpersonateGeneric  = $wpf_cbImpersonateGeneric.IsChecked
+    CustomRanges        = $wpf_CbCustomranges.IsChecked
+    CustomNameEnabled   = $wpf_Checkbox_CustomName.IsChecked
+    CustomNameText      = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
     CustomFormatEnabled = $wpf_cbCustomFormat.IsChecked
-    SelectedFormatId   = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
-    Referer            = $wpf_txtReferer.Text
-    Resolution720p     = $wpf_cb720p.IsChecked
-    Resolution1080p    = $wpf_cb1080p.IsChecked
-    TimeRanges         = @()
+    SelectedFormatId    = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
+    Referer             = $wpf_txtReferer.Text
+    Resolution720p      = $wpf_cb720p.IsChecked
+    Resolution1080p     = $wpf_cb1080p.IsChecked
+    TimeRanges          = @()
   }
 
   # Save time ranges if any exist
@@ -239,17 +204,17 @@ function Get-YtDlpConfig {
     $wpf_txtCustomDestination.Text = $config.Destination
     $wpf_cbCookies.IsChecked = $config.Cookies
     if ($wpf_cbCookies.IsChecked) {
-        $wpf_browserComboBox.SelectedItem = $config.Browser
-        # Wait for profiles to populate
-        Start-Sleep -Milliseconds 100
-        $wpf_profileComboBox.SelectedItem = $config.BrowserProfile
+      $wpf_browserComboBox.SelectedItem = $config.Browser
+      # Wait for profiles to populate
+      Start-Sleep -Milliseconds 100
+      $wpf_profileComboBox.SelectedItem = $config.BrowserProfile
     }
     $wpf_cbBestAudio.IsChecked = $config.BestAudioOnly
     $wpf_cbImpersonateGeneric.IsChecked = $config.ImpersonateGeneric
     $wpf_CbCustomranges.IsChecked = $config.CustomRanges
     $wpf_Checkbox_CustomName.IsChecked = $config.CustomNameEnabled
     if ($config.CustomNameEnabled) {
-        $wpf_Textbox_CustomName.Text = $config.CustomNameText
+      $wpf_Textbox_CustomName.Text = $config.CustomNameText
     }
     $wpf_cbCustomFormat.IsChecked = $config.CustomFormatEnabled
     $wpf_cb720p.IsChecked = $config.Resolution720p
@@ -307,23 +272,24 @@ function Show-MainWindow {
 
   # Add event handlers for browser and profile selection
   $wpf_cbCookies.Add_Click({
-    if ($wpf_cbCookies.IsChecked) {
+      if ($wpf_cbCookies.IsChecked) {
         $wpf_spBrowser.Visibility = 'Visible'
-    } else {
+      }
+      else {
         $wpf_spBrowser.Visibility = 'Collapsed'
-    }
-  })
+      }
+    })
 
   $wpf_browserComboBox.Add_SelectionChanged({
-    $selectedBrowser = $wpf_browserComboBox.SelectedItem
-    $wpf_profileComboBox.Items.Clear()
-    if ($selectedBrowser -and $availableBrowsers.ContainsKey($selectedBrowser)) {
+      $selectedBrowser = $wpf_browserComboBox.SelectedItem
+      $wpf_profileComboBox.Items.Clear()
+      if ($selectedBrowser -and $availableBrowsers.ContainsKey($selectedBrowser)) {
         foreach ($BrowserProfile in $availableBrowsers[$selectedBrowser]) {
-            $wpf_profileComboBox.Items.Add($BrowserProfile)
+          $wpf_profileComboBox.Items.Add($BrowserProfile)
         }
         $wpf_profileComboBox.SelectedIndex = 0
-    }
-  })
+      }
+    })
 
   # Populate browser combo box
   $availableBrowsers = Get-BrowserProfiles

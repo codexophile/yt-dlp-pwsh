@@ -39,7 +39,7 @@ function restart {
 function Test-DownloadSuccess {
   param($VideoId)
 
-  if ($VideoId -eq "") {
+  if ($VideoId -eq "" -or $VideoId -eq 'master') {
     return $false
   }
 
