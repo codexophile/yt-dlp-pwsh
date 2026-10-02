@@ -37,30 +37,79 @@ function restart {
 }
 
 function Test-DownloadSuccess {
-  param($VideoId)
+  <#
+  .SYNOPSIS
+  Finds the completed download files for a video ID.
 
-  if ($VideoId -eq "" -or $VideoId -eq 'master') {
-    return $false
+  .DESCRIPTION
+  Searches the whole system with Everything's command-line client (es.exe,
+  referenced by the script-scoped $EsPath variable) for files whose names
+  contain the given video ID. Folders, metadata files (.json) and unfinished or
+  temporary download files (.part, .ytdl, .tmp, .temp, .part-FragN) are
+  excluded. If more than 100 raw matches are found, a warning is shown and the
+  script pauses so the ID can be checked.
+
+  .PARAMETER VideoId
+  The video ID to search for. Empty, whitespace-only, $null, and 'master'
+  values are rejected and return an empty array.
+
+  .OUTPUTS
+  [string[]] Full paths of the valid downloaded files. An empty array when none
+  are found, so the result is also falsy in an `if` condition.
+
+  .EXAMPLE
+  $Files = Test-DownloadSuccess -VideoId 'dQw4w9WgXcQ'
+  if ($Files.Count -gt 0) {
+    Write-Host "Downloaded: $($Files -join ', ')"
   }
 
-  $EsResult = & $EsPath $VideoId
-  $FilesListArr = $EsResult -split "\r?\n" |
-  ForEach-Object { $_.Trim() } |
-  Where-Object { $_ -ne "" }
+  .EXAMPLE
+  Test-DownloadSuccess -VideoId 'dQw4w9WgXcQ' -Verbose
+  Runs the check and prints every candidate path and its file/folder status.
 
-  if ($FilesListArr.Count -gt 100) {
-    Write-Host "More than 100 files found for video ID $VideoId."
+  .NOTES
+  Requires $EsPath to point to es.exe (Everything must be running).
+  #>
+  [CmdletBinding()]
+  [OutputType([string[]])]
+  param(
+    [string]$VideoId
+  )
+
+  # Reject empty/whitespace/$null IDs and the bogus 'master' ID.
+  # The leading comma stops PowerShell from unrolling the empty array into $null.
+  if ([string]::IsNullOrWhiteSpace($VideoId) -or $VideoId -eq 'master') {
+    return , @()
+  }
+
+  if (-not $EsPath -or -not (Test-Path -LiteralPath $EsPath -PathType Leaf)) {
+    throw "es.exe not found. Set `$EsPath to the full path of es.exe."
+  }
+
+  # Extensions of metadata and unfinished/temporary files that don't count as a download.
+  $IgnoredPattern = '\.(json|part|ytdl|tmp|temp)$|\.part-Frag\d+$'
+
+  $Candidates = @(
+    & $EsPath $VideoId |
+    ForEach-Object { $_.Trim() } |
+    Where-Object { $_ -ne '' }
+  )
+
+  if ($Candidates.Count -gt 100) {
+    Write-Warning "More than 100 files found for video ID $VideoId."
     Pause
   }
 
-  $ValidFiles = $FilesListArr | Where-Object {
-    $IsFile = Test-Path -LiteralPath $_ -PathType Leaf
-    Write-Host "Testing: $_" -ForegroundColor Cyan
-    Write-Host "Is file: $IsFile" -ForegroundColor Cyan
-    ($_ -notlike "*.json") -and $IsFile
-  }
+  $ValidFiles = @(
+    $Candidates | Where-Object {
+      $IsFile = Test-Path -LiteralPath $_ -PathType Leaf
+      Write-Verbose "Testing: $_ (is file: $IsFile)"
+      $IsFile -and ($_ -notmatch $IgnoredPattern)
+    }
+  )
 
-  return [bool]$ValidFiles
+  # The leading comma keeps the array intact when it has 0 or 1 items.
+  return , $ValidFiles
 }
 
 function Test-DownloadedInfoJson {

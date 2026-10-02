@@ -195,8 +195,6 @@ if (Test-DownloadSuccess $videoId) {
 }
 
 $Options = generateParameters
-$OutTemplate = Get-OutputTemplate $InfoJSON $UniqueId
-$OutputFiles = Get-OutputFileNames $Options $InfoJSON $OutTemplate $BaseParameters
 
 # Prefer GUI/manual destination when available; keep CLI destination as fallback.
 $effectiveDestination = $destination
@@ -245,18 +243,19 @@ $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
 #* After download
 Start-Sleep -Seconds 2
-Write-Host 'video id: ' $videoId
-Write-Host 'video id type: ' $videoId.GetType().FullName
-Write-Host "is array: " ($videoId -is [array])
-write-Host "is IEnumerable: " ($videoId -is [System.Collections.IEnumerable])
-Write-Host "length: " $videoId.Length
+# Write-Host 'video id: ' $videoId
+# Write-Host 'video id type: ' $videoId.GetType().FullName
+# Write-Host "is array: " ($videoId -is [array])
+# write-Host "is IEnumerable: " ($videoId -is [System.Collections.IEnumerable])
+# Write-Host "length: " $videoId.Length
 if ($videoId -is [object[]]) {
   $videoId = $videoId[0]
 }
 if ( -not $videoId -or $videoId -eq 'master') {
   $videoId = $UniqueId
 }
-if (Test-DownloadSuccess $videoId) {
+$OutputFiles = Test-DownloadSuccess $videoId
+if ($OutputFiles.Count -gt 0) {
   Write-Ascii 'Success!'
   if ($Debug) {
     Exit

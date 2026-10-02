@@ -11,18 +11,18 @@ function Show-DownloadCompleteWindow {
   $window = GuiFromXaml -XamlTextOrXamlFile "gui-download-complete.xaml"
     
   # Create a custom object for each file with path and existence status
-  foreach ($File in $FilesList) {
-    $fullPath = "$Destination\$File"
+  foreach ($FilePath in $FilesList) {
+    
     # Explicitly check if file exists and set boolean value
-    $fileExists = [bool](Test-Path -LiteralPath $fullPath -PathType Leaf)
+    $fileExists = [bool](Test-Path -LiteralPath $FilePath -PathType Leaf)
         
     $fileItem = [PSCustomObject]@{
-      FilePath = $fullPath
+      FilePath = $FilePath
       Exists   = $fileExists  # This will be a true boolean value
     }
         
     $wpf_FilesList.Items.Add($fileItem)
-    Write-Host "$fullPath - Exists: $fileExists"
+    Write-Host "$FilePath - Exists: $fileExists"
   }
 
   # Add event handlers
@@ -471,14 +471,15 @@ function Show-MainWindow {
 
 function guiAlreadyExistsPrompt {
     
-  $objLabel = addLabel  "An entry for this video id already exists. Continue with download?" 
+  $objLabel = addLabel  "xxxAn entry for this video id already exists. Continue with download?`n"
+  $EmptyLabel = addLabel '`n___`n' -after
   $okButton = addButton 'Yes'          -below $objLabel -dialogRes Yes
   $cancelButton = addButton 'No'           -after $okButton -dialogRes No #-EventClick { [Environment]::Exit(0) }
   $EverythingButton = addButton 'Everything' -after $cancelButton -dialogRes Abort
   $continueButton = addButton 'More ...'     -after $EverythingButton -dialogRes Continue
     
-  $formAlreadyExistsPrompt = addForm '' -controls $objLabel, $okButton, $cancelButton, $EverythingButton, $continueButton `
-    -minSize
+  $formAlreadyExistsPrompt = addForm '' -controls $objLabel, $EmptyLabel, $okButton, $cancelButton, $EverythingButton, $continueButton `
+    # -minSize
 
   $result = $formAlreadyExistsPrompt.ShowDialog()
     
