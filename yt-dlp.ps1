@@ -70,7 +70,7 @@ else {
 }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
-
+Get-DiskFreeSpace
 $UniqueId = Get-UniqueId
 
 $CustomRanges = @()
