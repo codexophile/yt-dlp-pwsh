@@ -434,6 +434,8 @@ function Show-MainWindow {
 
   # Add Loaded event handler to ensure focus
   $wpf_mainWindow.Add_Loaded({
+      $screenBounds = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+      $wpf_mainWindow.Top = [Math]::Max($screenBounds.Top, $wpf_mainWindow.Top - 100)
       $wpf_mainWindow.Activate()
       $wpf_mainWindow.Focus()
         
