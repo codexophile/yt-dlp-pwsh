@@ -117,12 +117,15 @@ function RefreshAndDisplayDestinations {
   param( $ListBox)
     
   $ListBox.Items.Clear()
-  if ( Test-Path W: ) {
-    get-childitem -path 'w:\#later' -directory | ForEach-Object { [void] $ListBox.Items.Add( $_.fullname ) } 
+
+  foreach ($path in @('Y:\', 'X:\', 'W:\#later')) {
+    if (Test-Path -Path $path) {
+      Get-ChildItem -Path $path -Directory | ForEach-Object {
+        [void] $ListBox.Items.Add($_.FullName)
+      }
+    }
   }
-  if ( Test-Path X: ) {
-    get-childitem -path 'X:\' -directory | ForEach-Object { [void] $ListBox.Items.Add( $_.fullname ) } 
-  }
+  
   [void] $ListBox.Items.Add( [Environment]::GetFolderPath("Desktop") )
   [void] $ListBox.Items.Add("$HOME\Downloads")
 }
