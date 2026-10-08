@@ -118,7 +118,14 @@ function RefreshAndDisplayDestinations {
     
   $ListBox.Items.Clear()
 
-  foreach ($path in @('Y:\', 'X:\', 'W:\#later')) {
+  foreach ($path in @(
+      'Y:\',
+      'Y:\@TOP',
+      'Y:\@BOTTOM'
+      'Y:\@ANY',
+      'X:\',
+      'W:\',
+      'W:\#later')) {
     if (Test-Path -Path $path) {
       Get-ChildItem -Path $path -Directory | ForEach-Object {
         [void] $ListBox.Items.Add($_.FullName)
