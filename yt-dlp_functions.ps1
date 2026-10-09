@@ -89,8 +89,10 @@ function Test-DownloadSuccess {
   # Extensions of metadata and unfinished/temporary files that don't count as a download.
   $IgnoredPattern = '\.(json|part|ytdl|tmp|temp)$|\.part-Frag\d+$'
 
+  # $SearchTermWrapped = "'`"$videoId`"'"
+  $SearchTermWrapped = $videoId
   $Candidates = @(
-    & $EsPath $VideoId |
+    & $EsPath $SearchTermWrapped |
     ForEach-Object { $_.Trim() } |
     Where-Object { $_ -ne '' }
   )
