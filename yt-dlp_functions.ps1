@@ -204,6 +204,9 @@ function Get-DownloadParameters {
   Else {
     $OutTemplate = Get-OutputTemplate $InfoJson $UniqueId
   }
+  if ($Options.FileNameSuffix) {
+    $OutTemplate = $OutTemplate.Replace('.%(ext)s', "$($Options.FileNameSuffix).%(ext)s")
+  }
   If ($Options.ImpersonateGeneric) { $DownloadParameters += '--extractor-args', "generic:impersonate" }
 
   $DownloadParameters += '-o', $OutTemplate
@@ -284,6 +287,9 @@ function Get-OutputFileNames {
 
   if ( $OptionsObj.CustomName ) {
     $OutTemplate = "$($OptionsObj.CustomName) - $( $OptionsObj.customRange ? '_%(section_start)s' : '' ) @[o].%(ext)s"
+  }
+  if ($OptionsObj.FileNameSuffix) {
+    $OutTemplate = $OutTemplate.Replace('.%(ext)s', "$($OptionsObj.FileNameSuffix).%(ext)s")
   }
     
   $OutputFiles = @()

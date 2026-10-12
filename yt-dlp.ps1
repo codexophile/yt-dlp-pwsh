@@ -174,7 +174,7 @@ $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
 $UploaderId = $InfoJSONFormatted.uploader_id
 
-Write-Host $url -ForegroundColor 
+Write-Host $url -ForegroundColor DarkCyan
 $pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
 if (Test-DownloadSuccess $videoId) {
   activate

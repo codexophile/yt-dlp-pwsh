@@ -86,6 +86,13 @@ function GenerateParameters {
   $CustomRange = $wpf_CbCustomranges.IsChecked ? $true : $false
   $Items = $wpf_ListBoxRanges.Items
   $CustomName = $wpf_Checkbox_CustomName.IsChecked ? $wpf_Textbox_CustomName.Text : $False
+  $FileNameSuffix = if ($wpf_Checkbox_FileNameSuffix.IsChecked -and
+    -not [string]::IsNullOrWhiteSpace($wpf_Textbox_FileNameSuffix.Text)) {
+    $wpf_Textbox_FileNameSuffix.Text
+  }
+  else {
+    $null
+  }
   $720p = $wpf_cb720p.IsChecked ? $true : $false
   $1080p = $wpf_cb1080p.IsChecked ? $true : $false
   $BestAudioOnly = $wpf_cbBestAudio.IsChecked ? $true : $false
@@ -102,6 +109,7 @@ function GenerateParameters {
     CustomRange        = $CustomRange
     Items              = $Items
     CustomName         = $CustomName
+    FileNameSuffix     = $FileNameSuffix
     SevenTwenty        = $720p
     TenEighty          = $1080p
     BestAudioOnly      = $BestAudioOnly
@@ -177,6 +185,8 @@ function Save-YtDlpConfig {
     CustomRanges        = $wpf_CbCustomranges.IsChecked
     CustomNameEnabled   = $wpf_Checkbox_CustomName.IsChecked
     CustomNameText      = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
+    FileNameSuffixEnabled = $wpf_Checkbox_FileNameSuffix.IsChecked
+    FileNameSuffixText    = if ($wpf_Checkbox_FileNameSuffix.IsChecked) { $wpf_Textbox_FileNameSuffix.Text } else { "" }
     CustomFormatEnabled = $wpf_cbCustomFormat.IsChecked
     SelectedFormatId    = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
     Referer             = $wpf_txtReferer.Text
@@ -225,6 +235,10 @@ function Get-YtDlpConfig {
     $wpf_Checkbox_CustomName.IsChecked = $config.CustomNameEnabled
     if ($config.CustomNameEnabled) {
       $wpf_Textbox_CustomName.Text = $config.CustomNameText
+    }
+    $wpf_Checkbox_FileNameSuffix.IsChecked = $config.FileNameSuffixEnabled
+    if ($config.FileNameSuffixEnabled) {
+      $wpf_Textbox_FileNameSuffix.Text = $config.FileNameSuffixText
     }
     $wpf_cbCustomFormat.IsChecked = $config.CustomFormatEnabled
     $wpf_cb720p.IsChecked = $config.Resolution720p

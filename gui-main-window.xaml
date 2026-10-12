@@ -271,6 +271,8 @@
             <Grid>
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
               </Grid.RowDefinitions>
               <Grid.ColumnDefinitions>
@@ -289,6 +291,13 @@
                 VerticalAlignment="Top"
                 Margin="4,4,0,0"
                 Padding="0" />
+              <CheckBox x:Name="Checkbox_FileNameSuffix" Content="File name suffix"
+                Grid.Row="2" Grid.ColumnSpan="2" />
+              <TextBox x:Name="Textbox_FileNameSuffix" Grid.Row="3" Grid.ColumnSpan="2"
+                Height="24"
+                IsEnabled="{Binding IsChecked, ElementName=Checkbox_FileNameSuffix}"
+                ToolTip="Appended to the file name before the extension."
+                Margin="0,4,0,0" />
             </Grid>
           </GroupBox>
         </Grid>
