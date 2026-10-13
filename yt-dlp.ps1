@@ -2,7 +2,7 @@
 param( 
   [Parameter(Mandatory)][string]$url,
   [ValidateSet('list', 'instant', 'noprompt', 'quick', 'max', 'min', 'check')]
-  [Parameter(Mandatory)][string]$mode,
+  [string]$mode = 'quick',
   [string]$destination, 
   [Switch]$SkipPrompt,
   $InfoJson,
@@ -14,6 +14,8 @@ param(
   [Switch]$skipAlreadyExistsPrompt,
   [Switch]$AutoRetryInfoJson
 )
+
+if ($Browser -eq 0) { $Browser = $null }
 
 Clear-Host
 

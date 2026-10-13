@@ -176,23 +176,23 @@ function PopulateFormatsListbox {
 function Save-YtDlpConfig {
   # Get current configuration from GUI controls
   $config = @{
-    Destination         = $wpf_txtCustomDestination.Text
-    Cookies             = $wpf_cbCookies.IsChecked
-    Browser             = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
-    BrowserProfile      = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
-    BestAudioOnly       = $wpf_cbBestAudio.IsChecked
-    ImpersonateGeneric  = $wpf_cbImpersonateGeneric.IsChecked
-    CustomRanges        = $wpf_CbCustomranges.IsChecked
-    CustomNameEnabled   = $wpf_Checkbox_CustomName.IsChecked
-    CustomNameText      = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
+    Destination           = $wpf_txtCustomDestination.Text
+    Cookies               = $wpf_cbCookies.IsChecked
+    Browser               = if ($wpf_cbCookies.IsChecked) { $wpf_browserComboBox.SelectedItem } else { $null }
+    BrowserProfile        = if ($wpf_cbCookies.IsChecked) { $wpf_profileComboBox.SelectedItem } else { $null }
+    BestAudioOnly         = $wpf_cbBestAudio.IsChecked
+    ImpersonateGeneric    = $wpf_cbImpersonateGeneric.IsChecked
+    CustomRanges          = $wpf_CbCustomranges.IsChecked
+    CustomNameEnabled     = $wpf_Checkbox_CustomName.IsChecked
+    CustomNameText        = if ($wpf_Checkbox_CustomName.IsChecked) { $wpf_Textbox_CustomName.Text } else { "" }
     FileNameSuffixEnabled = $wpf_Checkbox_FileNameSuffix.IsChecked
     FileNameSuffixText    = if ($wpf_Checkbox_FileNameSuffix.IsChecked) { $wpf_Textbox_FileNameSuffix.Text } else { "" }
-    CustomFormatEnabled = $wpf_cbCustomFormat.IsChecked
-    SelectedFormatId    = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
-    Referer             = $wpf_txtReferer.Text
-    Resolution720p      = $wpf_cb720p.IsChecked
-    Resolution1080p     = $wpf_cb1080p.IsChecked
-    TimeRanges          = @()
+    CustomFormatEnabled   = $wpf_cbCustomFormat.IsChecked
+    SelectedFormatId      = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
+    Referer               = $wpf_txtReferer.Text
+    Resolution720p        = $wpf_cb720p.IsChecked
+    Resolution1080p       = $wpf_cb1080p.IsChecked
+    TimeRanges            = @()
   }
 
   # Save time ranges if any exist
@@ -475,9 +475,10 @@ function Show-MainWindow {
  
   if ($InfoJson) {
     $DisplayTemplate = Get-OutputTemplate($InfoJson)
+    pause
     $DisplayFileName = $InfoJSON | & $ytdlPath  '--load-info-json' - -O $DisplayTemplate
     $wpf_Textbox_CustomName.Text = $DisplayFileName
-
+    
     $InfoJSON | & $ytdlPath $InfoJSONParameters --print formats_table --load-info-json - ;
     PopulateFormatsListbox $InfoJson
   }        
