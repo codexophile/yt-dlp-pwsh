@@ -16,6 +16,13 @@ param(
 )
 
 if ($Browser -eq 0) { $Browser = $null }
+# ? use this 👇🏻 if above line fails
+# foreach ($name in 'destination', 'InfoJson', 'GivenName', 'Browser', 'BrowserProfile', 'Referer') {
+#   if ($PSBoundParameters.ContainsKey($name) -and "$($PSBoundParameters[$name])" -eq '0') {
+#     [void]$PSBoundParameters.Remove($name)
+#     Set-Variable -Name $name -Value $null
+#   }
+# }
 
 Clear-Host
 
