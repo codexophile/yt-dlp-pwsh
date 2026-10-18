@@ -14,8 +14,8 @@
         "-Debug",
         "-url",
         "https://x.com/jholtillus/status/1790003810061947174",
-        "-mode",
-        "noprompt",
+        // "-mode",
+        // "noprompt",
         "-destination",
         "C:\\Users\\xq151\\Downloads"
       ]

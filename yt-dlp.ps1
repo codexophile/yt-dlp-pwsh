@@ -15,14 +15,14 @@ param(
   [Switch]$AutoRetryInfoJson
 )
 
-if ($Browser -eq 0) { $Browser = $null }
+# if ($Browser -eq 0) { $Browser = $null }
 # ? use this 👇🏻 if above line fails
-# foreach ($name in 'destination', 'InfoJson', 'GivenName', 'Browser', 'BrowserProfile', 'Referer') {
-#   if ($PSBoundParameters.ContainsKey($name) -and "$($PSBoundParameters[$name])" -eq '0') {
-#     [void]$PSBoundParameters.Remove($name)
-#     Set-Variable -Name $name -Value $null
-#   }
-# }
+foreach ($name in 'destination', 'InfoJson', 'GivenName', 'Browser', 'BrowserProfile', 'Referer') {
+  if ($PSBoundParameters.ContainsKey($name) -and "$($PSBoundParameters[$name])" -eq '0') {
+    [void]$PSBoundParameters.Remove($name)
+    Set-Variable -Name $name -Value $null
+  }
+}
 
 Clear-Host
 
@@ -243,7 +243,8 @@ if ($effectiveDestination) {
   }
 }
 
-& $YtdlPath $DownloadParameters   # 🔥 
+#  MARK: x🔥 
+& $YtdlPath $DownloadParameters   
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
 
