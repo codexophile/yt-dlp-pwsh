@@ -320,7 +320,7 @@ function Get-OutputTemplate {
     zee5      = "%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s";
     instagram = "%(channel)s- %(uploader)s - %(uploader_id)s";
     tiktok    = "%(uploader)s";
-    twitter   = "%(uploader_id)s- %(uploader)s";
+    twitter   = "%(uploader_id)s- %(uploader)s- did_%(display_id)s";
     vimeo     = "%(uploader_id)s- %(uploader)s";
     youtube   = "%(uploader_id)s- %(uploader)s";
     XHamster  = "%(uploader_id)s";
@@ -403,15 +403,6 @@ function exitTerminal {
   param ( $pathToJson, $finalFilePath )
   $response = infoJsonOperations $pathToJson $finalFilePath
   if ( $response -eq 'Cancel' ) { exit }
-}
-
-function exitAndCloseTerminal { 
-  if ( $Debug ) {
-    exit
-  } 
-  else {
-    [Environment]::Exit(0)
-  }
 }
 
 function Get-BrowserProfiles {

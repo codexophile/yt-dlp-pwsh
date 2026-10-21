@@ -15,8 +15,6 @@ param(
   [Switch]$AutoRetryInfoJson
 )
 
-# if ($Browser -eq 0) { $Browser = $null }
-# ? use this 👇🏻 if above line fails
 foreach ($name in 'destination', 'InfoJson', 'GivenName', 'Browser', 'BrowserProfile', 'Referer') {
   if ($PSBoundParameters.ContainsKey($name) -and "$($PSBoundParameters[$name])" -eq '0') {
     [void]$PSBoundParameters.Remove($name)
@@ -51,7 +49,6 @@ Set-Location $PSScriptRoot
 . .\yt-dlp_guis.ps1
 . .\yt-dlp-debug.ps1
 . .\gui-others.ps1
-
 If (-Not($url -OR $mode)) {
   Write-Host "Url : $url"
   Write-Host "Mode: $mode"
@@ -126,7 +123,8 @@ switch ($mode) {
   'noprompt' {
 
     if (-not $destination) {
-      Write-Error "A destination must be given with 'NoPrompt' mode!"
+      write-Host "No destination provided. Please provide a destination path using the -destination parameter." -ForegroundColor Red
+      Pause
       Exit
     }
     
@@ -272,7 +270,7 @@ if ($OutputFiles.Count -gt 0) {
     Exit
   }
   if ($mode -eq 'noprompt') {
-    Countdown -TotalSeconds 30
+    Countdown -TotalSeconds 15
     exitAndCloseTerminal
   }
   $Destination = $effectiveDestination
