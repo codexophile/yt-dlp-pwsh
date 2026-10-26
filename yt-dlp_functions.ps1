@@ -93,8 +93,8 @@ function Test-DownloadSuccess {
   $SearchTermWrapped = $videoId
   $Candidates = @(
     & $EsPath $SearchTermWrapped |
-    ForEach-Object { $_.Trim() } |
-    Where-Object { $_ -ne '' }
+      ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -ne '' }
   )
 
   if ($Candidates.Count -gt 100) {
@@ -117,8 +117,8 @@ function Test-DownloadSuccess {
 function Test-DownloadedInfoJson {
   param( $extractor, $VideoId)
 
-  $CurrentPath = "archive"
-  $LegacyPath = "c:\mega\IDEs\powershell\yt-dlp archive"
+  $CurrentPath = 'archive'
+  $LegacyPath = 'c:\mega\IDEs\powershell\yt-dlp archive'
   $SearchPattern = "*($extractor)$VideoId*.info.json"
     
   # Search in current path
@@ -169,8 +169,8 @@ function Get-SecondaryBaseParameters {
     }
   }
   
-  If ($ImpersonateGeneric -eq $true) { 
-    $OutputParameters += '--extractor-args', "generic:impersonate" 
+  if ($ImpersonateGeneric -eq $true) { 
+    $OutputParameters += '--extractor-args', 'generic:impersonate' 
   }
   if ($Referer) {
     $OutputParameters += '--referer', $Referer
@@ -185,11 +185,23 @@ function Get-DownloadParameters {
   $destination = $Options.destination
   $DownloadParameters = $BaseParameters
   $DownloadParameters += '-P', $destination
+
+  # Let yt-dlp resume collections per entry instead of treating the whole
+  # URL as one item. The archive is shared by all wrapper invocations.
+  if ($Options.DownloadCollection) {
+    $DownloadParameters += '--yes-playlist', '--download-archive', (Get-DownloadArchivePath)
+    if ($Options.PlaylistItems) {
+      $DownloadParameters += '--playlist-items', $Options.PlaylistItems
+    }
+  }
+  else {
+    $DownloadParameters += '--no-playlist'
+  }
     
-  If ($Options.IsCookies) { 
+  if ($Options.IsCookies) { 
     $DownloadParameters += '--cookies-from-browser', "$($Options.Browser):$($Options.BrowserProfile)"
   }
-  If ($Options.CustomRange) {
+  if ($Options.CustomRange) {
     foreach ( $currentItem in $Options.Items ) {
       $DownloadParameters += '--download-sections', "*$currentItem"
       $CustomRanges += $currentItem
@@ -198,16 +210,16 @@ function Get-DownloadParameters {
   if ($Options.Referer) {
     $DownloadParameters += '--referer', $Options.Referer
   }
-  If ($Options.CustomName) {
+  if ($Options.CustomName) {
     $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o].%(ext)s"
   }
-  Else {
+  else {
     $OutTemplate = Get-OutputTemplate $InfoJson $UniqueId
   }
   if ($Options.FileNameSuffix) {
     $OutTemplate = $OutTemplate.Replace('.%(ext)s', "$($Options.FileNameSuffix).%(ext)s")
   }
-  If ($Options.ImpersonateGeneric) { $DownloadParameters += '--extractor-args', "generic:impersonate" }
+  if ($Options.ImpersonateGeneric) { $DownloadParameters += '--extractor-args', 'generic:impersonate' }
 
   $DownloadParameters += '-o', $OutTemplate
   $DownloadParameters += '--embed-info-json', '--embed-subs', '--embed-metadata', '--embed-chapters'
@@ -218,12 +230,48 @@ function Get-DownloadParameters {
     $DownloadParameters += '-f', $Options.SelectedFormatId
   }
   else {
-    If ($Options.SevenTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
-    If ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
+    if ($Options.SevenTwenty) { $DownloadParameters += '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]' }
+    if ($Options.TenEighty) { $DownloadParameters += '-f', 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' }
   }
 
   return $DownloadParameters
 
+}
+
+function ConvertFrom-InfoJson {
+  param(
+    [Parameter(Mandatory)]
+    [AllowEmptyString()]
+    [string]$InfoJson
+  )
+
+  if ([string]::IsNullOrWhiteSpace($InfoJson)) {
+    return $null
+  }
+
+  try {
+    return $InfoJson | ConvertFrom-Json -Depth 100
+  }
+  catch {
+    throw "The yt-dlp metadata is not valid JSON: $($_.Exception.Message)"
+  }
+}
+
+function Test-InfoJsonCollection {
+  param($InfoJsonObject)
+
+  if (-not $InfoJsonObject) {
+    return $false
+  }
+  return [bool]($InfoJsonObject._type -in @('playlist', 'multi_video') -or $InfoJsonObject.entries)
+}
+
+function Get-DownloadArchivePath {
+  $ArchiveDirectory = Join-Path $PSScriptRoot 'archive'
+  if (-not (Test-Path -LiteralPath $ArchiveDirectory -PathType Container)) {
+    [void](New-Item -Path $ArchiveDirectory -ItemType Directory -Force)
+  }
+  return (Join-Path $ArchiveDirectory 'download-archive.txt')
 }
 
 function Show-DownloadInfo {
@@ -232,7 +280,7 @@ function Show-DownloadInfo {
   $textColor = 'Yellow'
     
   # Draw top border
-  Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+  Write-Host ('─' * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
     
   # Show ASCII art with padding
   Write-Ascii $Extractor
@@ -240,46 +288,46 @@ function Show-DownloadInfo {
     
   # Create info block with consistent formatting
   $infoBlock = @(
-    @{ Label = "MODE"; Value = $mode }
-    @{ Label = "URL"; Value = $url }
-    @{ Label = "OUTPUT DIR"; Value = $Options.Destination }
+    @{ Label = 'MODE'; Value = $mode }
+    @{ Label = 'URL'; Value = $url }
+    @{ Label = 'OUTPUT DIR'; Value = $Options.Destination }
   )
     
   # Display info block with proper alignment
   $labelWidth = ($infoBlock | ForEach-Object { $_.Label.Length } | Measure-Object -Maximum).Maximum + 2
   foreach ($item in $infoBlock) {
     $label = $item.Label.PadRight($labelWidth)
-    Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
+    Write-Host ' ┃ ' -ForegroundColor $borderColor -NoNewline
     Write-Host $label -ForegroundColor $headerColor -NoNewline
-    Write-Host " │ " -ForegroundColor $borderColor -NoNewline
+    Write-Host ' │ ' -ForegroundColor $borderColor -NoNewline
     Write-Host $item.Value -ForegroundColor $textColor
   }
     
   # Display output files
-  Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
-  Write-Host "FILES".PadRight($labelWidth) -ForegroundColor $headerColor -NoNewline
-  Write-Host " │ " -ForegroundColor $borderColor
+  Write-Host ' ┃ ' -ForegroundColor $borderColor -NoNewline
+  Write-Host 'FILES'.PadRight($labelWidth) -ForegroundColor $headerColor -NoNewline
+  Write-Host ' │ ' -ForegroundColor $borderColor
   foreach ($fileName in $OutputFiles) {
-    Write-Host " ┃ " -ForegroundColor $borderColor -NoNewline
-    Write-Host "".PadRight($labelWidth) -NoNewline
-    Write-Host " │ " -ForegroundColor $borderColor -NoNewline
+    Write-Host ' ┃ ' -ForegroundColor $borderColor -NoNewline
+    Write-Host ''.PadRight($labelWidth) -NoNewline
+    Write-Host ' │ ' -ForegroundColor $borderColor -NoNewline
     Write-Host $fileName -ForegroundColor $textColor
   }
     
   # Draw separator
-  Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+  Write-Host ('─' * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
     
   # Display command parameters in a vertical, color-coded list
-  Write-Host " COMMAND " -BackgroundColor DarkGreen -ForegroundColor White
+  Write-Host ' COMMAND ' -BackgroundColor DarkGreen -ForegroundColor White
     
   foreach ($i in 0..($DownloadParameters.Count - 1)) {
     $bgColor = if ($i % 2 -eq 0) { 'DarkBlue' } else { 'DarkMagenta' }
-    Write-Host (" {0,2}. " -f ($i + 1)) -ForegroundColor White -BackgroundColor Gray -NoNewline
+    Write-Host (' {0,2}. ' -f ($i + 1)) -ForegroundColor White -BackgroundColor Gray -NoNewline
     Write-Host " $($DownloadParameters[$i]) " -ForegroundColor White -BackgroundColor $bgColor
   }
     
   # Draw bottom border
-  Write-Host ("─" * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
+  Write-Host ('─' * ($Host.UI.RawUI.WindowSize.Width)) -ForegroundColor $borderColor
 }
 
 function Get-OutputFileNames {
@@ -315,30 +363,37 @@ function Get-OutputTemplate {
   param( $InfoJson, $UniqueId )
 
   $ExtractorHashTable = @{
-    facebook  = "%(uploader_id)s";
-    hotstar   = "%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s";
-    zee5      = "%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s";
-    instagram = "%(channel)s- %(uploader)s - %(uploader_id)s";
-    tiktok    = "%(uploader)s";
-    twitter   = "%(uploader_id)s- %(uploader)s- did_%(display_id)s";
-    vimeo     = "%(uploader_id)s- %(uploader)s";
-    youtube   = "%(uploader_id)s- %(uploader)s";
-    XHamster  = "%(uploader_id)s";
-    pornhub   = "%(uploader_id)s- %(cast)s";
+    facebook  = '%(uploader_id)s';
+    hotstar   = '%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s';
+    zee5      = '%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s';
+    instagram = '%(channel)s- %(uploader)s - %(uploader_id)s';
+    tiktok    = '%(uploader)s';
+    twitter   = '%(uploader_id)s- %(uploader)s- did_%(display_id)s';
+    vimeo     = '%(uploader_id)s- %(uploader)s';
+    youtube   = '%(uploader_id)s- %(uploader)s';
+    XHamster  = '%(uploader_id)s';
+    pornhub   = '%(uploader_id)s- %(cast)s';
   }
 
   $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
   $Extractor = $InfoJSONFormatted.extractor
     
   # Build the template conditionally based on extractor
-  $TitlePart = if ($Extractor -ne "facebook") { " - %(title)s" } else { "" }
-  $OutTemplate = "$($ExtractorHashTable[$extractor]) - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o].%(ext)s"
+  $TitlePart = if ($Extractor -ne 'facebook') { ' - %(title)s' } else { '' }
+  $TemplatePrefix = $ExtractorHashTable[$Extractor]
+  if (-not $TemplatePrefix -and $Extractor -match ':') {
+    $TemplatePrefix = $ExtractorHashTable[($Extractor -split ':')[0]]
+  }
+  if (-not $TemplatePrefix) {
+    $TemplatePrefix = '%(uploader)s'
+  }
+  $OutTemplate = "$TemplatePrefix - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o].%(ext)s"
 
-  Return $OutTemplate
+  return $OutTemplate
 }
 
-Function Get-Proxy() {
-  Return ( Get-ItemProperty -Path "Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" )
+function Get-Proxy() {
+  return ( Get-ItemProperty -Path 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings' )
 }
 
 function Get-InfoJson {
@@ -351,14 +406,17 @@ function Get-InfoJson {
 
   $InfoJsonParameters = @($BaseParameters)
   $InfoJsonParameters += $SecondaryBaseParameters
-  $InfoJsonParameters += '--print', '%()j', '--no-clean-info-json'
+  # --dump-single-json keeps a playlist/channel as one JSON document with an
+  # entries array. This avoids trying to parse newline-delimited entry JSON as
+  # one document and preserves collection metadata for the GUI and archive.
+  $InfoJsonParameters += '--dump-single-json', '--no-clean-info-json'
 
-  Write-Host "Getting .info.json ..."
+  Write-Host 'Getting .info.json ...'
   $stopWatch = [System.Diagnostics.Stopwatch]::StartNew()
 
   try {
     $result = & $YtdlPath $InfoJsonParameters 2>&1
-    $stdout = $result | Where-Object { $_ -is [string] }
+    $stdout = @($result | Where-Object { $_ -is [string] })
     $stderr = $result | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
 
     $stopWatch.Stop()
@@ -366,9 +424,9 @@ function Get-InfoJson {
 
     if ($stdout) {
       try {
-        $null = $stdout | ConvertFrom-Json
-        # Write-Host $stdout
-        return $stdout
+        $InfoJson = ($stdout -join [Environment]::NewLine)
+        $null = ConvertFrom-InfoJson $InfoJson
+        return $InfoJson
       }
       catch {
         Write-Warning "Failed to parse JSON: $_"
@@ -380,16 +438,16 @@ function Get-InfoJson {
     if ($stderr) {
       Write-Warning "Error occurred: $stderr"
       if ( $AutoRetryInfoJson ) {
-        Write-Host "AutoRetryInfoJson is enabled. Retrying..."
-        Return Get-InfoJson $YtdlPath $InfoJsonParameters
+        Write-Host 'AutoRetryInfoJson is enabled. Retrying...'
+        return Get-InfoJson $YtdlPath $InfoJsonParameters
       }
       $MsgboxResult = [System.Windows.MessageBox]::Show("$stderr`n`nRetry?", 'Yt-ldp Error', 4, 32)
-      If ( $MsgboxResult -eq 'Yes') { Return Get-InfoJson $YtdlPath $InfoJsonParameters }
-      Else { Return $null }
+      if ( $MsgboxResult -eq 'Yes') { return Get-InfoJson $YtdlPath $InfoJsonParameters }
+      else { return $null }
     }
 
     if (-not $stdout -and -not $stderr) {
-      Write-Warning "No output or error received."
+      Write-Warning 'No output or error received.'
     }
   }
   catch {
@@ -412,10 +470,10 @@ function Get-BrowserProfiles {
   function Get-ChromiumProfiles {
     param ($path)
     if (Test-Path $path) {
-      $profiles = Get-ChildItem -Path $path -Directory -Filter "Profile *" -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }
+      $profiles = Get-ChildItem -Path $path -Directory -Filter 'Profile *' -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }
       if (Test-Path "$path\Default") {
         # Ensure "Default" is at the beginning
-        $profiles = @("Default") + $profiles
+        $profiles = @('Default') + $profiles
       }
       return $profiles
     }
@@ -423,7 +481,7 @@ function Get-BrowserProfiles {
   }
 
   # Firefox
-  $firefoxProfilesPath = Join-Path $env:APPDATA "Mozilla\Firefox\Profiles"
+  $firefoxProfilesPath = Join-Path $env:APPDATA 'Mozilla\Firefox\Profiles'
   if (Test-Path $firefoxProfilesPath) {
     $profiles = Get-ChildItem -Path $firefoxProfilesPath -Directory | Select-Object -ExpandProperty Name
     if ($profiles) {
@@ -433,11 +491,11 @@ function Get-BrowserProfiles {
 
   # Chromium-based browsers
   $browserPaths = @{
-    brave   = Join-Path $env:LOCALAPPDATA "BraveSoftware\Brave-Browser\User Data"
-    chrome  = Join-Path $env:LOCALAPPDATA "Google\Chrome\User Data"
-    edge    = Join-Path $env:LOCALAPPDATA "Microsoft\Edge\User Data"
-    vivaldi = Join-Path $env:LOCALAPPDATA "Vivaldi\User Data"
-    opera   = Join-Path $env:APPDATA "Opera Software\Opera Stable" # Opera has a different structure
+    brave   = Join-Path $env:LOCALAPPDATA 'BraveSoftware\Brave-Browser\User Data'
+    chrome  = Join-Path $env:LOCALAPPDATA 'Google\Chrome\User Data'
+    edge    = Join-Path $env:LOCALAPPDATA 'Microsoft\Edge\User Data'
+    vivaldi = Join-Path $env:LOCALAPPDATA 'Vivaldi\User Data'
+    opera   = Join-Path $env:APPDATA 'Opera Software\Opera Stable' # Opera has a different structure
   }
 
   foreach ($browser in $browserPaths.GetEnumerator()) {

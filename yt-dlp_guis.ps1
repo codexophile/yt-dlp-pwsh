@@ -100,6 +100,13 @@ function GenerateParameters {
   $CustomFormat = $wpf_cbCustomFormat.IsChecked ? $true : $false
   $SelectedFormatId = if ($CustomFormat -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
   $Referer = if ([string]::IsNullOrWhiteSpace($wpf_txtReferer.Text)) { $null } else { $wpf_txtReferer.Text.Trim() }
+  $DownloadCollection = if ($wpf_cbDownloadCollection) { $wpf_cbDownloadCollection.IsChecked ? $true : $false } else { $true }
+  $PlaylistItems = if ($wpf_txtPlaylistItems -and -not [string]::IsNullOrWhiteSpace($wpf_txtPlaylistItems.Text)) {
+    $wpf_txtPlaylistItems.Text.Trim()
+  }
+  else {
+    $null
+  }
 
   Return @{
     Destination        = $destination
@@ -117,6 +124,8 @@ function GenerateParameters {
     CustomFormat       = $CustomFormat
     SelectedFormatId   = $SelectedFormatId
     Referer            = $Referer
+    DownloadCollection = $DownloadCollection
+    PlaylistItems      = $PlaylistItems
   }
 
 }
@@ -190,6 +199,8 @@ function Save-YtDlpConfig {
     CustomFormatEnabled   = $wpf_cbCustomFormat.IsChecked
     SelectedFormatId      = if ($wpf_cbCustomFormat.IsChecked -and $wpf_listboxFormats.SelectedItem) { $wpf_listboxFormats.SelectedItem } else { $null }
     Referer               = $wpf_txtReferer.Text
+    DownloadCollection    = $wpf_cbDownloadCollection.IsChecked
+    PlaylistItems         = $wpf_txtPlaylistItems.Text
     Resolution720p        = $wpf_cb720p.IsChecked
     Resolution1080p       = $wpf_cb1080p.IsChecked
     TimeRanges            = @()
@@ -244,6 +255,10 @@ function Get-YtDlpConfig {
     $wpf_cb720p.IsChecked = $config.Resolution720p
     $wpf_cb1080p.IsChecked = $config.Resolution1080p
     $wpf_txtReferer.Text = $config.Referer
+    if ($null -ne $config.DownloadCollection) {
+      $wpf_cbDownloadCollection.IsChecked = $config.DownloadCollection
+    }
+    $wpf_txtPlaylistItems.Text = $config.PlaylistItems
 
     # Clear and load time ranges
     $wpf_ListBoxRanges.Items.Clear()

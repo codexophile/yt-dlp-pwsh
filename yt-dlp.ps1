@@ -49,22 +49,22 @@ Set-Location $PSScriptRoot
 . .\yt-dlp_guis.ps1
 . .\yt-dlp-debug.ps1
 . .\gui-others.ps1
-If (-Not($url -OR $mode)) {
+if (-not($url -or $mode)) {
   Write-Host "Url : $url"
   Write-Host "Mode: $mode"
-  Write-Host "Both download mode and url are required" -ForegroundColor Red
+  Write-Host 'Both download mode and url are required' -ForegroundColor Red
   return     
 }
 
-$ytdlPath = "C:\mega\program-files\yt-dlp\yt-dlp.exe"
-$EsPath = "C:\mega\program-files\Everything\es.exe"
+$ytdlPath = 'C:\mega\program-files\yt-dlp\yt-dlp.exe'
+$EsPath = 'C:\mega\program-files\Everything\es.exe'
 
 $BaseParameters = @( $url, '--progress')
 $CurrentProxySettings = Get-Proxy
 if ( $currentProxySettings.ProxyEnable -eq '1' ) { $BaseParameters += '--proxy', $currentProxySettings.ProxyServer } 
 
 # Get FFmpeg location and add to base parameters
-$ffmpegPath = . "C:\mega\IDEs\powershell\ffmpeg\ffmpeg-find.ps1" -Variety yt-dlp
+$ffmpegPath = . 'C:\mega\IDEs\powershell\ffmpeg\ffmpeg-find.ps1' -Variety yt-dlp
 if ($ffmpegPath) {
   Write-Verbose "Using FFmpeg from: $ffmpegPath"
   $BaseParameters += '--ffmpeg-location', $ffmpegPath
@@ -72,7 +72,7 @@ if ($ffmpegPath) {
 }
 else {
   Write-Host $ffmpegPath
-  Write-Warning "FFmpeg not found."
+  Write-Warning 'FFmpeg not found.'
 }
 
 $host.ui.RawUI.WindowTitle = "yt-dlp.ps1 ""$url"""
@@ -104,11 +104,11 @@ switch ($mode) {
         . $PSCommandPath -url $url -mode 'max' -infoJson $InfoJson
       })
     $AfterListGui.ShowDialog()
-    Exit
+    exit
   }
 
   'instant' {
-    $DefaultPath = "x:\#downloads"
+    $DefaultPath = 'x:\#downloads'
     if (Test-Path $DefaultPath) {
       $destination = $DefaultPath
     }
@@ -116,21 +116,21 @@ switch ($mode) {
       $AlternativePath = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
       $destination = $AlternativePath
     }
-    & $ytdlPath $url -P $destination
-    Exit
+    & $ytdlPath $url -P $destination --yes-playlist --download-archive (Get-DownloadArchivePath)
+    exit
   }
 
   'noprompt' {
 
     if (-not $destination) {
-      write-Host "No destination provided. Please provide a destination path using the -destination parameter." -ForegroundColor Red
+      Write-Host 'No destination provided. Please provide a destination path using the -destination parameter.' -ForegroundColor Red
       Pause
-      Exit
+      exit
     }
     
     if ( -not (Test-Path $destination)) {
       Write-Error "Invalid path: $destination"
-      Read-Host -Prompt "Press Enter to continue..."
+      Read-Host -Prompt 'Press Enter to continue...'
       Pause
       $newParams = $PSBoundParameters
       $newParams['mode'] = 'quick'  
@@ -169,26 +169,29 @@ switch ($mode) {
     $videoId = $InfoJSONFormatted.id
     Write-Host $VideoId
     Pause
-    Exit
+    exit
   }
     
-  Default {}
+  default {}
 }
 
 $DownloadParameters = Get-DownloadParameters $InfoJSON $UniqueId $BaseParameters
-$InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
+$InfoJSONFormatted = ConvertFrom-InfoJson $InfoJSON
+$IsCollection = Test-InfoJsonCollection $InfoJSONFormatted
 $Extractor = $InfoJSONFormatted.extractor
 $VideoId = $InfoJSONFormatted.id
 $UploaderId = $InfoJSONFormatted.uploader_id
 
 Write-Host $url -ForegroundColor DarkCyan
-$pathToJson = Test-DownloadedInfoJson $Extractor $VideoId
-if (Test-DownloadSuccess $videoId) {
+$pathToJson = if (-not $IsCollection -and $VideoId) {
+  Test-DownloadedInfoJson $Extractor $VideoId
+}
+if (-not $IsCollection -and (Test-DownloadSuccess $videoId)) {
   activate
   Write-Host "An entry for this video id already exists: $VideoId" -ForegroundColor DarkYellow
   & $EsPath $videoId
   if ($skipAlreadyExistsPrompt) {
-    $response = "Yes"
+    $response = 'Yes'
   }
   else {
     $response = guiAlreadyExistsPrompt
@@ -242,11 +245,20 @@ if ($effectiveDestination) {
 }
 
 #  MARK: x🔥 
+$FilesBeforeDownload = @()
+if ($IsCollection -and $effectiveDestination -and (Test-Path -LiteralPath $effectiveDestination -PathType Container)) {
+  $FilesBeforeDownload = @(
+    Get-ChildItem -LiteralPath $effectiveDestination -File -Recurse -ErrorAction SilentlyContinue |
+      Select-Object -ExpandProperty FullName
+  )
+}
 & $YtdlPath $DownloadParameters   
 
 if ($Extractor -eq 'generic') { $VideoId = '' }
 
-$JsonPath = "archive\$UploaderId- ($extractor)$VideoId-uid_$UniqueId.info.json"
+$ArchiveId = if ($VideoId) { $VideoId } else { $UniqueId }
+$ArchiveUploader = if ($UploaderId) { $UploaderId } else { 'collection' }
+$JsonPath = "archive\$ArchiveUploader- ($extractor)$ArchiveId-uid_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
@@ -260,14 +272,26 @@ Start-Sleep -Seconds 2
 if ($videoId -is [object[]]) {
   $videoId = $videoId[0]
 }
-if ( -not $videoId -or $videoId -eq 'master') {
+if (-not $IsCollection -and (-not $videoId -or $videoId -eq 'master')) {
   $videoId = $UniqueId
 }
-$OutputFiles = Test-DownloadSuccess $videoId
-if ($OutputFiles.Count -gt 0) {
+if ($IsCollection) {
+  $OutputFiles = @(
+    if ($effectiveDestination -and (Test-Path -LiteralPath $effectiveDestination -PathType Container)) {
+      Get-ChildItem -LiteralPath $effectiveDestination -File -Recurse -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -notin $FilesBeforeDownload } |
+          Select-Object -ExpandProperty FullName
+    }
+  )
+}
+else {
+  $OutputFiles = Test-DownloadSuccess $videoId
+}
+$DownloadSucceeded = $OutputFiles.Count -gt 0 -or ($IsCollection -and $LASTEXITCODE -eq 0)
+if ($DownloadSucceeded) {
   Write-Ascii 'Success!'
   if ($Debug) {
-    Exit
+    exit
   }
   if ($mode -eq 'noprompt') {
     Countdown -TotalSeconds 15
@@ -277,6 +301,7 @@ if ($OutputFiles.Count -gt 0) {
   Show-DownloadCompleteWindow $JsonPath $OutputFiles $Destination
 }
 else {
-  Write-Host "Download failed for video: $videoId" -ForegroundColor Red
+  $DownloadTarget = if ($IsCollection) { 'collection' } else { $videoId }
+  Write-Host "Download failed for $DownloadTarget" -ForegroundColor Red
   restart -prompt
 }
