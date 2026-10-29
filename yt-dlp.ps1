@@ -1,7 +1,17 @@
 [CmdletBinding()]
 param( 
   [Parameter(Mandatory)][string]$url,
-  [ValidateSet('list', 'instant', 'noprompt', 'quick', 'max', 'min', 'check')]
+  [ValidateSet(
+    'list',
+    'instant',
+    'noprompt',
+    'quick',
+    'max',
+    'min',
+    'check',
+    'thumbnails',
+    'storyboards'
+  )]
   [string]$mode = 'quick',
   [string]$destination, 
   [Switch]$SkipPrompt,
@@ -105,6 +115,10 @@ switch ($mode) {
       })
     $AfterListGui.ShowDialog()
     exit
+  }
+
+  'thumbnails' {
+    $BaseParameters += '--skip-download', '--write-thumbnail', '--convert-thumbnails', 'jpg'
   }
 
   'instant' {
