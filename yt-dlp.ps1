@@ -121,6 +121,16 @@ switch ($mode) {
     $BaseParameters += '--skip-download', '--write-thumbnail', '--convert-thumbnails', 'jpg'
   }
 
+  'storyboards' {
+    $BaseParameters += @(
+      '--keep-fragments',
+      '--exec',
+      'powershell -NoProfile -ExecutionPolicy Bypass -File C:\mega\IDEs\powershell\yt-dlp\yt-dlp-sb-post.ps1',
+      '-f',
+      'sb0/sb1/sb2/sb3'
+    )
+  }
+
   'instant' {
     $DefaultPath = 'x:\#downloads'
     if (Test-Path $DefaultPath) {

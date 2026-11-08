@@ -409,7 +409,7 @@ function Get-InfoJson {
   # --dump-single-json keeps a playlist/channel as one JSON document with an
   # entries array. This avoids trying to parse newline-delimited entry JSON as
   # one document and preserves collection metadata for the GUI and archive.
-  $InfoJsonParameters += '--dump-single-json', '--no-clean-info-json'
+  $InfoJsonParameters += '--dump-single-json'
 
   Write-Host 'Getting .info.json ...'
   $stopWatch = [System.Diagnostics.Stopwatch]::StartNew()
