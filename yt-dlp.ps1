@@ -2,6 +2,7 @@
 param( 
   [Parameter(Mandatory)][string]$url,
   [ValidateSet(
+    'get-infojson',
     'list',
     'instant',
     'noprompt',
@@ -95,6 +96,14 @@ $CustomRanges
 
 $mode = $mode.ToLower()
 switch ($mode) {
+
+  'get-infojson' {
+    $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
+    $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
+    $InfoJson | code -
+    Pause
+    exit
+  }
     
   'list' {
     $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
