@@ -90,7 +90,8 @@ function Test-DownloadSuccess {
   $IgnoredPattern = '\.(json|part|ytdl|tmp|temp)$|\.part-Frag\d+$'
 
   # $SearchTermWrapped = "'`"$videoId`"'"
-  $SearchTermWrapped = $videoId
+  $SearchTermWrapped = $videoId -replace '^-+', '"$0"'
+  Write-Host $SearchTermWrapped
   $Candidates = @(
     & $EsPath $SearchTermWrapped |
       ForEach-Object { $_.Trim() } |
