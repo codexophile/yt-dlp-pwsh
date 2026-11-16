@@ -212,7 +212,7 @@ function Get-DownloadParameters {
     $DownloadParameters += '--referer', $Options.Referer
   }
   if ($Options.CustomName) {
-    $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) uid_$UniqueId  @[o].%(ext)s"
+    $OutTemplate = "$($Options.CustomName) - $( $Options.customRange ? '_%(section_start)s' : '' ) $($UidPrefix)_$UniqueId  @[o].%(ext)s"
   }
   else {
     $OutTemplate = Get-OutputTemplate $InfoJson $UniqueId
@@ -388,7 +388,7 @@ function Get-OutputTemplate {
   if (-not $TemplatePrefix) {
     $TemplatePrefix = '%(uploader)s'
   }
-  $OutTemplate = "$TemplatePrefix - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) uid_$UniqueId @[o].%(ext)s"
+  $OutTemplate = "$TemplatePrefix - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) $($UidPrefix)_$UniqueId @[o].%(ext)s"
 
   return $OutTemplate
 }

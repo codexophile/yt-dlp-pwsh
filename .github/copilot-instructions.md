@@ -67,7 +67,7 @@ Multi-mode PowerShell wrapper around `yt-dlp` CLI with WPF GUI support. Enables 
 
 ### Archive Directory
 
-`/archive/` caches downloaded metadata with naming pattern: `(extractor)VideoId-uid_UniqueId.info.json`
+`/archive/` caches downloaded metadata with naming pattern: `(extractor)VideoId-$($UidPrefix)_UniqueId.info.json`
 
 - Purpose: Skip re-fetching metadata for videos already attempted
 - Pattern matching: `*($extractor)$VideoId*.info.json`
@@ -102,7 +102,7 @@ All GUI controls use `$wpf_` prefix + descriptive name:
 
 Every download gets a `$UniqueId` (via `Get-UniqueId`) appended to filenames:
 
-- Format: `filename_uid_RANDOMID@[o].%(ext)s`
+- Format: `filename_$($UidPrefix)_RANDOMID@[o].%(ext)s`
 - Purpose: Distinguish partial/retry downloads of same video
 - Embedded in archive cache filename too
 

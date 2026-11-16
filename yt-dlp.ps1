@@ -70,6 +70,7 @@ if (-not($url -or $mode)) {
 
 $ytdlPath = 'C:\mega\program-files\yt-dlp\yt-dlp.exe'
 $EsPath = 'C:\mega\program-files\Everything\es.exe'
+$UidPrefix = 'GfmsUid'
 
 $BaseParameters = @( $url, '--progress')
 $CurrentProxySettings = Get-Proxy
@@ -101,7 +102,6 @@ switch ($mode) {
     $SecondaryBaseParameters = Get-SecondaryBaseParameters -Browser $Browser -BrowserProfile $BrowserProfile -ImpersonateGeneric $ImpersonateGeneric -Referer $Referer
     $InfoJson = Get-InfoJson $ytdlPath $SecondaryBaseParameters
     $InfoJson | code -
-    Pause
     exit
   }
     
@@ -292,7 +292,7 @@ if ($Extractor -eq 'generic') { $VideoId = '' }
 
 $ArchiveId = if ($VideoId) { $VideoId } else { $UniqueId }
 $ArchiveUploader = if ($UploaderId) { $UploaderId } else { 'collection' }
-$JsonPath = "archive\$ArchiveUploader- ($extractor)$ArchiveId-uid_$UniqueId.info.json"
+$JsonPath = "archive\$ArchiveUploader- ($extractor)$ArchiveId-$($UidPrefix)_$UniqueId.info.json"
 #// $InfoJSONFormatted.PSObject.properties.Remove( ' ')
 $InfoJSONFormatted | ConvertTo-Json -Depth 100 | Out-File -FilePath $JsonPath
 
