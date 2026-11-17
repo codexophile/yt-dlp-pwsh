@@ -364,31 +364,29 @@ function Get-OutputTemplate {
   param( $InfoJson, $UniqueId )
 
   $ExtractorHashTable = @{
-    facebook  = '%(uploader_id)s';
+    facebook  = '';
     hotstar   = '%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s';
     zee5      = '%(series)s- S%(season_number)sE%(episode_number)s- %(upload_date)s';
-    instagram = '%(channel)s- %(uploader)s - %(uploader_id)s';
-    tiktok    = '%(uploader)s';
-    twitter   = '%(uploader_id)s- %(uploader)s- did_%(display_id)s';
-    vimeo     = '%(uploader_id)s- %(uploader)s';
-    youtube   = '%(uploader_id)s- %(uploader)s';
-    XHamster  = '%(uploader_id)s';
-    pornhub   = '%(uploader_id)s- %(cast)s';
+    instagram = 'channel_%(channel)s';
+    tiktok    = '';
+    twitter   = 'channelId_%(channel_id)s did_%(display_id)s';
+    vimeo     = '';
+    youtube   = '';
+    XHamster  = '';
+    pornhub   = '%(cast)s';
   }
 
   $InfoJSONFormatted = $InfoJSON | ConvertFrom-Json
   $Extractor = $InfoJSONFormatted.extractor
     
   # Build the template conditionally based on extractor
-  $TitlePart = if ($Extractor -ne 'facebook') { ' - %(title)s' } else { '' }
-  $TemplatePrefix = $ExtractorHashTable[$Extractor]
-  if (-not $TemplatePrefix -and $Extractor -match ':') {
-    $TemplatePrefix = $ExtractorHashTable[($Extractor -split ':')[0]]
+  $ExtractorSpecificSegment = $ExtractorHashTable[$Extractor]
+  if (-not $ExtractorSpecificSegment -and $Extractor -match ':') {
+    # $ExtractorSpecificSegment = $ExtractorHashTable[($Extractor -split ':')[0]]
+    Write-Warning "Check this line in source code. `n Extractor = '$Extractor'"
   }
-  if (-not $TemplatePrefix) {
-    $TemplatePrefix = '%(uploader)s'
-  }
-  $OutTemplate = "$TemplatePrefix - (%(extractor)s)%(id)s$TitlePart$( $Options.customRange ? ' _%(section_start)s' : '' ) $($UidPrefix)_$UniqueId @[o].%(ext)s"
+  $CustomRangeSegment = if ($Options.customRange) { '_%(section_start)s' } else { '' }
+  $OutTemplate = "uploaderId_%(uploader_id)s $ExtractorSpecificSegment - uploader_﹝%(uploader)s﹞ (%(extractor)s)%(id)s $CustomRangeSegment $($UidPrefix)_$UniqueId [o].%(ext)s"
 
   return $OutTemplate
 }
